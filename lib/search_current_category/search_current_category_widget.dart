@@ -39,6 +39,7 @@ class _SearchCurrentCategoryWidgetState
   double? ratingBarValue6;
   double? ratingBarValue7;
   double? ratingBarValue8;
+  double? ratingBarValue9;
 
   @override
   void initState() {
@@ -1179,6 +1180,208 @@ class _SearchCurrentCategoryWidgetState
                         },
                       ),
                     ),
+                  if (FFAppState().sortby == 'Farthest')
+                    Padding(
+                      padding: EdgeInsetsDirectional.fromSTEB(10, 10, 10, 0),
+                      child: StreamBuilder<List<PostsRecord>>(
+                        stream: queryPostsRecord(
+                          queryBuilder: (postsRecord) => postsRecord
+                              .where('category',
+                                  isEqualTo: columnCategorySalonRecord.name)
+                              .where('isBusiness', isEqualTo: true)
+                              .orderBy('name', descending: true),
+                        ),
+                        builder: (context, snapshot) {
+                          // Customize what your widget looks like when it's loading.
+                          if (!snapshot.hasData) {
+                            return Center(
+                              child: SizedBox(
+                                width: 50,
+                                height: 50,
+                                child: CircularProgressIndicator(
+                                  color:
+                                      FlutterFlowTheme.of(context).primaryColor,
+                                ),
+                              ),
+                            );
+                          }
+                          List<PostsRecord> farthestPostsRecordList =
+                              snapshot.data!;
+                          return ListView.builder(
+                            padding: EdgeInsets.zero,
+                            shrinkWrap: true,
+                            scrollDirection: Axis.vertical,
+                            itemCount: farthestPostsRecordList.length,
+                            itemBuilder: (context, farthestIndex) {
+                              final farthestPostsRecord =
+                                  farthestPostsRecordList[farthestIndex];
+                              return Padding(
+                                padding: EdgeInsetsDirectional.fromSTEB(
+                                    0, 10, 0, 10),
+                                child: InkWell(
+                                  onTap: () async {
+                                    if (farthestPostsRecord.createdBy ==
+                                        currentUserReference) {
+                                      await Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => NavBarPage(
+                                              initialPage: 'MyProfile'),
+                                        ),
+                                      );
+                                    } else {
+                                      await Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              ProfileSalonWidget(
+                                            profileSalon:
+                                                farthestPostsRecord.createdBy,
+                                          ),
+                                        ),
+                                      );
+                                    }
+                                  },
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.max,
+                                    children: [
+                                      StreamBuilder<UsersRecord>(
+                                        stream: UsersRecord.getDocument(
+                                            farthestPostsRecord.createdBy!),
+                                        builder: (context, snapshot) {
+                                          // Customize what your widget looks like when it's loading.
+                                          if (!snapshot.hasData) {
+                                            return Center(
+                                              child: SizedBox(
+                                                width: 50,
+                                                height: 50,
+                                                child:
+                                                    CircularProgressIndicator(
+                                                  color: FlutterFlowTheme.of(
+                                                          context)
+                                                      .primaryColor,
+                                                ),
+                                              ),
+                                            );
+                                          }
+                                          final rowUsersRecord = snapshot.data!;
+                                          return Row(
+                                            mainAxisSize: MainAxisSize.max,
+                                            children: [
+                                              Container(
+                                                width: 80,
+                                                height: 80,
+                                                clipBehavior: Clip.antiAlias,
+                                                decoration: BoxDecoration(
+                                                  shape: BoxShape.circle,
+                                                ),
+                                                child: Image.network(
+                                                  rowUsersRecord.photoUrl!,
+                                                  fit: BoxFit.contain,
+                                                ),
+                                              ),
+                                              Padding(
+                                                padding: EdgeInsetsDirectional
+                                                    .fromSTEB(10, 0, 0, 0),
+                                                child: Column(
+                                                  mainAxisSize:
+                                                      MainAxisSize.max,
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Text(
+                                                      rowUsersRecord
+                                                          .displayName!,
+                                                      style:
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .bodyText1
+                                                              .override(
+                                                                fontFamily:
+                                                                    'Poppins',
+                                                                fontSize: 18,
+                                                              ),
+                                                    ),
+                                                    Row(
+                                                      mainAxisSize:
+                                                          MainAxisSize.max,
+                                                      children: [
+                                                        Text(
+                                                          functions
+                                                              .returnDistanceBetweenTwoPointsCopy(
+                                                                  rowUsersRecord
+                                                                      .adresMap,
+                                                                  currentUserLocationValue)
+                                                              .toString(),
+                                                          style: FlutterFlowTheme
+                                                                  .of(context)
+                                                              .bodyText1,
+                                                        ),
+                                                        Text(
+                                                          'km from you',
+                                                          style: FlutterFlowTheme
+                                                                  .of(context)
+                                                              .bodyText1,
+                                                        ),
+                                                      ],
+                                                    ),
+                                                    RatingBar.builder(
+                                                      onRatingUpdate: (newValue) =>
+                                                          setState(() =>
+                                                              ratingBarValue5 =
+                                                                  newValue),
+                                                      itemBuilder:
+                                                          (context, index) =>
+                                                              Icon(
+                                                        Icons.star_rounded,
+                                                        color:
+                                                            FlutterFlowTheme.of(
+                                                                    context)
+                                                                .secondaryColor,
+                                                      ),
+                                                      direction:
+                                                          Axis.horizontal,
+                                                      initialRating:
+                                                          ratingBarValue5 ??= 3,
+                                                      unratedColor:
+                                                          Color(0xFF9E9E9E),
+                                                      itemCount: 5,
+                                                      itemSize: 20,
+                                                      glowColor:
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .secondaryColor,
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ],
+                                          );
+                                        },
+                                      ),
+                                      Padding(
+                                        padding: EdgeInsetsDirectional.fromSTEB(
+                                            0, 15, 0, 0),
+                                        child: ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(15),
+                                          child: Image.network(
+                                            farthestPostsRecord.firstPhoto!,
+                                            width: double.infinity,
+                                            height: 180,
+                                            fit: BoxFit.cover,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              );
+                            },
+                          );
+                        },
+                      ),
+                    ),
                   if (FFAppState().sortby == 'walkins')
                     Padding(
                       padding: EdgeInsetsDirectional.fromSTEB(10, 10, 10, 0),
@@ -1327,7 +1530,7 @@ class _SearchCurrentCategoryWidgetState
                                                     RatingBar.builder(
                                                       onRatingUpdate: (newValue) =>
                                                           setState(() =>
-                                                              ratingBarValue5 =
+                                                              ratingBarValue6 =
                                                                   newValue),
                                                       itemBuilder:
                                                           (context, index) =>
@@ -1341,7 +1544,7 @@ class _SearchCurrentCategoryWidgetState
                                                       direction:
                                                           Axis.horizontal,
                                                       initialRating:
-                                                          ratingBarValue5 ??= 3,
+                                                          ratingBarValue6 ??= 3,
                                                       unratedColor:
                                                           Color(0xFF9E9E9E),
                                                       itemCount: 5,
@@ -1529,7 +1732,7 @@ class _SearchCurrentCategoryWidgetState
                                                     RatingBar.builder(
                                                       onRatingUpdate: (newValue) =>
                                                           setState(() =>
-                                                              ratingBarValue6 =
+                                                              ratingBarValue7 =
                                                                   newValue),
                                                       itemBuilder:
                                                           (context, index) =>
@@ -1543,7 +1746,7 @@ class _SearchCurrentCategoryWidgetState
                                                       direction:
                                                           Axis.horizontal,
                                                       initialRating:
-                                                          ratingBarValue6 ??= 3,
+                                                          ratingBarValue7 ??= 3,
                                                       unratedColor:
                                                           Color(0xFF9E9E9E),
                                                       itemCount: 5,
@@ -1736,7 +1939,7 @@ class _SearchCurrentCategoryWidgetState
                                                     RatingBar.builder(
                                                       onRatingUpdate: (newValue) =>
                                                           setState(() =>
-                                                              ratingBarValue7 =
+                                                              ratingBarValue8 =
                                                                   newValue),
                                                       itemBuilder:
                                                           (context, index) =>
@@ -1750,7 +1953,7 @@ class _SearchCurrentCategoryWidgetState
                                                       direction:
                                                           Axis.horizontal,
                                                       initialRating:
-                                                          ratingBarValue7 ??= 3,
+                                                          ratingBarValue8 ??= 3,
                                                       unratedColor:
                                                           Color(0xFF9E9E9E),
                                                       itemCount: 5,
@@ -1939,7 +2142,7 @@ class _SearchCurrentCategoryWidgetState
                                                     RatingBar.builder(
                                                       onRatingUpdate: (newValue) =>
                                                           setState(() =>
-                                                              ratingBarValue8 =
+                                                              ratingBarValue9 =
                                                                   newValue),
                                                       itemBuilder:
                                                           (context, index) =>
@@ -1953,7 +2156,7 @@ class _SearchCurrentCategoryWidgetState
                                                       direction:
                                                           Axis.horizontal,
                                                       initialRating:
-                                                          ratingBarValue8 ??= 3,
+                                                          ratingBarValue9 ??= 3,
                                                       unratedColor:
                                                           Color(0xFF9E9E9E),
                                                       itemCount: 5,
