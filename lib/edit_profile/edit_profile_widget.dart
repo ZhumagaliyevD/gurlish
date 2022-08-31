@@ -25,7 +25,6 @@ class _EditProfileWidgetState extends State<EditProfileWidget> {
   TextEditingController? textController1;
   TextEditingController? textController2;
   bool? walkInsValue;
-  bool? mbileValue;
   TextEditingController? textController3;
   TextEditingController? textController4;
   TextEditingController? textController5;
@@ -428,85 +427,117 @@ class _EditProfileWidgetState extends State<EditProfileWidget> {
                           ],
                         ),
                       ),
-                      Padding(
-                        padding: EdgeInsetsDirectional.fromSTEB(0, 20, 0, 0),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.max,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Business account',
-                              style: FlutterFlowTheme.of(context)
-                                  .bodyText1
-                                  .override(
-                                    fontFamily: 'Poppins',
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                            ),
-                            Padding(
-                              padding:
-                                  EdgeInsetsDirectional.fromSTEB(0, 10, 0, 0),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.max,
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  InkWell(
-                                    onTap: () async {
-                                      await Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) =>
-                                              PaymentPortalRedirectWidget(),
-                                        ),
-                                      );
-                                    },
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                        color: Color(0xFFE0E0E0),
+                      if (valueOrDefault<bool>(
+                          currentUserDocument?.isSalon, false))
+                        Padding(
+                          padding: EdgeInsetsDirectional.fromSTEB(0, 20, 0, 0),
+                          child: AuthUserStreamWidget(
+                            child: Column(
+                              mainAxisSize: MainAxisSize.max,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Select your service type below',
+                                  style: FlutterFlowTheme.of(context)
+                                      .bodyText1
+                                      .override(
+                                        fontFamily: 'Poppins',
+                                        fontWeight: FontWeight.bold,
                                       ),
-                                      child: Padding(
-                                        padding: EdgeInsetsDirectional.fromSTEB(
-                                            7, 7, 7, 7),
-                                        child: Row(
-                                          mainAxisSize: MainAxisSize.max,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            FlutterFlowDropDown(
-                                              options: ['Option 1'],
-                                              onChanged: (val) => setState(
-                                                  () => dropDownValue = val),
-                                              width: 180,
-                                              height: 50,
-                                              textStyle:
-                                                  FlutterFlowTheme.of(context)
-                                                      .bodyText1
-                                                      .override(
-                                                        fontFamily: 'Poppins',
-                                                        color: Colors.black,
-                                                      ),
-                                              hintText: 'Please select...',
-                                              fillColor: Colors.white,
-                                              elevation: 2,
-                                              borderColor: Colors.transparent,
-                                              borderWidth: 0,
-                                              borderRadius: 0,
-                                              margin: EdgeInsetsDirectional
-                                                  .fromSTEB(12, 4, 12, 4),
-                                              hidesUnderline: true,
+                                ),
+                                Padding(
+                                  padding: EdgeInsetsDirectional.fromSTEB(
+                                      0, 10, 0, 0),
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.max,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      FlutterFlowDropDown(
+                                        options: [
+                                          'Stationery',
+                                          'Mobile',
+                                          'Stationery and Mobile'
+                                        ],
+                                        onChanged: (val) =>
+                                            setState(() => dropDownValue = val),
+                                        width: 180,
+                                        height: 50,
+                                        textStyle: FlutterFlowTheme.of(context)
+                                            .bodyText1
+                                            .override(
+                                              fontFamily: 'Poppins',
+                                              color: Colors.black,
                                             ),
-                                          ],
+                                        hintText: 'Service type',
+                                        fillColor: Color(0xFFE0E0E0),
+                                        elevation: 2,
+                                        borderColor: Colors.transparent,
+                                        borderWidth: 0,
+                                        borderRadius: 0,
+                                        margin: EdgeInsetsDirectional.fromSTEB(
+                                            12, 4, 12, 4),
+                                        hidesUnderline: true,
+                                      ),
+                                      InkWell(
+                                        onTap: () async {
+                                          final usersUpdateData =
+                                              createUsersRecordData(
+                                            serviceType: dropDownValue,
+                                          );
+                                          await currentUserReference!
+                                              .update(usersUpdateData);
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(
+                                            SnackBar(
+                                              content: Text(
+                                                'saved',
+                                                style: GoogleFonts.getFont(
+                                                  'Roboto',
+                                                  color: FlutterFlowTheme.of(
+                                                          context)
+                                                      .primaryText,
+                                                  fontSize: 14,
+                                                ),
+                                              ),
+                                              duration:
+                                                  Duration(milliseconds: 4000),
+                                              backgroundColor: Colors.white,
+                                            ),
+                                          );
+                                        },
+                                        child: Container(
+                                          width: 70,
+                                          decoration: BoxDecoration(
+                                            color: Color(0xFFE0E0E0),
+                                          ),
+                                          child: Padding(
+                                            padding:
+                                                EdgeInsetsDirectional.fromSTEB(
+                                                    7, 7, 7, 7),
+                                            child: Row(
+                                              mainAxisSize: MainAxisSize.max,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                Text(
+                                                  'Save',
+                                                  style: FlutterFlowTheme.of(
+                                                          context)
+                                                      .bodyText1,
+                                                ),
+                                              ],
+                                            ),
+                                          ),
                                         ),
                                       ),
-                                    ),
+                                    ],
                                   ),
-                                ],
-                              ),
+                                ),
+                              ],
                             ),
-                          ],
+                          ),
                         ),
-                      ),
                     ],
                   ),
                 ),
@@ -548,78 +579,6 @@ class _EditProfileWidgetState extends State<EditProfileWidget> {
                         onTap: () async {
                           final usersUpdateData = createUsersRecordData(
                             walkIns: walkInsValue,
-                          );
-                          await currentUserReference!.update(usersUpdateData);
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text(
-                                'saved',
-                                style: GoogleFonts.getFont(
-                                  'Roboto',
-                                  color:
-                                      FlutterFlowTheme.of(context).primaryText,
-                                  fontSize: 14,
-                                ),
-                              ),
-                              duration: Duration(milliseconds: 4000),
-                              backgroundColor: Colors.white,
-                            ),
-                          );
-                        },
-                        child: Container(
-                          width: 70,
-                          decoration: BoxDecoration(
-                            color: Color(0xFFE0E0E0),
-                          ),
-                          child: Padding(
-                            padding: EdgeInsetsDirectional.fromSTEB(7, 7, 7, 7),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.max,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  'Save',
-                                  style: FlutterFlowTheme.of(context).bodyText1,
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsetsDirectional.fromSTEB(0, 20, 0, 0),
-                  child: AuthUserStreamWidget(
-                    child: SwitchListTile(
-                      value: mbileValue ??= valueOrDefault<bool>(
-                          currentUserDocument?.isMobile, false),
-                      onChanged: (newValue) =>
-                          setState(() => mbileValue = newValue),
-                      title: Text(
-                        'Mobile service',
-                        style: FlutterFlowTheme.of(context).title3.override(
-                              fontFamily: 'Poppins',
-                              fontSize: 14,
-                            ),
-                      ),
-                      tileColor: FlutterFlowTheme.of(context).primaryBackground,
-                      dense: false,
-                      controlAffinity: ListTileControlAffinity.trailing,
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsetsDirectional.fromSTEB(10, 0, 10, 0),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      InkWell(
-                        onTap: () async {
-                          final usersUpdateData = createUsersRecordData(
-                            isMobile: mbileValue,
                           );
                           await currentUserReference!.update(usersUpdateData);
                           ScaffoldMessenger.of(context).showSnackBar(

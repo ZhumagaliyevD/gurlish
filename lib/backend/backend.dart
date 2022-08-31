@@ -17,6 +17,7 @@ import 'schema/comments_post_record.dart';
 import 'schema/comments_stories_record.dart';
 import 'schema/payments_record.dart';
 import 'schema/price_record.dart';
+import 'schema/is_mobile_record.dart';
 import 'schema/serializers.dart';
 
 export 'dart:async' show StreamSubscription;
@@ -36,6 +37,7 @@ export 'schema/comments_post_record.dart';
 export 'schema/comments_stories_record.dart';
 export 'schema/payments_record.dart';
 export 'schema/price_record.dart';
+export 'schema/is_mobile_record.dart';
 
 /// Functions to query UsersRecords (as a Stream and as a Future).
 Stream<List<UsersRecord>> queryUsersRecord({
@@ -541,6 +543,48 @@ Future<FFFirestorePage<PriceRecord>> queryPriceRecordPage({
     queryCollectionPage(
       PriceRecord.collection,
       PriceRecord.serializer,
+      queryBuilder: queryBuilder,
+      nextPageMarker: nextPageMarker,
+      pageSize: pageSize,
+      isStream: isStream,
+    );
+
+/// Functions to query IsMobileRecords (as a Stream and as a Future).
+Stream<List<IsMobileRecord>> queryIsMobileRecord({
+  Query Function(Query)? queryBuilder,
+  int limit = -1,
+  bool singleRecord = false,
+}) =>
+    queryCollection(
+      IsMobileRecord.collection,
+      IsMobileRecord.serializer,
+      queryBuilder: queryBuilder,
+      limit: limit,
+      singleRecord: singleRecord,
+    );
+
+Future<List<IsMobileRecord>> queryIsMobileRecordOnce({
+  Query Function(Query)? queryBuilder,
+  int limit = -1,
+  bool singleRecord = false,
+}) =>
+    queryCollectionOnce(
+      IsMobileRecord.collection,
+      IsMobileRecord.serializer,
+      queryBuilder: queryBuilder,
+      limit: limit,
+      singleRecord: singleRecord,
+    );
+
+Future<FFFirestorePage<IsMobileRecord>> queryIsMobileRecordPage({
+  Query Function(Query)? queryBuilder,
+  DocumentSnapshot? nextPageMarker,
+  required int pageSize,
+  required bool isStream,
+}) =>
+    queryCollectionPage(
+      IsMobileRecord.collection,
+      IsMobileRecord.serializer,
       queryBuilder: queryBuilder,
       nextPageMarker: nextPageMarker,
       pageSize: pageSize,

@@ -445,8 +445,11 @@ class _MyProfileWidgetState extends State<MyProfileWidget> {
                                                     shape: BoxShape.circle,
                                                   ),
                                                   child: Image.network(
-                                                    currentUserPhoto,
-                                                    fit: BoxFit.contain,
+                                                    valueOrDefault<String>(
+                                                      currentUserPhoto,
+                                                      'https://picsum.photos/seed/261/600',
+                                                    ),
+                                                    fit: BoxFit.fill,
                                                   ),
                                                 ),
                                               ),
@@ -532,10 +535,12 @@ class _MyProfileWidgetState extends State<MyProfileWidget> {
                                     Padding(
                                       padding: EdgeInsetsDirectional.fromSTEB(
                                           10, 0, 0, 0),
-                                      child: Text(
-                                        'Mobile Service',
-                                        style: FlutterFlowTheme.of(context)
-                                            .bodyText1,
+                                      child: AuthUserStreamWidget(
+                                        child: Text(
+                                          '${valueOrDefault(currentUserDocument?.serviceType, '')} Service',
+                                          style: FlutterFlowTheme.of(context)
+                                              .bodyText1,
+                                        ),
                                       ),
                                     ),
                                     Padding(
@@ -609,9 +614,9 @@ class _MyProfileWidgetState extends State<MyProfileWidget> {
                         padding: EdgeInsetsDirectional.fromSTEB(10, 20, 10, 0),
                         child: Column(
                           mainAxisSize: MainAxisSize.max,
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Container(
-                              width: double.infinity,
                               height: 120,
                               decoration: BoxDecoration(),
                               child: StreamBuilder<List<CategorySalonRecord>>(
@@ -648,62 +653,72 @@ class _MyProfileWidgetState extends State<MyProfileWidget> {
                                       final listViewCategorySalonRecord =
                                           listViewCategorySalonRecordList[
                                               listViewIndex];
-                                      return Column(
-                                        mainAxisSize: MainAxisSize.max,
-                                        children: [
-                                          Container(
-                                            width: 84,
-                                            height: 70,
-                                            child: Stack(
-                                              children: [
-                                                Padding(
-                                                  padding: EdgeInsetsDirectional
-                                                      .fromSTEB(2, 2, 2, 2),
-                                                  child: InkWell(
-                                                    onTap: () async {
-                                                      await Navigator.push(
-                                                        context,
-                                                        MaterialPageRoute(
-                                                          builder: (context) =>
-                                                              StorismyprofileWidget(
-                                                            category:
-                                                                listViewCategorySalonRecord,
+                                      return Padding(
+                                        padding: EdgeInsetsDirectional.fromSTEB(
+                                            0, 0, 5, 0),
+                                        child: Column(
+                                          mainAxisSize: MainAxisSize.max,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          children: [
+                                            Container(
+                                              width: 84,
+                                              height: 70,
+                                              child: Stack(
+                                                children: [
+                                                  Padding(
+                                                    padding:
+                                                        EdgeInsetsDirectional
+                                                            .fromSTEB(
+                                                                2, 2, 2, 2),
+                                                    child: InkWell(
+                                                      onTap: () async {
+                                                        await Navigator.push(
+                                                          context,
+                                                          MaterialPageRoute(
+                                                            builder: (context) =>
+                                                                StorismyprofileWidget(
+                                                              category:
+                                                                  listViewCategorySalonRecord,
+                                                            ),
                                                           ),
+                                                        );
+                                                      },
+                                                      child: ClipRRect(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(10),
+                                                        child: Image.network(
+                                                          valueOrDefault<
+                                                              String>(
+                                                            listViewCategorySalonRecord
+                                                                .image,
+                                                            'https://www.beautyincheck.com/wp-content/uploads/2020/11/image-placeholder.jpg',
+                                                          ),
+                                                          width: 100,
+                                                          height: 100,
+                                                          fit: BoxFit.cover,
                                                         ),
-                                                      );
-                                                    },
-                                                    child: ClipRRect(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              10),
-                                                      child: Image.network(
-                                                        valueOrDefault<String>(
-                                                          listViewCategorySalonRecord
-                                                              .image,
-                                                          'https://www.beautyincheck.com/wp-content/uploads/2020/11/image-placeholder.jpg',
-                                                        ),
-                                                        width: 100,
-                                                        height: 100,
-                                                        fit: BoxFit.cover,
                                                       ),
                                                     ),
                                                   ),
-                                                ),
-                                              ],
+                                                ],
+                                              ),
                                             ),
-                                          ),
-                                          Padding(
-                                            padding:
-                                                EdgeInsetsDirectional.fromSTEB(
-                                                    0, 10, 0, 0),
-                                            child: Text(
-                                              listViewCategorySalonRecord.name!,
-                                              style:
-                                                  FlutterFlowTheme.of(context)
-                                                      .bodyText1,
+                                            Padding(
+                                              padding: EdgeInsetsDirectional
+                                                  .fromSTEB(0, 10, 0, 0),
+                                              child: Text(
+                                                listViewCategorySalonRecord
+                                                    .name!,
+                                                textAlign: TextAlign.center,
+                                                style:
+                                                    FlutterFlowTheme.of(context)
+                                                        .bodyText1,
+                                              ),
                                             ),
-                                          ),
-                                        ],
+                                          ],
+                                        ),
                                       );
                                     },
                                   );

@@ -218,7 +218,7 @@ class _ProfileSalonWidgetState extends State<ProfileSalonWidget> {
                                                 EdgeInsetsDirectional.fromSTEB(
                                                     10, 0, 0, 0),
                                             child: Text(
-                                              'Mobile Service',
+                                              '${columnUsersRecord.serviceType} Service',
                                               style:
                                                   FlutterFlowTheme.of(context)
                                                       .bodyText1,
@@ -689,7 +689,8 @@ class _ProfileSalonWidgetState extends State<ProfileSalonWidget> {
                                                 postsRecord
                                                     .where('created_by',
                                                         isEqualTo:
-                                                            currentUserReference)
+                                                            columnUsersRecord
+                                                                .reference)
                                                     .orderBy('created_at',
                                                         descending: true),
                                           ),
@@ -745,7 +746,10 @@ class _ProfileSalonWidgetState extends State<ProfileSalonWidget> {
                                                           child: Container(
                                                             height: 400,
                                                             child:
-                                                                RatingPostWidget(),
+                                                                RatingPostWidget(
+                                                              postDetails:
+                                                                  gridViewPostsRecord,
+                                                            ),
                                                           ),
                                                         );
                                                       },
@@ -819,7 +823,8 @@ class _ProfileSalonWidgetState extends State<ProfileSalonWidget> {
                                                 postsRecord
                                                     .where('created_by',
                                                         isEqualTo:
-                                                            currentUserReference)
+                                                            columnUsersRecord
+                                                                .reference)
                                                     .orderBy('created_at',
                                                         descending: true),
                                           ),
@@ -875,7 +880,10 @@ class _ProfileSalonWidgetState extends State<ProfileSalonWidget> {
                                                           child: Container(
                                                             height: 400,
                                                             child:
-                                                                RatingPostWidget(),
+                                                                RatingPostWidget(
+                                                              postDetails:
+                                                                  gridViewPostsRecord,
+                                                            ),
                                                           ),
                                                         );
                                                       },

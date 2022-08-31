@@ -269,11 +269,7 @@ class _RatingStoriesWidgetState extends State<RatingStoriesWidget> {
                                                               .sredOcenka(
                                                                   textCommentsStoriesRecordList
                                                                       .map((e) =>
-                                                                          valueOrDefault<
-                                                                              double>(
-                                                                            e.rating!,
-                                                                            0.0,
-                                                                          ))
+                                                                          e.rating!)
                                                                       .toList())
                                                               .toString(),
                                                           '0',
@@ -554,7 +550,12 @@ class _RatingStoriesWidgetState extends State<RatingStoriesWidget> {
                                         text: textController!.text,
                                         createdAt: getCurrentTimestamp,
                                         createdBy: currentUserReference,
-                                        rating: ratingBar111Value,
+                                        rating: valueOrDefault<double>(
+                                          functions.sredOcenka(
+                                              iconButtonUsersRecord.rating!
+                                                  .toList()),
+                                          0.0,
+                                        ),
                                       );
                                       await CommentsStoriesRecord.createDoc(
                                               widget.storiesDetails!.reference)
@@ -786,8 +787,9 @@ class _RatingStoriesWidgetState extends State<RatingStoriesWidget> {
                                                                 .fromSTEB(
                                                                     2, 0, 0, 0),
                                                         child: Text(
-                                                          listViewCommentsStoriesRecord
-                                                              .rating!
+                                                          rowUsersRecord.rating!
+                                                              .toList()
+                                                              .length
                                                               .toString(),
                                                           style: FlutterFlowTheme
                                                                   .of(context)

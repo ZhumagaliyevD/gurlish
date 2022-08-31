@@ -270,7 +270,7 @@ class _MainWidgetState extends State<MainWidget> {
                     fillColor: Colors.transparent,
                     icon: Icon(
                       Icons.menu_sharp,
-                      color: FlutterFlowTheme.of(context).primaryColor,
+                      color: FlutterFlowTheme.of(context).secondaryText,
                       size: 30,
                     ),
                     onPressed: () async {
@@ -404,59 +404,68 @@ class _MainWidgetState extends State<MainWidget> {
                                   visible: listViewCategorySalonRecord
                                           .countStories! >=
                                       1,
-                                  child: Column(
-                                    mainAxisSize: MainAxisSize.max,
-                                    children: [
-                                      Container(
-                                        width: 84,
-                                        height: 70,
-                                        child: Stack(
-                                          children: [
-                                            Padding(
-                                              padding: EdgeInsetsDirectional
-                                                  .fromSTEB(2, 2, 2, 2),
-                                              child: InkWell(
-                                                onTap: () async {
-                                                  await Navigator.push(
-                                                    context,
-                                                    MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          StorisWidget(
-                                                        category:
-                                                            listViewCategorySalonRecord,
+                                  child: Padding(
+                                    padding: EdgeInsetsDirectional.fromSTEB(
+                                        0, 0, 5, 0),
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.max,
+                                      children: [
+                                        Container(
+                                          width: 84,
+                                          height: 70,
+                                          child: Stack(
+                                            children: [
+                                              Padding(
+                                                padding: EdgeInsetsDirectional
+                                                    .fromSTEB(2, 2, 2, 2),
+                                                child: InkWell(
+                                                  onTap: () async {
+                                                    await Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            StorisWidget(
+                                                          category:
+                                                              listViewCategorySalonRecord,
+                                                        ),
                                                       ),
+                                                    );
+                                                  },
+                                                  child: ClipRRect(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            10),
+                                                    child: Image.network(
+                                                      valueOrDefault<String>(
+                                                        listViewCategorySalonRecord
+                                                            .image,
+                                                        'https://www.beautyincheck.com/wp-content/uploads/2020/11/image-placeholder.jpg',
+                                                      ),
+                                                      width: 100,
+                                                      height: 100,
+                                                      fit: BoxFit.cover,
                                                     ),
-                                                  );
-                                                },
-                                                child: ClipRRect(
-                                                  borderRadius:
-                                                      BorderRadius.circular(10),
-                                                  child: Image.network(
-                                                    valueOrDefault<String>(
-                                                      listViewCategorySalonRecord
-                                                          .image,
-                                                      'https://www.beautyincheck.com/wp-content/uploads/2020/11/image-placeholder.jpg',
-                                                    ),
-                                                    width: 100,
-                                                    height: 100,
-                                                    fit: BoxFit.cover,
                                                   ),
                                                 ),
                                               ),
+                                            ],
+                                          ),
+                                        ),
+                                        Expanded(
+                                          child: Padding(
+                                            padding:
+                                                EdgeInsetsDirectional.fromSTEB(
+                                                    0, 10, 0, 0),
+                                            child: Text(
+                                              listViewCategorySalonRecord.name!,
+                                              style:
+                                                  FlutterFlowTheme.of(context)
+                                                      .bodyText1,
                                             ),
-                                          ],
+                                          ),
                                         ),
-                                      ),
-                                      Padding(
-                                        padding: EdgeInsetsDirectional.fromSTEB(
-                                            0, 10, 0, 0),
-                                        child: Text(
-                                          listViewCategorySalonRecord.name!,
-                                          style: FlutterFlowTheme.of(context)
-                                              .bodyText1,
-                                        ),
-                                      ),
-                                    ],
+                                      ],
+                                    ),
                                   ),
                                 );
                               },

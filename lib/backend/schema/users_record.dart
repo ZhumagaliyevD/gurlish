@@ -88,6 +88,9 @@ abstract class UsersRecord implements Built<UsersRecord, UsersRecordBuilder> {
 
   int? get sredOcenka;
 
+  @BuiltValueField(wireName: 'service_type')
+  String? get serviceType;
+
   @BuiltValueField(wireName: kDocumentReferenceField)
   DocumentReference? get ffRef;
   DocumentReference get reference => ffRef!;
@@ -122,7 +125,8 @@ abstract class UsersRecord implements Built<UsersRecord, UsersRecordBuilder> {
     ..adressSelected = false
     ..walkIns = false
     ..linkFavCategories = ListBuilder()
-    ..sredOcenka = 0;
+    ..sredOcenka = 0
+    ..serviceType = '';
 
   static CollectionReference get collection =>
       FirebaseFirestore.instance.collection('users');
@@ -169,6 +173,7 @@ Map<String, dynamic> createUsersRecordData({
   bool? adressSelected,
   bool? walkIns,
   int? sredOcenka,
+  String? serviceType,
 }) {
   final firestoreData = serializers.toFirestore(
     UsersRecord.serializer,
@@ -205,7 +210,8 @@ Map<String, dynamic> createUsersRecordData({
         ..adressSelected = adressSelected
         ..walkIns = walkIns
         ..linkFavCategories = null
-        ..sredOcenka = sredOcenka,
+        ..sredOcenka = sredOcenka
+        ..serviceType = serviceType,
     ),
   );
 

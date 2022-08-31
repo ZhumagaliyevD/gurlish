@@ -27,6 +27,19 @@ double? sredOcenka(List<double>? listOcenok) {
   return roundDouble(average, 2);
 }
 
+double? sredOcenkaCopy(List<double>? listOcenok) {
+  double roundDouble(double value, int places) {
+    double mod = (10.0 * 10.0);
+    return ((value * mod).round().toDouble() / mod);
+  }
+
+  if (listOcenok == null || listOcenok.isEmpty) {
+    return 0;
+  }
+  double average = listOcenok.reduce((x, y) => x + y) / listOcenok.length;
+  return roundDouble(average, 2);
+}
+
 String getDiff(
   LatLng? latlng1,
   LatLng? latlng2,

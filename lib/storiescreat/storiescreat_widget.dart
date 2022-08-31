@@ -114,7 +114,6 @@ class _StoriescreatWidgetState extends State<StoriescreatWidget> {
                               context: context,
                               imageQuality: 100,
                               allowPhoto: true,
-                              allowVideo: true,
                               backgroundColor:
                                   FlutterFlowTheme.of(context).secondaryText,
                               textColor: Colors.white,

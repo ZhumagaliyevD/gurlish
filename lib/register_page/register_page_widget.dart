@@ -462,8 +462,8 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
                                         final usersCreateData = {
                                           ...createUsersRecordData(
                                             adressSelected: false,
-                                            isMobile: false,
                                             sredOcenka: 0,
+                                            serviceType: 'Stationery',
                                           ),
                                           'rating': [0.0],
                                         };

@@ -95,6 +95,13 @@ class _$PostsRecordSerializer implements StructuredSerializer<PostsRecord> {
             specifiedType: const FullType(
                 DocumentReference, const [const FullType.nullable(Object)])));
     }
+    value = object.walkIns;
+    if (value != null) {
+      result
+        ..add('walk_ins')
+        ..add(
+            serializers.serialize(value, specifiedType: const FullType(bool)));
+    }
     value = object.ffRef;
     if (value != null) {
       result
@@ -166,6 +173,10 @@ class _$PostsRecordSerializer implements StructuredSerializer<PostsRecord> {
                 const FullType.nullable(Object)
               ])) as DocumentReference<Object?>?;
           break;
+        case 'walk_ins':
+          result.walkIns = serializers.deserialize(value,
+              specifiedType: const FullType(bool)) as bool?;
+          break;
         case 'Document__Reference__Field':
           result.ffRef = serializers.deserialize(value,
               specifiedType: const FullType(DocumentReference, const [
@@ -201,6 +212,8 @@ class _$PostsRecord extends PostsRecord {
   @override
   final DocumentReference<Object?>? linkCategory;
   @override
+  final bool? walkIns;
+  @override
   final DocumentReference<Object?>? ffRef;
 
   factory _$PostsRecord([void Function(PostsRecordBuilder)? updates]) =>
@@ -217,6 +230,7 @@ class _$PostsRecord extends PostsRecord {
       this.isBusiness,
       this.location,
       this.linkCategory,
+      this.walkIns,
       this.ffRef})
       : super._();
 
@@ -241,6 +255,7 @@ class _$PostsRecord extends PostsRecord {
         isBusiness == other.isBusiness &&
         location == other.location &&
         linkCategory == other.linkCategory &&
+        walkIns == other.walkIns &&
         ffRef == other.ffRef;
   }
 
@@ -255,16 +270,18 @@ class _$PostsRecord extends PostsRecord {
                             $jc(
                                 $jc(
                                     $jc(
-                                        $jc($jc(0, name.hashCode),
-                                            image.hashCode),
-                                        likedBy.hashCode),
-                                    createdAt.hashCode),
-                                createdBy.hashCode),
-                            firstPhoto.hashCode),
-                        category.hashCode),
-                    isBusiness.hashCode),
-                location.hashCode),
-            linkCategory.hashCode),
+                                        $jc(
+                                            $jc($jc(0, name.hashCode),
+                                                image.hashCode),
+                                            likedBy.hashCode),
+                                        createdAt.hashCode),
+                                    createdBy.hashCode),
+                                firstPhoto.hashCode),
+                            category.hashCode),
+                        isBusiness.hashCode),
+                    location.hashCode),
+                linkCategory.hashCode),
+            walkIns.hashCode),
         ffRef.hashCode));
   }
 
@@ -281,6 +298,7 @@ class _$PostsRecord extends PostsRecord {
           ..add('isBusiness', isBusiness)
           ..add('location', location)
           ..add('linkCategory', linkCategory)
+          ..add('walkIns', walkIns)
           ..add('ffRef', ffRef))
         .toString();
   }
@@ -333,6 +351,10 @@ class PostsRecordBuilder implements Builder<PostsRecord, PostsRecordBuilder> {
   set linkCategory(DocumentReference<Object?>? linkCategory) =>
       _$this._linkCategory = linkCategory;
 
+  bool? _walkIns;
+  bool? get walkIns => _$this._walkIns;
+  set walkIns(bool? walkIns) => _$this._walkIns = walkIns;
+
   DocumentReference<Object?>? _ffRef;
   DocumentReference<Object?>? get ffRef => _$this._ffRef;
   set ffRef(DocumentReference<Object?>? ffRef) => _$this._ffRef = ffRef;
@@ -354,6 +376,7 @@ class PostsRecordBuilder implements Builder<PostsRecord, PostsRecordBuilder> {
       _isBusiness = $v.isBusiness;
       _location = $v.location;
       _linkCategory = $v.linkCategory;
+      _walkIns = $v.walkIns;
       _ffRef = $v.ffRef;
       _$v = null;
     }
@@ -389,6 +412,7 @@ class PostsRecordBuilder implements Builder<PostsRecord, PostsRecordBuilder> {
               isBusiness: isBusiness,
               location: location,
               linkCategory: linkCategory,
+              walkIns: walkIns,
               ffRef: ffRef);
     } catch (_) {
       late String _$failedField;

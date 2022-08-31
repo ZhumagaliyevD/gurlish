@@ -28,6 +28,8 @@ abstract class StoriesRecord
   @BuiltValueField(wireName: 'StoriesID')
   String? get storiesID;
 
+  BuiltList<double>? get rating;
+
   @BuiltValueField(wireName: kDocumentReferenceField)
   DocumentReference? get ffRef;
   DocumentReference get reference => ffRef!;
@@ -37,7 +39,8 @@ abstract class StoriesRecord
     ..imgStories = ''
     ..category = ''
     ..categories = ListBuilder()
-    ..storiesID = '';
+    ..storiesID = ''
+    ..rating = ListBuilder();
 
   static CollectionReference get collection =>
       FirebaseFirestore.instance.collection('stories');
@@ -78,7 +81,8 @@ Map<String, dynamic> createStoriesRecordData({
         ..imgStories = imgStories
         ..category = category
         ..categories = null
-        ..storiesID = storiesID,
+        ..storiesID = storiesID
+        ..rating = null,
     ),
   );
 

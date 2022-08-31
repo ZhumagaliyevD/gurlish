@@ -1,6 +1,7 @@
 import '../auth/auth_util.dart';
 import '../backend/backend.dart';
 import '../components/filter_price_range_widget.dart';
+import '../components/filter_sort_service_type_widget.dart';
 import '../components/filter_sort_widget.dart';
 import '../flutter_flow/flutter_flow_icon_button.dart';
 import '../flutter_flow/flutter_flow_theme.dart';
@@ -34,6 +35,10 @@ class _SearchCurrentCategoryWidgetState
   double? ratingBarValue1;
   double? ratingBarValue3;
   double? ratingBarValue4;
+  double? ratingBarValue5;
+  double? ratingBarValue6;
+  double? ratingBarValue7;
+  double? ratingBarValue8;
 
   @override
   void initState() {
@@ -129,7 +134,13 @@ class _SearchCurrentCategoryWidgetState
                                     size: 30,
                                   ),
                                   onPressed: () async {
-                                    Navigator.pop(context);
+                                    await Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => NavBarPage(
+                                            initialPage: 'main_search'),
+                                      ),
+                                    );
                                   },
                                 ),
                                 Expanded(
@@ -263,29 +274,85 @@ class _SearchCurrentCategoryWidgetState
                           Padding(
                             padding:
                                 EdgeInsetsDirectional.fromSTEB(10, 0, 0, 0),
-                            child: Container(
-                              height: 25,
-                              decoration: BoxDecoration(
-                                color: Color(0xFFE5E5E5),
-                                borderRadius: BorderRadius.circular(10),
+                            child: InkWell(
+                              onTap: () async {
+                                await showModalBottomSheet(
+                                  isScrollControlled: true,
+                                  backgroundColor: Colors.transparent,
+                                  context: context,
+                                  builder: (context) {
+                                    return Padding(
+                                      padding:
+                                          MediaQuery.of(context).viewInsets,
+                                      child: Container(
+                                        height:
+                                            MediaQuery.of(context).size.height *
+                                                0.5,
+                                        child: FilterSortServiceTypeWidget(),
+                                      ),
+                                    );
+                                  },
+                                );
+                              },
+                              child: Container(
+                                height: 25,
+                                decoration: BoxDecoration(
+                                  color: Color(0xFFE5E5E5),
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                child: Padding(
+                                  padding: EdgeInsetsDirectional.fromSTEB(
+                                      10, 10, 10, 10),
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Text(
+                                        'mobile',
+                                        style: FlutterFlowTheme.of(context)
+                                            .bodyText1,
+                                      ),
+                                      Icon(
+                                        Icons.keyboard_arrow_down,
+                                        color: Colors.black,
+                                        size: 24,
+                                      ),
+                                    ],
+                                  ),
+                                ),
                               ),
-                              child: Padding(
-                                padding: EdgeInsetsDirectional.fromSTEB(
-                                    10, 10, 10, 10),
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Text(
-                                      'mobile',
-                                      style: FlutterFlowTheme.of(context)
-                                          .bodyText1,
-                                    ),
-                                    Icon(
-                                      Icons.keyboard_arrow_down,
-                                      color: Colors.black,
-                                      size: 24,
-                                    ),
-                                  ],
+                            ),
+                          ),
+                          Padding(
+                            padding:
+                                EdgeInsetsDirectional.fromSTEB(10, 0, 0, 0),
+                            child: InkWell(
+                              onTap: () async {
+                                setState(() => FFAppState().sortby = 'walkins');
+                              },
+                              child: Container(
+                                height: 25,
+                                decoration: BoxDecoration(
+                                  color: Color(0xFFE5E5E5),
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                child: Padding(
+                                  padding: EdgeInsetsDirectional.fromSTEB(
+                                      10, 10, 10, 10),
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Text(
+                                        'walk ins',
+                                        style: FlutterFlowTheme.of(context)
+                                            .bodyText1,
+                                      ),
+                                      Icon(
+                                        Icons.keyboard_arrow_down,
+                                        color: Colors.black,
+                                        size: 24,
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ),
                             ),
@@ -1097,6 +1164,820 @@ class _SearchCurrentCategoryWidgetState
                                               BorderRadius.circular(15),
                                           child: Image.network(
                                             nearestPostsRecord.firstPhoto!,
+                                            width: double.infinity,
+                                            height: 180,
+                                            fit: BoxFit.cover,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              );
+                            },
+                          );
+                        },
+                      ),
+                    ),
+                  if (FFAppState().sortby == 'walkins')
+                    Padding(
+                      padding: EdgeInsetsDirectional.fromSTEB(10, 10, 10, 0),
+                      child: StreamBuilder<List<PostsRecord>>(
+                        stream: queryPostsRecord(
+                          queryBuilder: (postsRecord) => postsRecord
+                              .where('category',
+                                  isEqualTo: columnCategorySalonRecord.name)
+                              .where('isBusiness', isEqualTo: true)
+                              .orderBy('name', descending: true),
+                        ),
+                        builder: (context, snapshot) {
+                          // Customize what your widget looks like when it's loading.
+                          if (!snapshot.hasData) {
+                            return Center(
+                              child: SizedBox(
+                                width: 50,
+                                height: 50,
+                                child: CircularProgressIndicator(
+                                  color:
+                                      FlutterFlowTheme.of(context).primaryColor,
+                                ),
+                              ),
+                            );
+                          }
+                          List<PostsRecord> walkinsPostsRecordList =
+                              snapshot.data!;
+                          return ListView.builder(
+                            padding: EdgeInsets.zero,
+                            shrinkWrap: true,
+                            scrollDirection: Axis.vertical,
+                            itemCount: walkinsPostsRecordList.length,
+                            itemBuilder: (context, walkinsIndex) {
+                              final walkinsPostsRecord =
+                                  walkinsPostsRecordList[walkinsIndex];
+                              return Padding(
+                                padding: EdgeInsetsDirectional.fromSTEB(
+                                    0, 10, 0, 10),
+                                child: InkWell(
+                                  onTap: () async {
+                                    if (walkinsPostsRecord.createdBy ==
+                                        currentUserReference) {
+                                      await Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => NavBarPage(
+                                              initialPage: 'MyProfile'),
+                                        ),
+                                      );
+                                    } else {
+                                      await Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              ProfileSalonWidget(
+                                            profileSalon:
+                                                walkinsPostsRecord.createdBy,
+                                          ),
+                                        ),
+                                      );
+                                    }
+                                  },
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.max,
+                                    children: [
+                                      StreamBuilder<UsersRecord>(
+                                        stream: UsersRecord.getDocument(
+                                            walkinsPostsRecord.createdBy!),
+                                        builder: (context, snapshot) {
+                                          // Customize what your widget looks like when it's loading.
+                                          if (!snapshot.hasData) {
+                                            return Center(
+                                              child: SizedBox(
+                                                width: 50,
+                                                height: 50,
+                                                child:
+                                                    CircularProgressIndicator(
+                                                  color: FlutterFlowTheme.of(
+                                                          context)
+                                                      .primaryColor,
+                                                ),
+                                              ),
+                                            );
+                                          }
+                                          final rowUsersRecord = snapshot.data!;
+                                          return Row(
+                                            mainAxisSize: MainAxisSize.max,
+                                            children: [
+                                              Container(
+                                                width: 80,
+                                                height: 80,
+                                                clipBehavior: Clip.antiAlias,
+                                                decoration: BoxDecoration(
+                                                  shape: BoxShape.circle,
+                                                ),
+                                                child: Image.network(
+                                                  rowUsersRecord.photoUrl!,
+                                                  fit: BoxFit.contain,
+                                                ),
+                                              ),
+                                              Padding(
+                                                padding: EdgeInsetsDirectional
+                                                    .fromSTEB(10, 0, 0, 0),
+                                                child: Column(
+                                                  mainAxisSize:
+                                                      MainAxisSize.max,
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Text(
+                                                      rowUsersRecord
+                                                          .displayName!,
+                                                      style:
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .bodyText1
+                                                              .override(
+                                                                fontFamily:
+                                                                    'Poppins',
+                                                                fontSize: 18,
+                                                              ),
+                                                    ),
+                                                    Row(
+                                                      mainAxisSize:
+                                                          MainAxisSize.max,
+                                                      children: [
+                                                        Text(
+                                                          functions
+                                                              .returnDistanceBetweenTwoPointsCopy(
+                                                                  rowUsersRecord
+                                                                      .adresMap,
+                                                                  currentUserLocationValue)
+                                                              .toString(),
+                                                          style: FlutterFlowTheme
+                                                                  .of(context)
+                                                              .bodyText1,
+                                                        ),
+                                                        Text(
+                                                          'km from you',
+                                                          style: FlutterFlowTheme
+                                                                  .of(context)
+                                                              .bodyText1,
+                                                        ),
+                                                      ],
+                                                    ),
+                                                    RatingBar.builder(
+                                                      onRatingUpdate: (newValue) =>
+                                                          setState(() =>
+                                                              ratingBarValue5 =
+                                                                  newValue),
+                                                      itemBuilder:
+                                                          (context, index) =>
+                                                              Icon(
+                                                        Icons.star_rounded,
+                                                        color:
+                                                            FlutterFlowTheme.of(
+                                                                    context)
+                                                                .secondaryColor,
+                                                      ),
+                                                      direction:
+                                                          Axis.horizontal,
+                                                      initialRating:
+                                                          ratingBarValue5 ??= 3,
+                                                      unratedColor:
+                                                          Color(0xFF9E9E9E),
+                                                      itemCount: 5,
+                                                      itemSize: 20,
+                                                      glowColor:
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .secondaryColor,
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ],
+                                          );
+                                        },
+                                      ),
+                                      Padding(
+                                        padding: EdgeInsetsDirectional.fromSTEB(
+                                            0, 15, 0, 0),
+                                        child: ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(15),
+                                          child: Image.network(
+                                            walkinsPostsRecord.firstPhoto!,
+                                            width: double.infinity,
+                                            height: 180,
+                                            fit: BoxFit.cover,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              );
+                            },
+                          );
+                        },
+                      ),
+                    ),
+                  if (FFAppState().sortby == 'Mobile')
+                    Padding(
+                      padding: EdgeInsetsDirectional.fromSTEB(10, 10, 10, 0),
+                      child: StreamBuilder<List<PostsRecord>>(
+                        stream: queryPostsRecord(
+                          queryBuilder: (postsRecord) => postsRecord
+                              .where('category',
+                                  isEqualTo: columnCategorySalonRecord.name)
+                              .where('isBusiness', isEqualTo: true)
+                              .orderBy('name', descending: true),
+                        ),
+                        builder: (context, snapshot) {
+                          // Customize what your widget looks like when it's loading.
+                          if (!snapshot.hasData) {
+                            return Center(
+                              child: SizedBox(
+                                width: 50,
+                                height: 50,
+                                child: CircularProgressIndicator(
+                                  color:
+                                      FlutterFlowTheme.of(context).primaryColor,
+                                ),
+                              ),
+                            );
+                          }
+                          List<PostsRecord> mobilePostsRecordList =
+                              snapshot.data!;
+                          return ListView.builder(
+                            padding: EdgeInsets.zero,
+                            shrinkWrap: true,
+                            scrollDirection: Axis.vertical,
+                            itemCount: mobilePostsRecordList.length,
+                            itemBuilder: (context, mobileIndex) {
+                              final mobilePostsRecord =
+                                  mobilePostsRecordList[mobileIndex];
+                              return Padding(
+                                padding: EdgeInsetsDirectional.fromSTEB(
+                                    0, 10, 0, 10),
+                                child: InkWell(
+                                  onTap: () async {
+                                    if (mobilePostsRecord.createdBy ==
+                                        currentUserReference) {
+                                      await Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => NavBarPage(
+                                              initialPage: 'MyProfile'),
+                                        ),
+                                      );
+                                    } else {
+                                      await Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              ProfileSalonWidget(
+                                            profileSalon:
+                                                mobilePostsRecord.createdBy,
+                                          ),
+                                        ),
+                                      );
+                                    }
+                                  },
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.max,
+                                    children: [
+                                      StreamBuilder<UsersRecord>(
+                                        stream: UsersRecord.getDocument(
+                                            mobilePostsRecord.createdBy!),
+                                        builder: (context, snapshot) {
+                                          // Customize what your widget looks like when it's loading.
+                                          if (!snapshot.hasData) {
+                                            return Center(
+                                              child: SizedBox(
+                                                width: 50,
+                                                height: 50,
+                                                child:
+                                                    CircularProgressIndicator(
+                                                  color: FlutterFlowTheme.of(
+                                                          context)
+                                                      .primaryColor,
+                                                ),
+                                              ),
+                                            );
+                                          }
+                                          final rowUsersRecord = snapshot.data!;
+                                          return Row(
+                                            mainAxisSize: MainAxisSize.max,
+                                            children: [
+                                              Container(
+                                                width: 80,
+                                                height: 80,
+                                                clipBehavior: Clip.antiAlias,
+                                                decoration: BoxDecoration(
+                                                  shape: BoxShape.circle,
+                                                ),
+                                                child: Image.network(
+                                                  rowUsersRecord.photoUrl!,
+                                                  fit: BoxFit.contain,
+                                                ),
+                                              ),
+                                              Padding(
+                                                padding: EdgeInsetsDirectional
+                                                    .fromSTEB(10, 0, 0, 0),
+                                                child: Column(
+                                                  mainAxisSize:
+                                                      MainAxisSize.max,
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Text(
+                                                      rowUsersRecord
+                                                          .displayName!,
+                                                      style:
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .bodyText1
+                                                              .override(
+                                                                fontFamily:
+                                                                    'Poppins',
+                                                                fontSize: 18,
+                                                              ),
+                                                    ),
+                                                    Row(
+                                                      mainAxisSize:
+                                                          MainAxisSize.max,
+                                                      children: [
+                                                        Text(
+                                                          functions
+                                                              .returnDistanceBetweenTwoPointsCopy(
+                                                                  rowUsersRecord
+                                                                      .adresMap,
+                                                                  currentUserLocationValue)
+                                                              .toString(),
+                                                          style: FlutterFlowTheme
+                                                                  .of(context)
+                                                              .bodyText1,
+                                                        ),
+                                                        Text(
+                                                          'km from you',
+                                                          style: FlutterFlowTheme
+                                                                  .of(context)
+                                                              .bodyText1,
+                                                        ),
+                                                      ],
+                                                    ),
+                                                    RatingBar.builder(
+                                                      onRatingUpdate: (newValue) =>
+                                                          setState(() =>
+                                                              ratingBarValue6 =
+                                                                  newValue),
+                                                      itemBuilder:
+                                                          (context, index) =>
+                                                              Icon(
+                                                        Icons.star_rounded,
+                                                        color:
+                                                            FlutterFlowTheme.of(
+                                                                    context)
+                                                                .secondaryColor,
+                                                      ),
+                                                      direction:
+                                                          Axis.horizontal,
+                                                      initialRating:
+                                                          ratingBarValue6 ??= 3,
+                                                      unratedColor:
+                                                          Color(0xFF9E9E9E),
+                                                      itemCount: 5,
+                                                      itemSize: 20,
+                                                      glowColor:
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .secondaryColor,
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ],
+                                          );
+                                        },
+                                      ),
+                                      Padding(
+                                        padding: EdgeInsetsDirectional.fromSTEB(
+                                            0, 15, 0, 0),
+                                        child: ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(15),
+                                          child: Image.network(
+                                            mobilePostsRecord.firstPhoto!,
+                                            width: double.infinity,
+                                            height: 180,
+                                            fit: BoxFit.cover,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              );
+                            },
+                          );
+                        },
+                      ),
+                    ),
+                  if (FFAppState().sortby == 'Stationery')
+                    Padding(
+                      padding: EdgeInsetsDirectional.fromSTEB(10, 10, 10, 0),
+                      child: StreamBuilder<List<PostsRecord>>(
+                        stream: queryPostsRecord(
+                          queryBuilder: (postsRecord) => postsRecord
+                              .where('category',
+                                  isEqualTo: columnCategorySalonRecord.name)
+                              .where('isBusiness', isEqualTo: true)
+                              .orderBy('name', descending: true),
+                        ),
+                        builder: (context, snapshot) {
+                          // Customize what your widget looks like when it's loading.
+                          if (!snapshot.hasData) {
+                            return Center(
+                              child: SizedBox(
+                                width: 50,
+                                height: 50,
+                                child: CircularProgressIndicator(
+                                  color:
+                                      FlutterFlowTheme.of(context).primaryColor,
+                                ),
+                              ),
+                            );
+                          }
+                          List<PostsRecord> mobileandstationeryPostsRecordList =
+                              snapshot.data!;
+                          return ListView.builder(
+                            padding: EdgeInsets.zero,
+                            shrinkWrap: true,
+                            scrollDirection: Axis.vertical,
+                            itemCount:
+                                mobileandstationeryPostsRecordList.length,
+                            itemBuilder: (context, mobileandstationeryIndex) {
+                              final mobileandstationeryPostsRecord =
+                                  mobileandstationeryPostsRecordList[
+                                      mobileandstationeryIndex];
+                              return Padding(
+                                padding: EdgeInsetsDirectional.fromSTEB(
+                                    0, 10, 0, 10),
+                                child: InkWell(
+                                  onTap: () async {
+                                    if (mobileandstationeryPostsRecord
+                                            .createdBy ==
+                                        currentUserReference) {
+                                      await Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => NavBarPage(
+                                              initialPage: 'MyProfile'),
+                                        ),
+                                      );
+                                    } else {
+                                      await Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              ProfileSalonWidget(
+                                            profileSalon:
+                                                mobileandstationeryPostsRecord
+                                                    .createdBy,
+                                          ),
+                                        ),
+                                      );
+                                    }
+                                  },
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.max,
+                                    children: [
+                                      StreamBuilder<UsersRecord>(
+                                        stream: UsersRecord.getDocument(
+                                            mobileandstationeryPostsRecord
+                                                .createdBy!),
+                                        builder: (context, snapshot) {
+                                          // Customize what your widget looks like when it's loading.
+                                          if (!snapshot.hasData) {
+                                            return Center(
+                                              child: SizedBox(
+                                                width: 50,
+                                                height: 50,
+                                                child:
+                                                    CircularProgressIndicator(
+                                                  color: FlutterFlowTheme.of(
+                                                          context)
+                                                      .primaryColor,
+                                                ),
+                                              ),
+                                            );
+                                          }
+                                          final rowUsersRecord = snapshot.data!;
+                                          return Row(
+                                            mainAxisSize: MainAxisSize.max,
+                                            children: [
+                                              Container(
+                                                width: 80,
+                                                height: 80,
+                                                clipBehavior: Clip.antiAlias,
+                                                decoration: BoxDecoration(
+                                                  shape: BoxShape.circle,
+                                                ),
+                                                child: Image.network(
+                                                  rowUsersRecord.photoUrl!,
+                                                  fit: BoxFit.contain,
+                                                ),
+                                              ),
+                                              Padding(
+                                                padding: EdgeInsetsDirectional
+                                                    .fromSTEB(10, 0, 0, 0),
+                                                child: Column(
+                                                  mainAxisSize:
+                                                      MainAxisSize.max,
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Text(
+                                                      rowUsersRecord
+                                                          .displayName!,
+                                                      style:
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .bodyText1
+                                                              .override(
+                                                                fontFamily:
+                                                                    'Poppins',
+                                                                fontSize: 18,
+                                                              ),
+                                                    ),
+                                                    Row(
+                                                      mainAxisSize:
+                                                          MainAxisSize.max,
+                                                      children: [
+                                                        Text(
+                                                          functions
+                                                              .returnDistanceBetweenTwoPointsCopy(
+                                                                  rowUsersRecord
+                                                                      .adresMap,
+                                                                  currentUserLocationValue)
+                                                              .toString(),
+                                                          style: FlutterFlowTheme
+                                                                  .of(context)
+                                                              .bodyText1,
+                                                        ),
+                                                        Text(
+                                                          'km from you',
+                                                          style: FlutterFlowTheme
+                                                                  .of(context)
+                                                              .bodyText1,
+                                                        ),
+                                                      ],
+                                                    ),
+                                                    RatingBar.builder(
+                                                      onRatingUpdate: (newValue) =>
+                                                          setState(() =>
+                                                              ratingBarValue7 =
+                                                                  newValue),
+                                                      itemBuilder:
+                                                          (context, index) =>
+                                                              Icon(
+                                                        Icons.star_rounded,
+                                                        color:
+                                                            FlutterFlowTheme.of(
+                                                                    context)
+                                                                .secondaryColor,
+                                                      ),
+                                                      direction:
+                                                          Axis.horizontal,
+                                                      initialRating:
+                                                          ratingBarValue7 ??= 3,
+                                                      unratedColor:
+                                                          Color(0xFF9E9E9E),
+                                                      itemCount: 5,
+                                                      itemSize: 20,
+                                                      glowColor:
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .secondaryColor,
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ],
+                                          );
+                                        },
+                                      ),
+                                      Padding(
+                                        padding: EdgeInsetsDirectional.fromSTEB(
+                                            0, 15, 0, 0),
+                                        child: ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(15),
+                                          child: Image.network(
+                                            mobileandstationeryPostsRecord
+                                                .firstPhoto!,
+                                            width: double.infinity,
+                                            height: 180,
+                                            fit: BoxFit.cover,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              );
+                            },
+                          );
+                        },
+                      ),
+                    ),
+                  if (FFAppState().sortby == 'Stationery and Mobile')
+                    Padding(
+                      padding: EdgeInsetsDirectional.fromSTEB(10, 10, 10, 0),
+                      child: StreamBuilder<List<PostsRecord>>(
+                        stream: queryPostsRecord(
+                          queryBuilder: (postsRecord) => postsRecord
+                              .where('category',
+                                  isEqualTo: columnCategorySalonRecord.name)
+                              .where('isBusiness', isEqualTo: true)
+                              .orderBy('name', descending: true),
+                        ),
+                        builder: (context, snapshot) {
+                          // Customize what your widget looks like when it's loading.
+                          if (!snapshot.hasData) {
+                            return Center(
+                              child: SizedBox(
+                                width: 50,
+                                height: 50,
+                                child: CircularProgressIndicator(
+                                  color:
+                                      FlutterFlowTheme.of(context).primaryColor,
+                                ),
+                              ),
+                            );
+                          }
+                          List<PostsRecord> bothPostsRecordList =
+                              snapshot.data!;
+                          return ListView.builder(
+                            padding: EdgeInsets.zero,
+                            shrinkWrap: true,
+                            scrollDirection: Axis.vertical,
+                            itemCount: bothPostsRecordList.length,
+                            itemBuilder: (context, bothIndex) {
+                              final bothPostsRecord =
+                                  bothPostsRecordList[bothIndex];
+                              return Padding(
+                                padding: EdgeInsetsDirectional.fromSTEB(
+                                    0, 10, 0, 10),
+                                child: InkWell(
+                                  onTap: () async {
+                                    if (bothPostsRecord.createdBy ==
+                                        currentUserReference) {
+                                      await Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => NavBarPage(
+                                              initialPage: 'MyProfile'),
+                                        ),
+                                      );
+                                    } else {
+                                      await Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              ProfileSalonWidget(
+                                            profileSalon:
+                                                bothPostsRecord.createdBy,
+                                          ),
+                                        ),
+                                      );
+                                    }
+                                  },
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.max,
+                                    children: [
+                                      StreamBuilder<UsersRecord>(
+                                        stream: UsersRecord.getDocument(
+                                            bothPostsRecord.createdBy!),
+                                        builder: (context, snapshot) {
+                                          // Customize what your widget looks like when it's loading.
+                                          if (!snapshot.hasData) {
+                                            return Center(
+                                              child: SizedBox(
+                                                width: 50,
+                                                height: 50,
+                                                child:
+                                                    CircularProgressIndicator(
+                                                  color: FlutterFlowTheme.of(
+                                                          context)
+                                                      .primaryColor,
+                                                ),
+                                              ),
+                                            );
+                                          }
+                                          final rowUsersRecord = snapshot.data!;
+                                          return Row(
+                                            mainAxisSize: MainAxisSize.max,
+                                            children: [
+                                              Container(
+                                                width: 80,
+                                                height: 80,
+                                                clipBehavior: Clip.antiAlias,
+                                                decoration: BoxDecoration(
+                                                  shape: BoxShape.circle,
+                                                ),
+                                                child: Image.network(
+                                                  rowUsersRecord.photoUrl!,
+                                                  fit: BoxFit.contain,
+                                                ),
+                                              ),
+                                              Padding(
+                                                padding: EdgeInsetsDirectional
+                                                    .fromSTEB(10, 0, 0, 0),
+                                                child: Column(
+                                                  mainAxisSize:
+                                                      MainAxisSize.max,
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Text(
+                                                      rowUsersRecord
+                                                          .displayName!,
+                                                      style:
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .bodyText1
+                                                              .override(
+                                                                fontFamily:
+                                                                    'Poppins',
+                                                                fontSize: 18,
+                                                              ),
+                                                    ),
+                                                    Row(
+                                                      mainAxisSize:
+                                                          MainAxisSize.max,
+                                                      children: [
+                                                        Text(
+                                                          functions
+                                                              .returnDistanceBetweenTwoPointsCopy(
+                                                                  rowUsersRecord
+                                                                      .adresMap,
+                                                                  currentUserLocationValue)
+                                                              .toString(),
+                                                          style: FlutterFlowTheme
+                                                                  .of(context)
+                                                              .bodyText1,
+                                                        ),
+                                                        Text(
+                                                          'km from you',
+                                                          style: FlutterFlowTheme
+                                                                  .of(context)
+                                                              .bodyText1,
+                                                        ),
+                                                      ],
+                                                    ),
+                                                    RatingBar.builder(
+                                                      onRatingUpdate: (newValue) =>
+                                                          setState(() =>
+                                                              ratingBarValue8 =
+                                                                  newValue),
+                                                      itemBuilder:
+                                                          (context, index) =>
+                                                              Icon(
+                                                        Icons.star_rounded,
+                                                        color:
+                                                            FlutterFlowTheme.of(
+                                                                    context)
+                                                                .secondaryColor,
+                                                      ),
+                                                      direction:
+                                                          Axis.horizontal,
+                                                      initialRating:
+                                                          ratingBarValue8 ??= 3,
+                                                      unratedColor:
+                                                          Color(0xFF9E9E9E),
+                                                      itemCount: 5,
+                                                      itemSize: 20,
+                                                      glowColor:
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .secondaryColor,
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ],
+                                          );
+                                        },
+                                      ),
+                                      Padding(
+                                        padding: EdgeInsetsDirectional.fromSTEB(
+                                            0, 15, 0, 0),
+                                        child: ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(15),
+                                          child: Image.network(
+                                            bothPostsRecord.firstPhoto!,
                                             width: double.infinity,
                                             height: 180,
                                             fit: BoxFit.cover,

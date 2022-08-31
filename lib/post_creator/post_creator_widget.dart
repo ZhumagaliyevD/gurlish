@@ -171,7 +171,6 @@ class _PostCreatorWidgetState extends State<PostCreatorWidget> {
                   maxHeight: 150.00,
                   imageQuality: 100,
                   allowPhoto: true,
-                  allowVideo: true,
                   backgroundColor: Colors.white,
                   textColor: FlutterFlowTheme.of(context).secondaryText,
                 );
@@ -358,6 +357,8 @@ class _PostCreatorWidgetState extends State<PostCreatorWidget> {
                               isBusiness: true,
                               location: currentUserDocument!.adresMap,
                               linkCategory: rowCategorySalonRecord!.reference,
+                              walkIns: valueOrDefault<bool>(
+                                  currentUserDocument?.walkIns, false),
                             );
                             var postsRecordReference =
                                 PostsRecord.collection.doc();

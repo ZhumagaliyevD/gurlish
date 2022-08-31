@@ -13,6 +13,7 @@ export 'main/main_widget.dart' show MainWidget;
 export 'payment_portal_redirect/payment_portal_redirect_widget.dart'
     show PaymentPortalRedirectWidget;
 export 'plan2/plan2_widget.dart' show Plan2Widget;
+export 'paymentdone/paymentdone_widget.dart' show PaymentdoneWidget;
 export 'payment_portal_redirect_copy/payment_portal_redirect_copy_widget.dart'
     show PaymentPortalRedirectCopyWidget;
 export 'plan1/plan1_widget.dart' show Plan1Widget;
@@ -34,8 +35,6 @@ export 'forget_password/forget_password_widget.dart' show ForgetPasswordWidget;
 export 'chat/chat_widget.dart' show ChatWidget;
 export 'chat_list/chat_list_widget.dart' show ChatListWidget;
 export 'register_page/register_page_widget.dart' show RegisterPageWidget;
-export 'payment_portal_redirect_copy2/payment_portal_redirect_copy2_widget.dart'
-    show PaymentPortalRedirectCopy2Widget;
 export 'testtest/testtest_widget.dart' show TesttestWidget;
 export 'map_adress_copy/map_adress_copy_widget.dart' show MapAdressCopyWidget;
 export 'payment_portal_redirect_copy_copy/payment_portal_redirect_copy_copy_widget.dart'

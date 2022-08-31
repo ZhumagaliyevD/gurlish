@@ -1,9 +1,8 @@
-import '../auth/auth_util.dart';
 import '../backend/backend.dart';
-import '../backend/stripe/payment_manager.dart';
 import '../flutter_flow/flutter_flow_icon_button.dart';
 import '../flutter_flow/flutter_flow_theme.dart';
 import '../flutter_flow/flutter_flow_util.dart';
+import '../paymentdone/paymentdone_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -17,7 +16,6 @@ class PaymentPortalRedirectCopyWidget extends StatefulWidget {
 
 class _PaymentPortalRedirectCopyWidgetState
     extends State<PaymentPortalRedirectCopyWidget> {
-  String? paymentId;
   TextEditingController? cardNumberController;
   TextEditingController? nameController;
   TextEditingController? cvcController;
@@ -521,27 +519,12 @@ class _PaymentPortalRedirectCopyWidgetState
                                 return;
                               }
 
-                              final paymentResponse =
-                                  await processStripePayment(
-                                amount: containerPriceRecord!.price!,
-                                currency: 'ZAR',
-                                customerEmail: currentUserEmail,
-                                customerName: currentUserDisplayName,
-                                allowGooglePay: false,
-                                allowApplePay: false,
+                              await Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => PaymentdoneWidget(),
+                                ),
                               );
-                              if (paymentResponse.paymentId == null) {
-                                if (paymentResponse.errorMessage != null) {
-                                  showSnackbar(
-                                    context,
-                                    'Error: ${paymentResponse.errorMessage}',
-                                  );
-                                }
-                                return;
-                              }
-                              paymentId = paymentResponse.paymentId!;
-
-                              setState(() {});
                             },
                             child: Row(
                               mainAxisSize: MainAxisSize.max,

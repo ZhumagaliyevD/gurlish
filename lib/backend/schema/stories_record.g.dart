@@ -73,6 +73,14 @@ class _$StoriesRecordSerializer implements StructuredSerializer<StoriesRecord> {
         ..add(serializers.serialize(value,
             specifiedType: const FullType(String)));
     }
+    value = object.rating;
+    if (value != null) {
+      result
+        ..add('rating')
+        ..add(serializers.serialize(value,
+            specifiedType:
+                const FullType(BuiltList, const [const FullType(double)])));
+    }
     value = object.ffRef;
     if (value != null) {
       result
@@ -129,6 +137,12 @@ class _$StoriesRecordSerializer implements StructuredSerializer<StoriesRecord> {
           result.storiesID = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String?;
           break;
+        case 'rating':
+          result.rating.replace(serializers.deserialize(value,
+                  specifiedType: const FullType(
+                      BuiltList, const [const FullType(double)]))!
+              as BuiltList<Object?>);
+          break;
         case 'Document__Reference__Field':
           result.ffRef = serializers.deserialize(value,
               specifiedType: const FullType(DocumentReference, const [
@@ -158,6 +172,8 @@ class _$StoriesRecord extends StoriesRecord {
   @override
   final String? storiesID;
   @override
+  final BuiltList<double>? rating;
+  @override
   final DocumentReference<Object?>? ffRef;
 
   factory _$StoriesRecord([void Function(StoriesRecordBuilder)? updates]) =>
@@ -171,6 +187,7 @@ class _$StoriesRecord extends StoriesRecord {
       this.category,
       this.categories,
       this.storiesID,
+      this.rating,
       this.ffRef})
       : super._();
 
@@ -192,6 +209,7 @@ class _$StoriesRecord extends StoriesRecord {
         category == other.category &&
         categories == other.categories &&
         storiesID == other.storiesID &&
+        rating == other.rating &&
         ffRef == other.ffRef;
   }
 
@@ -202,12 +220,14 @@ class _$StoriesRecord extends StoriesRecord {
             $jc(
                 $jc(
                     $jc(
-                        $jc($jc($jc(0, createdBy.hashCode), name.hashCode),
-                            createdAt.hashCode),
-                        imgStories.hashCode),
-                    category.hashCode),
-                categories.hashCode),
-            storiesID.hashCode),
+                        $jc(
+                            $jc($jc($jc(0, createdBy.hashCode), name.hashCode),
+                                createdAt.hashCode),
+                            imgStories.hashCode),
+                        category.hashCode),
+                    categories.hashCode),
+                storiesID.hashCode),
+            rating.hashCode),
         ffRef.hashCode));
   }
 
@@ -221,6 +241,7 @@ class _$StoriesRecord extends StoriesRecord {
           ..add('category', category)
           ..add('categories', categories)
           ..add('storiesID', storiesID)
+          ..add('rating', rating)
           ..add('ffRef', ffRef))
         .toString();
   }
@@ -261,6 +282,11 @@ class StoriesRecordBuilder
   String? get storiesID => _$this._storiesID;
   set storiesID(String? storiesID) => _$this._storiesID = storiesID;
 
+  ListBuilder<double>? _rating;
+  ListBuilder<double> get rating =>
+      _$this._rating ??= new ListBuilder<double>();
+  set rating(ListBuilder<double>? rating) => _$this._rating = rating;
+
   DocumentReference<Object?>? _ffRef;
   DocumentReference<Object?>? get ffRef => _$this._ffRef;
   set ffRef(DocumentReference<Object?>? ffRef) => _$this._ffRef = ffRef;
@@ -279,6 +305,7 @@ class StoriesRecordBuilder
       _category = $v.category;
       _categories = $v.categories?.toBuilder();
       _storiesID = $v.storiesID;
+      _rating = $v.rating?.toBuilder();
       _ffRef = $v.ffRef;
       _$v = null;
     }
@@ -311,12 +338,16 @@ class StoriesRecordBuilder
               category: category,
               categories: _categories?.build(),
               storiesID: storiesID,
+              rating: _rating?.build(),
               ffRef: ffRef);
     } catch (_) {
       late String _$failedField;
       try {
         _$failedField = 'categories';
         _categories?.build();
+
+        _$failedField = 'rating';
+        _rating?.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
             r'StoriesRecord', _$failedField, e.toString());

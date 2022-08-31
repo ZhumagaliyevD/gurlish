@@ -12,6 +12,7 @@ Serializers _$serializers = (new Serializers().toBuilder()
       ..add(ChatsRecord.serializer)
       ..add(CommentsPostRecord.serializer)
       ..add(CommentsStoriesRecord.serializer)
+      ..add(IsMobileRecord.serializer)
       ..add(MessagesRecord.serializer)
       ..add(PaymentsRecord.serializer)
       ..add(PostsRecord.serializer)
@@ -55,6 +56,9 @@ Serializers _$serializers = (new Serializers().toBuilder()
                 DocumentReference, const [const FullType.nullable(Object)])
           ]),
           () => new ListBuilder<DocumentReference<Object?>>())
+      ..addBuilderFactory(
+          const FullType(BuiltList, const [const FullType(double)]),
+          () => new ListBuilder<double>())
       ..addBuilderFactory(
           const FullType(BuiltList, const [const FullType(String)]),
           () => new ListBuilder<String>())
