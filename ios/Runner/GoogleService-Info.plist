@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>53467980627-u8uapb656ks1g2c2sgnd055n8f56b52f.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.53467980627-u8uapb656ks1g2c2sgnd055n8f56b52f</string>
+	<key>API_KEY</key>
+	<string>AIzaSyBr9ldS7vzy7pxKa0HBAA8RsG7ZCuVwsaM</string>
+	<key>GCM_SENDER_ID</key>
+	<string>53467980627</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.wlff.socialbeautyplatform</string>
+	<key>PROJECT_ID</key>
+	<string>gurlish-f17cc</string>
+	<key>STORAGE_BUCKET</key>
+	<string>gurlish-f17cc.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:53467980627:ios:c374967537697f65e3b7a6</string>
+</dict>
+</plist>
