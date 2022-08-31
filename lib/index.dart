@@ -23,7 +23,6 @@ export 'ad_story_preview/ad_story_preview_widget.dart'
     show AdStoryPreviewWidget;
 export 'editors_pick/editors_pick_widget.dart' show EditorsPickWidget;
 export 'profile_salon/profile_salon_widget.dart' show ProfileSalonWidget;
-export 'payment_done/payment_done_widget.dart' show PaymentDoneWidget;
 export 'my_profile/my_profile_widget.dart' show MyProfileWidget;
 export 'edit_profile/edit_profile_widget.dart' show EditProfileWidget;
 export 'user_sign_in/user_sign_in_widget.dart' show UserSignInWidget;

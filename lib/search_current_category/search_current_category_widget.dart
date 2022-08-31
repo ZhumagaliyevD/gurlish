@@ -498,7 +498,7 @@ class _SearchCurrentCategoryWidgetState
                     ),
                   if (FFAppState().sortby == 'Alphabetic A-Z')
                     Padding(
-                      padding: EdgeInsetsDirectional.fromSTEB(10, 10, 0, 0),
+                      padding: EdgeInsetsDirectional.fromSTEB(10, 10, 10, 0),
                       child: StreamBuilder<List<PostsRecord>>(
                         stream: queryPostsRecord(
                           queryBuilder: (postsRecord) => postsRecord

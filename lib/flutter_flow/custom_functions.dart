@@ -21,7 +21,7 @@ double? sredOcenka(List<double>? listOcenok) {
   }
 
   if (listOcenok == null || listOcenok.isEmpty) {
-    return null;
+    return 0;
   }
   double average = listOcenok.reduce((x, y) => x + y) / listOcenok.length;
   return roundDouble(average, 2);

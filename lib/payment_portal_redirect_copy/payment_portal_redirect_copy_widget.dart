@@ -2,7 +2,6 @@ import '../backend/backend.dart';
 import '../flutter_flow/flutter_flow_icon_button.dart';
 import '../flutter_flow/flutter_flow_theme.dart';
 import '../flutter_flow/flutter_flow_util.dart';
-import '../payment_done/payment_done_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -518,13 +517,6 @@ class _PaymentPortalRedirectCopyWidgetState
                                   !formKey.currentState!.validate()) {
                                 return;
                               }
-
-                              await Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => PaymentDoneWidget(),
-                                ),
-                              );
                             },
                             child: Row(
                               mainAxisSize: MainAxisSize.max,

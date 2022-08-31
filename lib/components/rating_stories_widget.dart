@@ -211,9 +211,19 @@ class _RatingStoriesWidgetState extends State<RatingStoriesWidget> {
                                                       ),
                                                       direction:
                                                           Axis.horizontal,
-                                                      rating: rowUsersRecord
-                                                          .sredOcenka!
-                                                          .toDouble(),
+                                                      rating: valueOrDefault<
+                                                          double>(
+                                                        functions.sredOcenka(
+                                                            ratingBarCommentsStoriesRecordList
+                                                                .map((e) =>
+                                                                    valueOrDefault<
+                                                                        double>(
+                                                                      e.rating!,
+                                                                      0.0,
+                                                                    ))
+                                                                .toList()),
+                                                        0.0,
+                                                      ),
                                                       unratedColor:
                                                           Color(0xFF9E9E9E),
                                                       itemCount: 5,
@@ -221,55 +231,61 @@ class _RatingStoriesWidgetState extends State<RatingStoriesWidget> {
                                                     );
                                                   },
                                                 ),
-                                                if (rowUsersRecord.rating!
-                                                        .toList()
-                                                        .length !=
-                                                    null)
-                                                  Padding(
-                                                    padding:
-                                                        EdgeInsetsDirectional
-                                                            .fromSTEB(
-                                                                8, 0, 0, 0),
-                                                    child: StreamBuilder<
-                                                        List<
-                                                            CommentsStoriesRecord>>(
-                                                      stream:
-                                                          queryCommentsStoriesRecord(
-                                                        parent: widget
-                                                            .storiesDetails!
-                                                            .reference,
-                                                      ),
-                                                      builder:
-                                                          (context, snapshot) {
-                                                        // Customize what your widget looks like when it's loading.
-                                                        if (!snapshot.hasData) {
-                                                          return Center(
-                                                            child: SizedBox(
-                                                              width: 50,
-                                                              height: 50,
-                                                              child:
-                                                                  CircularProgressIndicator(
-                                                                color: FlutterFlowTheme.of(
-                                                                        context)
-                                                                    .primaryColor,
-                                                              ),
-                                                            ),
-                                                          );
-                                                        }
-                                                        List<CommentsStoriesRecord>
-                                                            textCommentsStoriesRecordList =
-                                                            snapshot.data!;
-                                                        return Text(
-                                                          rowUsersRecord
-                                                              .sredOcenka!
-                                                              .toString(),
-                                                          style: FlutterFlowTheme
-                                                                  .of(context)
-                                                              .bodyText1,
-                                                        );
-                                                      },
+                                                Padding(
+                                                  padding: EdgeInsetsDirectional
+                                                      .fromSTEB(8, 0, 0, 0),
+                                                  child: StreamBuilder<
+                                                      List<
+                                                          CommentsStoriesRecord>>(
+                                                    stream:
+                                                        queryCommentsStoriesRecord(
+                                                      parent: widget
+                                                          .storiesDetails!
+                                                          .reference,
                                                     ),
+                                                    builder:
+                                                        (context, snapshot) {
+                                                      // Customize what your widget looks like when it's loading.
+                                                      if (!snapshot.hasData) {
+                                                        return Center(
+                                                          child: SizedBox(
+                                                            width: 50,
+                                                            height: 50,
+                                                            child:
+                                                                CircularProgressIndicator(
+                                                              color: FlutterFlowTheme
+                                                                      .of(context)
+                                                                  .primaryColor,
+                                                            ),
+                                                          ),
+                                                        );
+                                                      }
+                                                      List<CommentsStoriesRecord>
+                                                          textCommentsStoriesRecordList =
+                                                          snapshot.data!;
+                                                      return Text(
+                                                        valueOrDefault<String>(
+                                                          functions
+                                                              .sredOcenka(
+                                                                  textCommentsStoriesRecordList
+                                                                      .map((e) =>
+                                                                          valueOrDefault<
+                                                                              double>(
+                                                                            e.rating!,
+                                                                            0.0,
+                                                                          ))
+                                                                      .toList())
+                                                              .toString(),
+                                                          '0',
+                                                        ),
+                                                        style:
+                                                            FlutterFlowTheme.of(
+                                                                    context)
+                                                                .bodyText1,
+                                                      );
+                                                    },
                                                   ),
+                                                ),
                                               ],
                                             ),
                                           Row(
