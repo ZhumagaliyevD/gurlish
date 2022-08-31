@@ -211,19 +211,9 @@ class _RatingStoriesWidgetState extends State<RatingStoriesWidget> {
                                                       ),
                                                       direction:
                                                           Axis.horizontal,
-                                                      rating: valueOrDefault<
-                                                          double>(
-                                                        functions.sredOcenka(
-                                                            ratingBarCommentsStoriesRecordList
-                                                                .map((e) =>
-                                                                    valueOrDefault<
-                                                                        double>(
-                                                                      e.rating!,
-                                                                      0.0,
-                                                                    ))
-                                                                .toList()),
-                                                        0.0,
-                                                      ),
+                                                      rating: rowUsersRecord
+                                                          .sredOcenka!
+                                                          .toDouble(),
                                                       unratedColor:
                                                           Color(0xFF9E9E9E),
                                                       itemCount: 5,
@@ -270,24 +260,9 @@ class _RatingStoriesWidgetState extends State<RatingStoriesWidget> {
                                                             textCommentsStoriesRecordList =
                                                             snapshot.data!;
                                                         return Text(
-                                                          valueOrDefault<
-                                                              String>(
-                                                            formatNumber(
-                                                              functions.sredOcenka(
-                                                                  textCommentsStoriesRecordList
-                                                                      .map((e) =>
-                                                                          valueOrDefault<
-                                                                              double>(
-                                                                            e.rating!,
-                                                                            0.0,
-                                                                          ))
-                                                                      .toList()),
-                                                              formatType:
-                                                                  FormatType
-                                                                      .compact,
-                                                            ),
-                                                            '0',
-                                                          ),
+                                                          rowUsersRecord
+                                                              .sredOcenka!
+                                                              .toString(),
                                                           style: FlutterFlowTheme
                                                                   .of(context)
                                                               .bodyText1,

@@ -52,47 +52,56 @@ class _MainWidgetState extends State<MainWidget> {
                 ),
               ),
             ),
-            Container(
-              width: double.infinity,
-              height: 100,
-              decoration: BoxDecoration(
-                color: Color(0x00FFFFFF),
-              ),
-              child: Padding(
-                padding: EdgeInsetsDirectional.fromSTEB(10, 20, 10, 20),
-                child: InkWell(
-                  onTap: () async {
-                    await Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => PaymentPortalRedirectWidget(),
+            if (valueOrDefault<bool>(currentUserDocument?.isSalon, false) ==
+                false)
+              AuthUserStreamWidget(
+                child: Container(
+                  width: double.infinity,
+                  height: 100,
+                  decoration: BoxDecoration(
+                    color: Color(0x00FFFFFF),
+                  ),
+                  child: Padding(
+                    padding: EdgeInsetsDirectional.fromSTEB(10, 20, 10, 20),
+                    child: InkWell(
+                      onTap: () async {
+                        await Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => PaymentPortalRedirectWidget(),
+                          ),
+                        );
+                      },
+                      child: Row(
+                        mainAxisSize: MainAxisSize.max,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            'Register Business',
+                            style:
+                                FlutterFlowTheme.of(context).bodyText1.override(
+                                      fontFamily: 'Poppins',
+                                      fontSize: 18,
+                                    ),
+                          ),
+                          Icon(
+                            Icons.navigate_next,
+                            color: Color(0xFFC4C4C4),
+                            size: 30,
+                          ),
+                        ],
                       ),
-                    );
-                  },
-                  child: Row(
-                    mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'Register Business',
-                        style: FlutterFlowTheme.of(context).bodyText1.override(
-                              fontFamily: 'Poppins',
-                              fontSize: 18,
-                            ),
-                      ),
-                      Icon(
-                        Icons.navigate_next,
-                        color: Color(0xFFC4C4C4),
-                        size: 30,
-                      ),
-                    ],
+                    ),
                   ),
                 ),
               ),
-            ),
-            Divider(
-              thickness: 1,
-            ),
+            if (valueOrDefault<bool>(currentUserDocument?.isSalon, false) ==
+                false)
+              AuthUserStreamWidget(
+                child: Divider(
+                  thickness: 1,
+                ),
+              ),
             InkWell(
               onTap: () async {
                 await showModalBottomSheet(
@@ -261,7 +270,7 @@ class _MainWidgetState extends State<MainWidget> {
                     fillColor: Colors.transparent,
                     icon: Icon(
                       Icons.menu_sharp,
-                      color: FlutterFlowTheme.of(context).secondaryText,
+                      color: FlutterFlowTheme.of(context).primaryColor,
                       size: 30,
                     ),
                     onPressed: () async {
@@ -284,6 +293,10 @@ class _MainWidgetState extends State<MainWidget> {
                       size: 30,
                     ),
                     onPressed: () async {
+                      setState(() => FFAppState().linkCatergory =
+                          (currentUserDocument?.linkFavCategories?.toList() ??
+                                  [])
+                              .toList());
                       await showModalBottomSheet(
                         isScrollControlled: true,
                         backgroundColor: Colors.transparent,
@@ -303,10 +316,10 @@ class _MainWidgetState extends State<MainWidget> {
                 ],
               ),
               Padding(
-                padding: EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10),
+                padding: EdgeInsetsDirectional.fromSTEB(0, 10, 0, 10),
                 child: Container(
                   width: double.infinity,
-                  height: 100,
+                  height: 110,
                   decoration: BoxDecoration(
                     color: Colors.white,
                   ),
@@ -316,7 +329,7 @@ class _MainWidgetState extends State<MainWidget> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Padding(
-                        padding: EdgeInsetsDirectional.fromSTEB(0, 0, 5, 30),
+                        padding: EdgeInsetsDirectional.fromSTEB(10, 0, 5, 30),
                         child: InkWell(
                           onTap: () async {
                             await Navigator.push(
@@ -455,152 +468,144 @@ class _MainWidgetState extends State<MainWidget> {
                   ),
                 ),
               ),
-              if ((currentUserDocument?.linkFavCategories?.toList() ?? [])
-                      .length
-                      .toString() ==
-                  '0')
+              if (FFAppState().linkCatergory.length < 1)
                 Expanded(
                   child: Padding(
                     padding: EdgeInsetsDirectional.fromSTEB(10, 20, 10, 10),
-                    child: AuthUserStreamWidget(
-                      child: StreamBuilder<List<PostsRecord>>(
-                        stream: queryPostsRecord(
-                          queryBuilder: (postsRecord) => postsRecord
-                              .orderBy('created_at', descending: true),
-                        ),
-                        builder: (context, snapshot) {
-                          // Customize what your widget looks like when it's loading.
-                          if (!snapshot.hasData) {
-                            return Center(
-                              child: SizedBox(
-                                width: 50,
-                                height: 50,
-                                child: CircularProgressIndicator(
-                                  color:
-                                      FlutterFlowTheme.of(context).primaryColor,
-                                ),
+                    child: StreamBuilder<List<PostsRecord>>(
+                      stream: queryPostsRecord(
+                        queryBuilder: (postsRecord) =>
+                            postsRecord.orderBy('created_at', descending: true),
+                      ),
+                      builder: (context, snapshot) {
+                        // Customize what your widget looks like when it's loading.
+                        if (!snapshot.hasData) {
+                          return Center(
+                            child: SizedBox(
+                              width: 50,
+                              height: 50,
+                              child: CircularProgressIndicator(
+                                color:
+                                    FlutterFlowTheme.of(context).primaryColor,
                               ),
-                            );
-                          }
-                          List<PostsRecord> staggeredViewPostsRecordList =
-                              snapshot.data!;
-                          return MasonryGridView.count(
-                            crossAxisCount: 2,
-                            crossAxisSpacing: 5,
-                            mainAxisSpacing: 10,
-                            itemCount: staggeredViewPostsRecordList.length,
-                            itemBuilder: (context, staggeredViewIndex) {
-                              final staggeredViewPostsRecord =
-                                  staggeredViewPostsRecordList[
-                                      staggeredViewIndex];
-                              return Column(
-                                mainAxisSize: MainAxisSize.min,
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Stack(
-                                    alignment: AlignmentDirectional(0, 1),
-                                    children: [
-                                      Row(
-                                        mainAxisSize: MainAxisSize.max,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.end,
-                                        children: [
-                                          Expanded(
-                                            child: InkWell(
-                                              onTap: () async {
-                                                await showModalBottomSheet(
-                                                  isScrollControlled: true,
-                                                  backgroundColor:
-                                                      Colors.transparent,
-                                                  context: context,
-                                                  builder: (context) {
-                                                    return Padding(
-                                                      padding:
-                                                          MediaQuery.of(context)
-                                                              .viewInsets,
-                                                      child: Container(
-                                                        height: 400,
-                                                        child: RatingPostWidget(
-                                                          postDetails:
-                                                              staggeredViewPostsRecord,
-                                                        ),
+                            ),
+                          );
+                        }
+                        List<PostsRecord> staggeredViewPostsRecordList =
+                            snapshot.data!;
+                        return MasonryGridView.count(
+                          crossAxisCount: 2,
+                          crossAxisSpacing: 5,
+                          mainAxisSpacing: 10,
+                          itemCount: staggeredViewPostsRecordList.length,
+                          itemBuilder: (context, staggeredViewIndex) {
+                            final staggeredViewPostsRecord =
+                                staggeredViewPostsRecordList[
+                                    staggeredViewIndex];
+                            return Column(
+                              mainAxisSize: MainAxisSize.min,
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Stack(
+                                  alignment: AlignmentDirectional(0, 1),
+                                  children: [
+                                    Row(
+                                      mainAxisSize: MainAxisSize.max,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.end,
+                                      children: [
+                                        Expanded(
+                                          child: InkWell(
+                                            onTap: () async {
+                                              await showModalBottomSheet(
+                                                isScrollControlled: true,
+                                                backgroundColor:
+                                                    Colors.transparent,
+                                                context: context,
+                                                builder: (context) {
+                                                  return Padding(
+                                                    padding:
+                                                        MediaQuery.of(context)
+                                                            .viewInsets,
+                                                    child: Container(
+                                                      height: 400,
+                                                      child: RatingPostWidget(
+                                                        postDetails:
+                                                            staggeredViewPostsRecord,
                                                       ),
-                                                    );
-                                                  },
-                                                );
-                                              },
-                                              child: ClipRRect(
-                                                borderRadius:
-                                                    BorderRadius.circular(8),
-                                                child: Image.network(
-                                                  valueOrDefault<String>(
-                                                    staggeredViewPostsRecord
-                                                        .firstPhoto,
-                                                    'https://www.beautyincheck.com/wp-content/uploads/2020/11/image-placeholder.jpg',
-                                                  ),
-                                                  fit: BoxFit.cover,
+                                                    ),
+                                                  );
+                                                },
+                                              );
+                                            },
+                                            child: ClipRRect(
+                                              borderRadius:
+                                                  BorderRadius.circular(8),
+                                              child: Image.network(
+                                                valueOrDefault<String>(
+                                                  staggeredViewPostsRecord
+                                                      .firstPhoto,
+                                                  'https://www.beautyincheck.com/wp-content/uploads/2020/11/image-placeholder.jpg',
                                                 ),
+                                                fit: BoxFit.cover,
                                               ),
                                             ),
                                           ),
-                                        ],
-                                      ),
-                                      Align(
-                                        alignment: AlignmentDirectional(1, 1),
-                                        child: ToggleIcon(
-                                          onPressed: () async {
-                                            final likedByElement =
-                                                currentUserReference;
-                                            final likedByUpdate =
-                                                staggeredViewPostsRecord
-                                                        .likedBy!
-                                                        .toList()
-                                                        .contains(
-                                                            likedByElement)
-                                                    ? FieldValue.arrayRemove(
-                                                        [likedByElement])
-                                                    : FieldValue.arrayUnion(
-                                                        [likedByElement]);
-                                            final postsUpdateData = {
-                                              'Liked_by': likedByUpdate,
-                                            };
-                                            await staggeredViewPostsRecord
-                                                .reference
-                                                .update(postsUpdateData);
-                                          },
-                                          value: staggeredViewPostsRecord
-                                              .likedBy!
-                                              .toList()
-                                              .contains(currentUserReference),
-                                          onIcon: FaIcon(
-                                            FontAwesomeIcons.solidBookmark,
-                                            color: Colors.black,
-                                            size: 22,
-                                          ),
-                                          offIcon: FaIcon(
-                                            FontAwesomeIcons.bookmark,
-                                            color: Colors.black,
-                                            size: 22,
-                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    Align(
+                                      alignment: AlignmentDirectional(1, 1),
+                                      child: ToggleIcon(
+                                        onPressed: () async {
+                                          final likedByElement =
+                                              currentUserReference;
+                                          final likedByUpdate =
+                                              staggeredViewPostsRecord
+                                                      .likedBy!
+                                                      .toList()
+                                                      .contains(likedByElement)
+                                                  ? FieldValue.arrayRemove(
+                                                      [likedByElement])
+                                                  : FieldValue.arrayUnion(
+                                                      [likedByElement]);
+                                          final postsUpdateData = {
+                                            'Liked_by': likedByUpdate,
+                                          };
+                                          await staggeredViewPostsRecord
+                                              .reference
+                                              .update(postsUpdateData);
+                                        },
+                                        value: staggeredViewPostsRecord.likedBy!
+                                            .toList()
+                                            .contains(currentUserReference),
+                                        onIcon: FaIcon(
+                                          FontAwesomeIcons.solidBookmark,
+                                          color: Colors.black,
+                                          size: 22,
+                                        ),
+                                        offIcon: FaIcon(
+                                          FontAwesomeIcons.bookmark,
+                                          color: Colors.black,
+                                          size: 22,
                                         ),
                                       ),
-                                    ],
-                                  ),
-                                ],
-                              );
-                            },
-                          );
-                        },
-                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      },
                     ),
                   ),
                 ),
               if ((currentUserDocument?.linkFavCategories?.toList() ?? [])
-                      .length
-                      .toString() !=
-                  '0')
+                      .length >=
+                  1)
                 Expanded(
                   child: Padding(
                     padding: EdgeInsetsDirectional.fromSTEB(10, 20, 10, 10),

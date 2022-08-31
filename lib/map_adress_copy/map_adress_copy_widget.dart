@@ -11,14 +11,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class MapAdressWidget extends StatefulWidget {
-  const MapAdressWidget({Key? key}) : super(key: key);
+class MapAdressCopyWidget extends StatefulWidget {
+  const MapAdressCopyWidget({Key? key}) : super(key: key);
 
   @override
-  _MapAdressWidgetState createState() => _MapAdressWidgetState();
+  _MapAdressCopyWidgetState createState() => _MapAdressCopyWidgetState();
 }
 
-class _MapAdressWidgetState extends State<MapAdressWidget> {
+class _MapAdressCopyWidgetState extends State<MapAdressCopyWidget> {
   final formKey = GlobalKey<FormState>();
   final scaffoldKey = GlobalKey<ScaffoldState>();
   var placePickerValue = FFPlace();

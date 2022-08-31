@@ -118,85 +118,156 @@ class _FilterWidgetState extends State<FilterWidget> {
                             width: 100,
                             height: 100,
                             decoration: BoxDecoration(
-                              color: FlutterFlowTheme.of(context)
-                                  .secondaryBackground,
+                              gradient: LinearGradient(
+                                colors: [
+                                  FlutterFlowTheme.of(context).primaryColor,
+                                  FlutterFlowTheme.of(context).secondaryColor
+                                ],
+                                stops: [0, 1],
+                                begin: AlignmentDirectional(0, -1),
+                                end: AlignmentDirectional(0, 1),
+                              ),
                             ),
-                            child: Stack(
-                              children: [
-                                ClipRRect(
-                                  borderRadius: BorderRadius.circular(10),
-                                  child: Image.network(
-                                    wrapCategorySalonRecord.image!,
-                                    width: 100,
-                                    height: 100,
-                                    fit: BoxFit.cover,
-                                  ),
-                                ),
-                                Align(
-                                  alignment: AlignmentDirectional(0.85, -0.85),
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      if ((currentUserDocument
-                                                  ?.linkFavCategories
-                                                  ?.toList() ??
-                                              [])
-                                          .contains(wrapCategorySalonRecord
-                                              .reference))
-                                        AuthUserStreamWidget(
-                                          child: InkWell(
-                                            onTap: () async {
-                                              final usersUpdateData = {
-                                                'link_fav_categories':
-                                                    FieldValue.arrayRemove([
-                                                  wrapCategorySalonRecord
-                                                      .reference
-                                                ]),
-                                              };
-                                              await currentUserReference!
-                                                  .update(usersUpdateData);
-                                            },
-                                            child: FaIcon(
-                                              FontAwesomeIcons.solidCheckCircle,
-                                              color:
-                                                  FlutterFlowTheme.of(context)
-                                                      .primaryColor,
-                                              size: 24,
-                                            ),
+                            child: InkWell(
+                              onTap: () async {
+                                if (FFAppState()
+                                        .linkCatergory
+                                        .length
+                                        .toString() ==
+                                    '10') {
+                                  if ((currentUserDocument?.linkFavCategories
+                                              ?.toList() ??
+                                          [])
+                                      .contains(
+                                          wrapCategorySalonRecord.reference)) {
+                                    final usersUpdateData = {
+                                      'link_fav_categories':
+                                          FieldValue.arrayRemove([
+                                        wrapCategorySalonRecord.reference
+                                      ]),
+                                    };
+                                    await currentUserReference!
+                                        .update(usersUpdateData);
+                                    setState(() => FFAppState()
+                                        .linkCatergory
+                                        .remove(
+                                            wrapCategorySalonRecord.reference));
+                                  } else {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: Text(
+                                          'Не сможете выбрать больше 10',
+                                          style: TextStyle(
+                                            color: FlutterFlowTheme.of(context)
+                                                .primaryText,
                                           ),
                                         ),
-                                      if (!(currentUserDocument
-                                                  ?.linkFavCategories
-                                                  ?.toList() ??
-                                              [])
-                                          .contains(wrapCategorySalonRecord
-                                              .reference))
-                                        AuthUserStreamWidget(
-                                          child: InkWell(
-                                            onTap: () async {
-                                              final usersUpdateData = {
-                                                'link_fav_categories':
-                                                    FieldValue.arrayUnion([
-                                                  wrapCategorySalonRecord
-                                                      .reference
-                                                ]),
-                                              };
-                                              await currentUserReference!
-                                                  .update(usersUpdateData);
-                                            },
-                                            child: FaIcon(
-                                              FontAwesomeIcons.checkCircle,
-                                              color:
-                                                  FlutterFlowTheme.of(context)
-                                                      .primaryColor,
-                                              size: 24,
-                                            ),
-                                          ),
-                                        ),
-                                    ],
+                                        duration: Duration(milliseconds: 4000),
+                                        backgroundColor: Color(0x00000000),
+                                      ),
+                                    );
+                                  }
+                                } else {
+                                  if (FFAppState().linkCatergory.contains(
+                                      wrapCategorySalonRecord.reference)) {
+                                    final usersUpdateData = {
+                                      'link_fav_categories':
+                                          FieldValue.arrayRemove([
+                                        wrapCategorySalonRecord.reference
+                                      ]),
+                                    };
+                                    await currentUserReference!
+                                        .update(usersUpdateData);
+                                    setState(() => FFAppState()
+                                        .linkCatergory
+                                        .remove(
+                                            wrapCategorySalonRecord.reference));
+                                  } else {
+                                    final usersUpdateData = {
+                                      'link_fav_categories':
+                                          FieldValue.arrayUnion([
+                                        wrapCategorySalonRecord.reference
+                                      ]),
+                                    };
+                                    await currentUserReference!
+                                        .update(usersUpdateData);
+                                    setState(() => FFAppState()
+                                        .linkCatergory
+                                        .add(
+                                            wrapCategorySalonRecord.reference));
+                                  }
+                                }
+                              },
+                              child: Stack(
+                                children: [
+                                  ClipRRect(
+                                    borderRadius: BorderRadius.circular(10),
+                                    child: Image.network(
+                                      wrapCategorySalonRecord.image!,
+                                      width: 100,
+                                      height: 100,
+                                      fit: BoxFit.cover,
+                                    ),
                                   ),
-                                ),
-                              ],
+                                  Align(
+                                    alignment: AlignmentDirectional(0, 0),
+                                    child: Container(
+                                      width: 100,
+                                      height: 100,
+                                      decoration: BoxDecoration(
+                                        gradient: LinearGradient(
+                                          colors: [
+                                            Color(0x49000000),
+                                            Colors.black
+                                          ],
+                                          stops: [0, 1],
+                                          begin: AlignmentDirectional(0, -1),
+                                          end: AlignmentDirectional(0, 1),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  Align(
+                                    alignment:
+                                        AlignmentDirectional(-0.74, 0.77),
+                                    child: Text(
+                                      wrapCategorySalonRecord.name!,
+                                      style: FlutterFlowTheme.of(context)
+                                          .bodyText1
+                                          .override(
+                                            fontFamily: 'Poppins',
+                                            color: Colors.white,
+                                            fontSize: 13,
+                                          ),
+                                    ),
+                                  ),
+                                  Align(
+                                    alignment:
+                                        AlignmentDirectional(0.85, -0.85),
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        if (FFAppState().linkCatergory.contains(
+                                            wrapCategorySalonRecord.reference))
+                                          FaIcon(
+                                            FontAwesomeIcons.solidCheckCircle,
+                                            color: Colors.white,
+                                            size: 24,
+                                          ),
+                                        if (!FFAppState()
+                                            .linkCatergory
+                                            .contains(wrapCategorySalonRecord
+                                                .reference))
+                                          FaIcon(
+                                            FontAwesomeIcons.checkCircle,
+                                            color: Colors.white,
+                                            size: 24,
+                                          ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
                           );
                         }),

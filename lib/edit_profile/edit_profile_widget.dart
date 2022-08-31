@@ -23,7 +23,7 @@ class _EditProfileWidgetState extends State<EditProfileWidget> {
   TextEditingController? textController1;
   TextEditingController? textController2;
   bool? walkInsValue;
-  bool? switchListTileValue;
+  bool? mbileValue;
   TextEditingController? textController3;
   TextEditingController? textController4;
   TextEditingController? textController5;
@@ -512,10 +512,10 @@ class _EditProfileWidgetState extends State<EditProfileWidget> {
                   padding: EdgeInsetsDirectional.fromSTEB(0, 20, 0, 0),
                   child: AuthUserStreamWidget(
                     child: SwitchListTile(
-                      value: switchListTileValue ??= valueOrDefault<bool>(
+                      value: mbileValue ??= valueOrDefault<bool>(
                           currentUserDocument?.isMobile, false),
                       onChanged: (newValue) =>
-                          setState(() => switchListTileValue = newValue),
+                          setState(() => mbileValue = newValue),
                       title: Text(
                         'Mobile service',
                         style: FlutterFlowTheme.of(context).title3.override(
@@ -538,7 +538,7 @@ class _EditProfileWidgetState extends State<EditProfileWidget> {
                       InkWell(
                         onTap: () async {
                           final usersUpdateData = createUsersRecordData(
-                            isMobile: switchListTileValue,
+                            isMobile: mbileValue,
                           );
                           await currentUserReference!.update(usersUpdateData);
                           ScaffoldMessenger.of(context).showSnackBar(

@@ -9,8 +9,8 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
-class StorisWidget extends StatefulWidget {
-  const StorisWidget({
+class StorismyprofileWidget extends StatefulWidget {
+  const StorismyprofileWidget({
     Key? key,
     this.category,
   }) : super(key: key);
@@ -18,10 +18,10 @@ class StorisWidget extends StatefulWidget {
   final CategorySalonRecord? category;
 
   @override
-  _StorisWidgetState createState() => _StorisWidgetState();
+  _StorismyprofileWidgetState createState() => _StorismyprofileWidgetState();
 }
 
-class _StorisWidgetState extends State<StorisWidget> {
+class _StorismyprofileWidgetState extends State<StorismyprofileWidget> {
   PageController? pageViewController;
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -40,6 +40,7 @@ class _StorisWidgetState extends State<StorisWidget> {
                 stream: queryStoriesRecord(
                   queryBuilder: (storiesRecord) => storiesRecord
                       .where('category', isEqualTo: widget.category!.name)
+                      .where('created_by', isEqualTo: currentUserReference)
                       .orderBy('Created_at'),
                 ),
                 builder: (context, snapshot) {

@@ -255,6 +255,12 @@ class _$UsersRecordSerializer implements StructuredSerializer<UsersRecord> {
                   DocumentReference, const [const FullType.nullable(Object)])
             ])));
     }
+    value = object.sredOcenka;
+    if (value != null) {
+      result
+        ..add('sredOcenka')
+        ..add(serializers.serialize(value, specifiedType: const FullType(int)));
+    }
     value = object.ffRef;
     if (value != null) {
       result
@@ -424,6 +430,10 @@ class _$UsersRecordSerializer implements StructuredSerializer<UsersRecord> {
                     DocumentReference, const [const FullType.nullable(Object)])
               ]))! as BuiltList<Object?>);
           break;
+        case 'sredOcenka':
+          result.sredOcenka = serializers.deserialize(value,
+              specifiedType: const FullType(int)) as int?;
+          break;
         case 'Document__Reference__Field':
           result.ffRef = serializers.deserialize(value,
               specifiedType: const FullType(DocumentReference, const [
@@ -501,6 +511,8 @@ class _$UsersRecord extends UsersRecord {
   @override
   final BuiltList<DocumentReference<Object?>>? linkFavCategories;
   @override
+  final int? sredOcenka;
+  @override
   final DocumentReference<Object?>? ffRef;
 
   factory _$UsersRecord([void Function(UsersRecordBuilder)? updates]) =>
@@ -538,6 +550,7 @@ class _$UsersRecord extends UsersRecord {
       this.adressSelected,
       this.walkIns,
       this.linkFavCategories,
+      this.sredOcenka,
       this.ffRef})
       : super._();
 
@@ -583,6 +596,7 @@ class _$UsersRecord extends UsersRecord {
         adressSelected == other.adressSelected &&
         walkIns == other.walkIns &&
         linkFavCategories == other.linkFavCategories &&
+        sredOcenka == other.sredOcenka &&
         ffRef == other.ffRef;
   }
 
@@ -606,25 +620,25 @@ class _$UsersRecord extends UsersRecord {
                                                                 $jc(
                                                                     $jc(
                                                                         $jc(
-                                                                            $jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc(0, email.hashCode), displayName.hashCode), photoUrl.hashCode), uid.hashCode), createdTime.hashCode), phoneNumber.hashCode), photos.hashCode), wishlistPhotos.hashCode), userType.hashCode), adresMap.hashCode), adreText.hashCode), linkPost.hashCode), linkPricelist.hashCode),
-                                                                                isSalon.hashCode),
-                                                                            category.hashCode),
-                                                                        followers.hashCode),
-                                                                    following.hashCode),
-                                                                rating.hashCode),
-                                                            role.hashCode),
-                                                        inst.hashCode),
-                                                    facebook.hashCode),
-                                                whats.hashCode),
-                                            isMobile.hashCode),
-                                        adresCity.hashCode),
-                                    isSubs.hashCode),
-                                authEnd.hashCode),
-                            averageRating.hashCode),
-                        likedCategory.hashCode),
-                    adressSelected.hashCode),
-                walkIns.hashCode),
-            linkFavCategories.hashCode),
+                                                                            $jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc(0, email.hashCode), displayName.hashCode), photoUrl.hashCode), uid.hashCode), createdTime.hashCode), phoneNumber.hashCode), photos.hashCode), wishlistPhotos.hashCode), userType.hashCode), adresMap.hashCode), adreText.hashCode), linkPost.hashCode), linkPricelist.hashCode), isSalon.hashCode),
+                                                                                category.hashCode),
+                                                                            followers.hashCode),
+                                                                        following.hashCode),
+                                                                    rating.hashCode),
+                                                                role.hashCode),
+                                                            inst.hashCode),
+                                                        facebook.hashCode),
+                                                    whats.hashCode),
+                                                isMobile.hashCode),
+                                            adresCity.hashCode),
+                                        isSubs.hashCode),
+                                    authEnd.hashCode),
+                                averageRating.hashCode),
+                            likedCategory.hashCode),
+                        adressSelected.hashCode),
+                    walkIns.hashCode),
+                linkFavCategories.hashCode),
+            sredOcenka.hashCode),
         ffRef.hashCode));
   }
 
@@ -662,6 +676,7 @@ class _$UsersRecord extends UsersRecord {
           ..add('adressSelected', adressSelected)
           ..add('walkIns', walkIns)
           ..add('linkFavCategories', linkFavCategories)
+          ..add('sredOcenka', sredOcenka)
           ..add('ffRef', ffRef))
         .toString();
   }
@@ -814,6 +829,10 @@ class UsersRecordBuilder implements Builder<UsersRecord, UsersRecordBuilder> {
           ListBuilder<DocumentReference<Object?>>? linkFavCategories) =>
       _$this._linkFavCategories = linkFavCategories;
 
+  int? _sredOcenka;
+  int? get sredOcenka => _$this._sredOcenka;
+  set sredOcenka(int? sredOcenka) => _$this._sredOcenka = sredOcenka;
+
   DocumentReference<Object?>? _ffRef;
   DocumentReference<Object?>? get ffRef => _$this._ffRef;
   set ffRef(DocumentReference<Object?>? ffRef) => _$this._ffRef = ffRef;
@@ -856,6 +875,7 @@ class UsersRecordBuilder implements Builder<UsersRecord, UsersRecordBuilder> {
       _adressSelected = $v.adressSelected;
       _walkIns = $v.walkIns;
       _linkFavCategories = $v.linkFavCategories?.toBuilder();
+      _sredOcenka = $v.sredOcenka;
       _ffRef = $v.ffRef;
       _$v = null;
     }
@@ -912,6 +932,7 @@ class UsersRecordBuilder implements Builder<UsersRecord, UsersRecordBuilder> {
               adressSelected: adressSelected,
               walkIns: walkIns,
               linkFavCategories: _linkFavCategories?.build(),
+              sredOcenka: sredOcenka,
               ffRef: ffRef);
     } catch (_) {
       late String _$failedField;

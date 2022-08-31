@@ -7,6 +7,7 @@ import '../flutter_flow/flutter_flow_theme.dart';
 import '../flutter_flow/flutter_flow_util.dart';
 import '../main.dart';
 import '../storis/storis_widget.dart';
+import '../storis_salon/storis_salon_widget.dart';
 import '../flutter_flow/custom_functions.dart' as functions;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -429,8 +430,14 @@ class _ProfileSalonWidgetState extends State<ProfileSalonWidget> {
                             child: Padding(
                               padding:
                                   EdgeInsetsDirectional.fromSTEB(10, 0, 0, 0),
-                              child: StreamBuilder<List<StoriesRecord>>(
-                                stream: queryStoriesRecord(),
+                              child: StreamBuilder<List<CategorySalonRecord>>(
+                                stream: queryCategorySalonRecord(
+                                  queryBuilder: (categorySalonRecord) =>
+                                      categorySalonRecord.where(
+                                          'created_user_link',
+                                          arrayContains:
+                                              columnUsersRecord.reference),
+                                ),
                                 builder: (context, snapshot) {
                                   // Customize what your widget looks like when it's loading.
                                   if (!snapshot.hasData) {
@@ -445,16 +452,17 @@ class _ProfileSalonWidgetState extends State<ProfileSalonWidget> {
                                       ),
                                     );
                                   }
-                                  List<StoriesRecord>
-                                      listViewStoriesRecordList =
+                                  List<CategorySalonRecord>
+                                      listViewCategorySalonRecordList =
                                       snapshot.data!;
                                   return ListView.builder(
                                     padding: EdgeInsets.zero,
                                     scrollDirection: Axis.horizontal,
-                                    itemCount: listViewStoriesRecordList.length,
+                                    itemCount:
+                                        listViewCategorySalonRecordList.length,
                                     itemBuilder: (context, listViewIndex) {
-                                      final listViewStoriesRecord =
-                                          listViewStoriesRecordList[
+                                      final listViewCategorySalonRecord =
+                                          listViewCategorySalonRecordList[
                                               listViewIndex];
                                       return Padding(
                                         padding: EdgeInsetsDirectional.fromSTEB(
@@ -477,126 +485,153 @@ class _ProfileSalonWidgetState extends State<ProfileSalonWidget> {
                                                 CrossAxisAlignment.center,
                                             children: [
                                               Container(
-                                                width: 90,
-                                                height: 90,
-                                                child: Stack(
+                                                decoration: BoxDecoration(
+                                                  color: FlutterFlowTheme.of(
+                                                          context)
+                                                      .secondaryBackground,
+                                                ),
+                                                child: Column(
+                                                  mainAxisSize:
+                                                      MainAxisSize.max,
                                                   children: [
-                                                    Align(
-                                                      alignment:
-                                                          AlignmentDirectional(
-                                                              0, 0),
-                                                      child: Container(
-                                                        width: 90,
-                                                        height: 90,
-                                                        decoration:
-                                                            BoxDecoration(
-                                                          shape:
-                                                              BoxShape.circle,
-                                                          border: Border.all(
-                                                            color: Color(
-                                                                0xFFCD82DE),
-                                                            width: 7,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    InkWell(
-                                                      onTap: () async {
-                                                        await Navigator.push(
-                                                          context,
-                                                          MaterialPageRoute(
-                                                            builder: (context) =>
-                                                                StorisWidget(),
-                                                          ),
-                                                        );
-                                                      },
-                                                      child: Column(
-                                                        mainAxisSize:
-                                                            MainAxisSize.max,
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .center,
-                                                        crossAxisAlignment:
-                                                            CrossAxisAlignment
-                                                                .stretch,
+                                                    Container(
+                                                      width: 90,
+                                                      height: 90,
+                                                      child: Stack(
                                                         children: [
-                                                          StreamBuilder<
-                                                              List<
-                                                                  CategorySalonRecord>>(
-                                                            stream:
-                                                                queryCategorySalonRecord(
-                                                              singleRecord:
-                                                                  true,
-                                                            ),
-                                                            builder: (context,
-                                                                snapshot) {
-                                                              // Customize what your widget looks like when it's loading.
-                                                              if (!snapshot
-                                                                  .hasData) {
-                                                                return Center(
-                                                                  child:
-                                                                      SizedBox(
-                                                                    width: 50,
-                                                                    height: 50,
-                                                                    child:
-                                                                        CircularProgressIndicator(
-                                                                      color: FlutterFlowTheme.of(
-                                                                              context)
-                                                                          .primaryColor,
-                                                                    ),
-                                                                  ),
-                                                                );
-                                                              }
-                                                              List<CategorySalonRecord>
-                                                                  circleImageCategorySalonRecordList =
-                                                                  snapshot
-                                                                      .data!;
-                                                              // Return an empty Container when the document does not exist.
-                                                              if (snapshot.data!
-                                                                  .isEmpty) {
-                                                                return Container();
-                                                              }
-                                                              final circleImageCategorySalonRecord =
-                                                                  circleImageCategorySalonRecordList
-                                                                          .isNotEmpty
-                                                                      ? circleImageCategorySalonRecordList
-                                                                          .first
-                                                                      : null;
-                                                              return Container(
-                                                                width: 68,
-                                                                height: 68,
-                                                                clipBehavior: Clip
-                                                                    .antiAlias,
-                                                                decoration:
-                                                                    BoxDecoration(
-                                                                  shape: BoxShape
-                                                                      .circle,
+                                                          Align(
+                                                            alignment:
+                                                                AlignmentDirectional(
+                                                                    0, 0),
+                                                            child: Container(
+                                                              width: 90,
+                                                              height: 90,
+                                                              decoration:
+                                                                  BoxDecoration(
+                                                                shape: BoxShape
+                                                                    .circle,
+                                                                border:
+                                                                    Border.all(
+                                                                  color: Color(
+                                                                      0xFFCD82DE),
+                                                                  width: 7,
                                                                 ),
-                                                                child: Image
-                                                                    .network(
-                                                                  circleImageCategorySalonRecord!
-                                                                      .image!,
-                                                                  fit: BoxFit
-                                                                      .contain,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          InkWell(
+                                                            onTap: () async {
+                                                              await Navigator
+                                                                  .push(
+                                                                context,
+                                                                MaterialPageRoute(
+                                                                  builder:
+                                                                      (context) =>
+                                                                          StorisSalonWidget(
+                                                                    category:
+                                                                        listViewCategorySalonRecord,
+                                                                    saloin: columnUsersRecord
+                                                                        .reference,
+                                                                  ),
                                                                 ),
                                                               );
                                                             },
+                                                            child: Column(
+                                                              mainAxisSize:
+                                                                  MainAxisSize
+                                                                      .max,
+                                                              mainAxisAlignment:
+                                                                  MainAxisAlignment
+                                                                      .center,
+                                                              crossAxisAlignment:
+                                                                  CrossAxisAlignment
+                                                                      .stretch,
+                                                              children: [
+                                                                StreamBuilder<
+                                                                    List<
+                                                                        CategorySalonRecord>>(
+                                                                  stream:
+                                                                      queryCategorySalonRecord(
+                                                                    singleRecord:
+                                                                        true,
+                                                                  ),
+                                                                  builder: (context,
+                                                                      snapshot) {
+                                                                    // Customize what your widget looks like when it's loading.
+                                                                    if (!snapshot
+                                                                        .hasData) {
+                                                                      return Center(
+                                                                        child:
+                                                                            SizedBox(
+                                                                          width:
+                                                                              50,
+                                                                          height:
+                                                                              50,
+                                                                          child:
+                                                                              CircularProgressIndicator(
+                                                                            color:
+                                                                                FlutterFlowTheme.of(context).primaryColor,
+                                                                          ),
+                                                                        ),
+                                                                      );
+                                                                    }
+                                                                    List<CategorySalonRecord>
+                                                                        circleImageCategorySalonRecordList =
+                                                                        snapshot
+                                                                            .data!;
+                                                                    // Return an empty Container when the document does not exist.
+                                                                    if (snapshot
+                                                                        .data!
+                                                                        .isEmpty) {
+                                                                      return Container();
+                                                                    }
+                                                                    final circleImageCategorySalonRecord = circleImageCategorySalonRecordList
+                                                                            .isNotEmpty
+                                                                        ? circleImageCategorySalonRecordList
+                                                                            .first
+                                                                        : null;
+                                                                    return Container(
+                                                                      width: 68,
+                                                                      height:
+                                                                          68,
+                                                                      clipBehavior:
+                                                                          Clip.antiAlias,
+                                                                      decoration:
+                                                                          BoxDecoration(
+                                                                        shape: BoxShape
+                                                                            .circle,
+                                                                      ),
+                                                                      child: Image
+                                                                          .network(
+                                                                        circleImageCategorySalonRecord!
+                                                                            .image!,
+                                                                        fit: BoxFit
+                                                                            .contain,
+                                                                      ),
+                                                                    );
+                                                                  },
+                                                                ),
+                                                              ],
+                                                            ),
                                                           ),
                                                         ],
                                                       ),
                                                     ),
+                                                    Text(
+                                                      listViewCategorySalonRecord
+                                                          .name!,
+                                                      style:
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .bodyText1
+                                                              .override(
+                                                                fontFamily:
+                                                                    'Poppins',
+                                                                fontSize: 16,
+                                                              ),
+                                                    ),
                                                   ],
                                                 ),
-                                              ),
-                                              Text(
-                                                listViewStoriesRecord.category!,
-                                                style:
-                                                    FlutterFlowTheme.of(context)
-                                                        .bodyText1
-                                                        .override(
-                                                          fontFamily: 'Poppins',
-                                                          fontSize: 16,
-                                                        ),
                                               ),
                                             ],
                                           ),

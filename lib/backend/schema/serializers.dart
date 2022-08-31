@@ -10,6 +10,8 @@ import 'stories_record.dart';
 import 'chat_messages_record.dart';
 import 'comments_post_record.dart';
 import 'comments_stories_record.dart';
+import 'payments_record.dart';
+import 'price_record.dart';
 
 import 'index.dart';
 
@@ -30,6 +32,8 @@ const kDocumentReferenceField = 'Document__Reference__Field';
   ChatMessagesRecord,
   CommentsPostRecord,
   CommentsStoriesRecord,
+  PaymentsRecord,
+  PriceRecord,
 ])
 final Serializers serializers = (_$serializers.toBuilder()
       ..add(DocumentReferenceSerializer())

@@ -65,6 +65,16 @@ class _$CategorySalonRecordSerializer
         ..add('count_stories')
         ..add(serializers.serialize(value, specifiedType: const FullType(int)));
     }
+    value = object.createdUserLink;
+    if (value != null) {
+      result
+        ..add('created_user_link')
+        ..add(serializers.serialize(value,
+            specifiedType: const FullType(BuiltList, const [
+              const FullType(
+                  DocumentReference, const [const FullType.nullable(Object)])
+            ])));
+    }
     value = object.ffRef;
     if (value != null) {
       result
@@ -114,6 +124,13 @@ class _$CategorySalonRecordSerializer
           result.countStories = serializers.deserialize(value,
               specifiedType: const FullType(int)) as int?;
           break;
+        case 'created_user_link':
+          result.createdUserLink.replace(serializers.deserialize(value,
+              specifiedType: const FullType(BuiltList, const [
+                const FullType(
+                    DocumentReference, const [const FullType.nullable(Object)])
+              ]))! as BuiltList<Object?>);
+          break;
         case 'Document__Reference__Field':
           result.ffRef = serializers.deserialize(value,
               specifiedType: const FullType(DocumentReference, const [
@@ -139,6 +156,8 @@ class _$CategorySalonRecord extends CategorySalonRecord {
   @override
   final int? countStories;
   @override
+  final BuiltList<DocumentReference<Object?>>? createdUserLink;
+  @override
   final DocumentReference<Object?>? ffRef;
 
   factory _$CategorySalonRecord(
@@ -151,6 +170,7 @@ class _$CategorySalonRecord extends CategorySalonRecord {
       this.linkSalon,
       this.linkStories,
       this.countStories,
+      this.createdUserLink,
       this.ffRef})
       : super._();
 
@@ -172,6 +192,7 @@ class _$CategorySalonRecord extends CategorySalonRecord {
         linkSalon == other.linkSalon &&
         linkStories == other.linkStories &&
         countStories == other.countStories &&
+        createdUserLink == other.createdUserLink &&
         ffRef == other.ffRef;
   }
 
@@ -180,10 +201,12 @@ class _$CategorySalonRecord extends CategorySalonRecord {
     return $jf($jc(
         $jc(
             $jc(
-                $jc($jc($jc(0, name.hashCode), image.hashCode),
-                    linkSalon.hashCode),
-                linkStories.hashCode),
-            countStories.hashCode),
+                $jc(
+                    $jc($jc($jc(0, name.hashCode), image.hashCode),
+                        linkSalon.hashCode),
+                    linkStories.hashCode),
+                countStories.hashCode),
+            createdUserLink.hashCode),
         ffRef.hashCode));
   }
 
@@ -195,6 +218,7 @@ class _$CategorySalonRecord extends CategorySalonRecord {
           ..add('linkSalon', linkSalon)
           ..add('linkStories', linkStories)
           ..add('countStories', countStories)
+          ..add('createdUserLink', createdUserLink)
           ..add('ffRef', ffRef))
         .toString();
   }
@@ -228,6 +252,13 @@ class CategorySalonRecordBuilder
   int? get countStories => _$this._countStories;
   set countStories(int? countStories) => _$this._countStories = countStories;
 
+  ListBuilder<DocumentReference<Object?>>? _createdUserLink;
+  ListBuilder<DocumentReference<Object?>> get createdUserLink =>
+      _$this._createdUserLink ??= new ListBuilder<DocumentReference<Object?>>();
+  set createdUserLink(
+          ListBuilder<DocumentReference<Object?>>? createdUserLink) =>
+      _$this._createdUserLink = createdUserLink;
+
   DocumentReference<Object?>? _ffRef;
   DocumentReference<Object?>? get ffRef => _$this._ffRef;
   set ffRef(DocumentReference<Object?>? ffRef) => _$this._ffRef = ffRef;
@@ -244,6 +275,7 @@ class CategorySalonRecordBuilder
       _linkSalon = $v.linkSalon?.toBuilder();
       _linkStories = $v.linkStories?.toBuilder();
       _countStories = $v.countStories;
+      _createdUserLink = $v.createdUserLink?.toBuilder();
       _ffRef = $v.ffRef;
       _$v = null;
     }
@@ -274,6 +306,7 @@ class CategorySalonRecordBuilder
               linkSalon: _linkSalon?.build(),
               linkStories: _linkStories?.build(),
               countStories: countStories,
+              createdUserLink: _createdUserLink?.build(),
               ffRef: ffRef);
     } catch (_) {
       late String _$failedField;
@@ -282,6 +315,9 @@ class CategorySalonRecordBuilder
         _linkSalon?.build();
         _$failedField = 'linkStories';
         _linkStories?.build();
+
+        _$failedField = 'createdUserLink';
+        _createdUserLink?.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
             r'CategorySalonRecord', _$failedField, e.toString());

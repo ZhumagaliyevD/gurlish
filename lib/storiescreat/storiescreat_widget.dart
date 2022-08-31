@@ -326,6 +326,8 @@ class _StoriescreatWidgetState extends State<StoriescreatWidget> {
 
                             final categorySalonUpdateData = {
                               'count_stories': FieldValue.increment(1),
+                              'created_user_link':
+                                  FieldValue.arrayUnion([currentUserReference]),
                             };
                             await rowCategorySalonRecord!.reference
                                 .update(categorySalonUpdateData);

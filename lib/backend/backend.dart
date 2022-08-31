@@ -15,6 +15,8 @@ import 'schema/stories_record.dart';
 import 'schema/chat_messages_record.dart';
 import 'schema/comments_post_record.dart';
 import 'schema/comments_stories_record.dart';
+import 'schema/payments_record.dart';
+import 'schema/price_record.dart';
 import 'schema/serializers.dart';
 
 export 'dart:async' show StreamSubscription;
@@ -32,6 +34,8 @@ export 'schema/stories_record.dart';
 export 'schema/chat_messages_record.dart';
 export 'schema/comments_post_record.dart';
 export 'schema/comments_stories_record.dart';
+export 'schema/payments_record.dart';
+export 'schema/price_record.dart';
 
 /// Functions to query UsersRecords (as a Stream and as a Future).
 Stream<List<UsersRecord>> queryUsersRecord({
@@ -453,6 +457,90 @@ Future<FFFirestorePage<CommentsStoriesRecord>> queryCommentsStoriesRecordPage({
     queryCollectionPage(
       CommentsStoriesRecord.collection(parent),
       CommentsStoriesRecord.serializer,
+      queryBuilder: queryBuilder,
+      nextPageMarker: nextPageMarker,
+      pageSize: pageSize,
+      isStream: isStream,
+    );
+
+/// Functions to query PaymentsRecords (as a Stream and as a Future).
+Stream<List<PaymentsRecord>> queryPaymentsRecord({
+  Query Function(Query)? queryBuilder,
+  int limit = -1,
+  bool singleRecord = false,
+}) =>
+    queryCollection(
+      PaymentsRecord.collection,
+      PaymentsRecord.serializer,
+      queryBuilder: queryBuilder,
+      limit: limit,
+      singleRecord: singleRecord,
+    );
+
+Future<List<PaymentsRecord>> queryPaymentsRecordOnce({
+  Query Function(Query)? queryBuilder,
+  int limit = -1,
+  bool singleRecord = false,
+}) =>
+    queryCollectionOnce(
+      PaymentsRecord.collection,
+      PaymentsRecord.serializer,
+      queryBuilder: queryBuilder,
+      limit: limit,
+      singleRecord: singleRecord,
+    );
+
+Future<FFFirestorePage<PaymentsRecord>> queryPaymentsRecordPage({
+  Query Function(Query)? queryBuilder,
+  DocumentSnapshot? nextPageMarker,
+  required int pageSize,
+  required bool isStream,
+}) =>
+    queryCollectionPage(
+      PaymentsRecord.collection,
+      PaymentsRecord.serializer,
+      queryBuilder: queryBuilder,
+      nextPageMarker: nextPageMarker,
+      pageSize: pageSize,
+      isStream: isStream,
+    );
+
+/// Functions to query PriceRecords (as a Stream and as a Future).
+Stream<List<PriceRecord>> queryPriceRecord({
+  Query Function(Query)? queryBuilder,
+  int limit = -1,
+  bool singleRecord = false,
+}) =>
+    queryCollection(
+      PriceRecord.collection,
+      PriceRecord.serializer,
+      queryBuilder: queryBuilder,
+      limit: limit,
+      singleRecord: singleRecord,
+    );
+
+Future<List<PriceRecord>> queryPriceRecordOnce({
+  Query Function(Query)? queryBuilder,
+  int limit = -1,
+  bool singleRecord = false,
+}) =>
+    queryCollectionOnce(
+      PriceRecord.collection,
+      PriceRecord.serializer,
+      queryBuilder: queryBuilder,
+      limit: limit,
+      singleRecord: singleRecord,
+    );
+
+Future<FFFirestorePage<PriceRecord>> queryPriceRecordPage({
+  Query Function(Query)? queryBuilder,
+  DocumentSnapshot? nextPageMarker,
+  required int pageSize,
+  required bool isStream,
+}) =>
+    queryCollectionPage(
+      PriceRecord.collection,
+      PriceRecord.serializer,
       queryBuilder: queryBuilder,
       nextPageMarker: nextPageMarker,
       pageSize: pageSize,

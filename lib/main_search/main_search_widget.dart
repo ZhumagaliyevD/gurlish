@@ -56,7 +56,7 @@ class _MainSearchWidgetState extends State<MainSearchWidget> {
         child: GestureDetector(
           onTap: () => FocusScope.of(context).unfocus(),
           child: Padding(
-            padding: EdgeInsetsDirectional.fromSTEB(10, 0, 10, 0),
+            padding: EdgeInsetsDirectional.fromSTEB(10, 10, 10, 0),
             child: Column(
               mainAxisSize: MainAxisSize.max,
               children: [

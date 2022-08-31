@@ -13,10 +13,12 @@ class StorisMenuWidget extends StatefulWidget {
     Key? key,
     this.storiesMenu,
     this.category,
+    this.usersStories,
   }) : super(key: key);
 
   final DocumentReference? storiesMenu;
   final DocumentReference? category;
+  final DocumentReference? usersStories;
 
   @override
   _StorisMenuWidgetState createState() => _StorisMenuWidgetState();
@@ -73,6 +75,8 @@ class _StorisMenuWidgetState extends State<StorisMenuWidget> {
 
                       final categorySalonUpdateData = {
                         'count_stories': FieldValue.increment(-(1)),
+                        'created_user_link':
+                            FieldValue.arrayRemove([currentUserReference]),
                       };
                       await widget.category!.update(categorySalonUpdateData);
                       await Navigator.push(

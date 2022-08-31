@@ -346,6 +346,8 @@ class _UserSignUpWidgetState extends State<UserSignUpWidget> {
                             final usersCreateData = {
                               ...createUsersRecordData(
                                 adressSelected: false,
+                                isMobile: false,
+                                sredOcenka: 0,
                               ),
                               'rating': [0.0],
                             };

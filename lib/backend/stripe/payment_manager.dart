@@ -75,7 +75,7 @@ Future<StripePaymentResponse> processStripePayment({
         customerEphemeralKeySecret: response['ephemeralKey'],
         customerId: response['customer'],
         merchantDisplayName: 'Gurlish',
-        merchantCountryCode: 'USD',
+        merchantCountryCode: 'ZAR',
         testEnv: !_isProd,
         googlePay: allowGooglePay,
         applePay: allowApplePay,

@@ -86,6 +86,8 @@ abstract class UsersRecord implements Built<UsersRecord, UsersRecordBuilder> {
   @BuiltValueField(wireName: 'link_fav_categories')
   BuiltList<DocumentReference>? get linkFavCategories;
 
+  int? get sredOcenka;
+
   @BuiltValueField(wireName: kDocumentReferenceField)
   DocumentReference? get ffRef;
   DocumentReference get reference => ffRef!;
@@ -119,7 +121,8 @@ abstract class UsersRecord implements Built<UsersRecord, UsersRecordBuilder> {
     ..likedCategory = ListBuilder()
     ..adressSelected = false
     ..walkIns = false
-    ..linkFavCategories = ListBuilder();
+    ..linkFavCategories = ListBuilder()
+    ..sredOcenka = 0;
 
   static CollectionReference get collection =>
       FirebaseFirestore.instance.collection('users');
@@ -165,6 +168,7 @@ Map<String, dynamic> createUsersRecordData({
   double? averageRating,
   bool? adressSelected,
   bool? walkIns,
+  int? sredOcenka,
 }) {
   final firestoreData = serializers.toFirestore(
     UsersRecord.serializer,
@@ -200,7 +204,8 @@ Map<String, dynamic> createUsersRecordData({
         ..likedCategory = null
         ..adressSelected = adressSelected
         ..walkIns = walkIns
-        ..linkFavCategories = null,
+        ..linkFavCategories = null
+        ..sredOcenka = sredOcenka,
     ),
   );
 
