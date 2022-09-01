@@ -14,6 +14,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'dart:math' as math;
 
 class SearchCurrentCategoryWidget extends StatefulWidget {
   const SearchCurrentCategoryWidget({
@@ -40,6 +41,33 @@ class _SearchCurrentCategoryWidgetState
   double? ratingBarValue7;
   double? ratingBarValue8;
   double? ratingBarValue9;
+
+  double calculateDistance(
+      LatLng latlon1,
+      LatLng latlon2,
+      ) {
+    // Add your function code here!
+    /*var latlong1str = latlon1.toString().split(',');
+    var latlong2str = latlon2.toString().split(',');
+    var lat1 = double.parse(latlong1str[0]);
+    var lon1 = double.parse(latlong1str[1]);
+    var lat2 = double.parse(latlong2str[0]);
+    var lon2 = double.parse(latlong2str[1]);
+    */
+    var lat1 = latlon1.latitude;
+    var lon1 = latlon1.longitude;
+    var lat2 = latlon2.latitude;
+    var lon2 = latlon2.longitude;
+    var p = 0.017453292519943295;
+
+    var c = math.cos;
+    var a = 0.5 -
+        c((lat2 - lat1) * p) / 2 +
+        c(lat1 * p) * c(lat2 * p) * (1 - c((lon2 - lon1) * p)) / 2;
+    // Returns distance in Kilo-meters
+    double ans = 12742 * math.asin(math.sqrt(a));
+    return ans;
+  }
 
   @override
   void initState() {
@@ -1005,6 +1033,13 @@ class _SearchCurrentCategoryWidgetState
                           }
                           List<PostsRecord> nearestPostsRecordList =
                               snapshot.data!;
+
+                          nearestPostsRecordList.sort((a, b) {
+                            return calculateDistance(
+                                a.location!, currentUserLocationValue!)
+                                .compareTo(calculateDistance(
+                                b.location!, currentUserLocationValue!));
+                          });
                           return ListView.builder(
                             padding: EdgeInsets.zero,
                             shrinkWrap: true,
