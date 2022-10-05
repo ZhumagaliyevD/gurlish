@@ -81,6 +81,26 @@ class _$StoriesRecordSerializer implements StructuredSerializer<StoriesRecord> {
             specifiedType:
                 const FullType(BuiltList, const [const FullType(double)])));
     }
+    value = object.isBuisness;
+    if (value != null) {
+      result
+        ..add('isBuisness')
+        ..add(
+            serializers.serialize(value, specifiedType: const FullType(bool)));
+    }
+    value = object.timer;
+    if (value != null) {
+      result
+        ..add('timer')
+        ..add(serializers.serialize(value, specifiedType: const FullType(int)));
+    }
+    value = object.description;
+    if (value != null) {
+      result
+        ..add('description')
+        ..add(serializers.serialize(value,
+            specifiedType: const FullType(String)));
+    }
     value = object.ffRef;
     if (value != null) {
       result
@@ -143,6 +163,18 @@ class _$StoriesRecordSerializer implements StructuredSerializer<StoriesRecord> {
                       BuiltList, const [const FullType(double)]))!
               as BuiltList<Object?>);
           break;
+        case 'isBuisness':
+          result.isBuisness = serializers.deserialize(value,
+              specifiedType: const FullType(bool)) as bool?;
+          break;
+        case 'timer':
+          result.timer = serializers.deserialize(value,
+              specifiedType: const FullType(int)) as int?;
+          break;
+        case 'description':
+          result.description = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String?;
+          break;
         case 'Document__Reference__Field':
           result.ffRef = serializers.deserialize(value,
               specifiedType: const FullType(DocumentReference, const [
@@ -174,6 +206,12 @@ class _$StoriesRecord extends StoriesRecord {
   @override
   final BuiltList<double>? rating;
   @override
+  final bool? isBuisness;
+  @override
+  final int? timer;
+  @override
+  final String? description;
+  @override
   final DocumentReference<Object?>? ffRef;
 
   factory _$StoriesRecord([void Function(StoriesRecordBuilder)? updates]) =>
@@ -188,6 +226,9 @@ class _$StoriesRecord extends StoriesRecord {
       this.categories,
       this.storiesID,
       this.rating,
+      this.isBuisness,
+      this.timer,
+      this.description,
       this.ffRef})
       : super._();
 
@@ -210,6 +251,9 @@ class _$StoriesRecord extends StoriesRecord {
         categories == other.categories &&
         storiesID == other.storiesID &&
         rating == other.rating &&
+        isBuisness == other.isBuisness &&
+        timer == other.timer &&
+        description == other.description &&
         ffRef == other.ffRef;
   }
 
@@ -221,13 +265,21 @@ class _$StoriesRecord extends StoriesRecord {
                 $jc(
                     $jc(
                         $jc(
-                            $jc($jc($jc(0, createdBy.hashCode), name.hashCode),
-                                createdAt.hashCode),
-                            imgStories.hashCode),
-                        category.hashCode),
-                    categories.hashCode),
-                storiesID.hashCode),
-            rating.hashCode),
+                            $jc(
+                                $jc(
+                                    $jc(
+                                        $jc(
+                                            $jc($jc(0, createdBy.hashCode),
+                                                name.hashCode),
+                                            createdAt.hashCode),
+                                        imgStories.hashCode),
+                                    category.hashCode),
+                                categories.hashCode),
+                            storiesID.hashCode),
+                        rating.hashCode),
+                    isBuisness.hashCode),
+                timer.hashCode),
+            description.hashCode),
         ffRef.hashCode));
   }
 
@@ -242,6 +294,9 @@ class _$StoriesRecord extends StoriesRecord {
           ..add('categories', categories)
           ..add('storiesID', storiesID)
           ..add('rating', rating)
+          ..add('isBuisness', isBuisness)
+          ..add('timer', timer)
+          ..add('description', description)
           ..add('ffRef', ffRef))
         .toString();
   }
@@ -287,6 +342,18 @@ class StoriesRecordBuilder
       _$this._rating ??= new ListBuilder<double>();
   set rating(ListBuilder<double>? rating) => _$this._rating = rating;
 
+  bool? _isBuisness;
+  bool? get isBuisness => _$this._isBuisness;
+  set isBuisness(bool? isBuisness) => _$this._isBuisness = isBuisness;
+
+  int? _timer;
+  int? get timer => _$this._timer;
+  set timer(int? timer) => _$this._timer = timer;
+
+  String? _description;
+  String? get description => _$this._description;
+  set description(String? description) => _$this._description = description;
+
   DocumentReference<Object?>? _ffRef;
   DocumentReference<Object?>? get ffRef => _$this._ffRef;
   set ffRef(DocumentReference<Object?>? ffRef) => _$this._ffRef = ffRef;
@@ -306,6 +373,9 @@ class StoriesRecordBuilder
       _categories = $v.categories?.toBuilder();
       _storiesID = $v.storiesID;
       _rating = $v.rating?.toBuilder();
+      _isBuisness = $v.isBuisness;
+      _timer = $v.timer;
+      _description = $v.description;
       _ffRef = $v.ffRef;
       _$v = null;
     }
@@ -339,6 +409,9 @@ class StoriesRecordBuilder
               categories: _categories?.build(),
               storiesID: storiesID,
               rating: _rating?.build(),
+              isBuisness: isBuisness,
+              timer: timer,
+              description: description,
               ffRef: ffRef);
     } catch (_) {
       late String _$failedField;

@@ -19,8 +19,10 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
   PageController? pageViewController;
   TextEditingController? emailTextController;
   TextEditingController? passwordController;
+
   late bool passwordVisibility;
   TextEditingController? password1Controller;
+
   late bool password1Visibility;
   final formKey = GlobalKey<FormState>();
   final scaffoldKey = GlobalKey<ScaffoldState>();
@@ -33,6 +35,16 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
     passwordVisibility = false;
     password1Controller = TextEditingController();
     password1Visibility = false;
+    logFirebaseEvent('screen_view',
+        parameters: {'screen_name': 'registerPage'});
+  }
+
+  @override
+  void dispose() {
+    emailTextController?.dispose();
+    passwordController?.dispose();
+    password1Controller?.dispose();
+    super.dispose();
   }
 
   @override
@@ -174,6 +186,31 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
                                                       Radius.circular(4.0),
                                                 ),
                                               ),
+                                              errorBorder: UnderlineInputBorder(
+                                                borderSide: BorderSide(
+                                                  color: Color(0x00000000),
+                                                  width: 1,
+                                                ),
+                                                borderRadius:
+                                                    const BorderRadius.only(
+                                                  topLeft: Radius.circular(4.0),
+                                                  topRight:
+                                                      Radius.circular(4.0),
+                                                ),
+                                              ),
+                                              focusedErrorBorder:
+                                                  UnderlineInputBorder(
+                                                borderSide: BorderSide(
+                                                  color: Color(0x00000000),
+                                                  width: 1,
+                                                ),
+                                                borderRadius:
+                                                    const BorderRadius.only(
+                                                  topLeft: Radius.circular(4.0),
+                                                  topRight:
+                                                      Radius.circular(4.0),
+                                                ),
+                                              ),
                                               prefixIcon: Icon(
                                                 Icons.person_outlined,
                                               ),
@@ -258,6 +295,31 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
                                                       Radius.circular(4.0),
                                                 ),
                                               ),
+                                              errorBorder: UnderlineInputBorder(
+                                                borderSide: BorderSide(
+                                                  color: Color(0x00000000),
+                                                  width: 1,
+                                                ),
+                                                borderRadius:
+                                                    const BorderRadius.only(
+                                                  topLeft: Radius.circular(4.0),
+                                                  topRight:
+                                                      Radius.circular(4.0),
+                                                ),
+                                              ),
+                                              focusedErrorBorder:
+                                                  UnderlineInputBorder(
+                                                borderSide: BorderSide(
+                                                  color: Color(0x00000000),
+                                                  width: 1,
+                                                ),
+                                                borderRadius:
+                                                    const BorderRadius.only(
+                                                  topLeft: Radius.circular(4.0),
+                                                  topRight:
+                                                      Radius.circular(4.0),
+                                                ),
+                                              ),
                                               prefixIcon: Icon(
                                                 Icons.vpn_key_outlined,
                                               ),
@@ -291,6 +353,7 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
                                               if (val == null || val.isEmpty) {
                                                 return 'Field is required';
                                               }
+
                                               if (val.length < 6) {
                                                 return 'Requires at least 6 characters.';
                                               }
@@ -357,6 +420,31 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
                                                       Radius.circular(4.0),
                                                 ),
                                               ),
+                                              errorBorder: UnderlineInputBorder(
+                                                borderSide: BorderSide(
+                                                  color: Color(0x00000000),
+                                                  width: 1,
+                                                ),
+                                                borderRadius:
+                                                    const BorderRadius.only(
+                                                  topLeft: Radius.circular(4.0),
+                                                  topRight:
+                                                      Radius.circular(4.0),
+                                                ),
+                                              ),
+                                              focusedErrorBorder:
+                                                  UnderlineInputBorder(
+                                                borderSide: BorderSide(
+                                                  color: Color(0x00000000),
+                                                  width: 1,
+                                                ),
+                                                borderRadius:
+                                                    const BorderRadius.only(
+                                                  topLeft: Radius.circular(4.0),
+                                                  topRight:
+                                                      Radius.circular(4.0),
+                                                ),
+                                              ),
                                               prefixIcon: Icon(
                                                 Icons.vpn_key_outlined,
                                               ),
@@ -390,6 +478,7 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
                                               if (val == null || val.isEmpty) {
                                                 return 'Field is required';
                                               }
+
                                               if (val.length < 6) {
                                                 return 'Requires at least 6 characters.';
                                               }
@@ -431,11 +520,16 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
                                         snapshot.data!;
                                     return InkWell(
                                       onTap: () async {
+                                        logFirebaseEvent(
+                                            'REGISTER_Container_rkkkyux4_ON_TAP');
+                                        logFirebaseEvent(
+                                            'Container_Validate-Form');
                                         if (formKey.currentState == null ||
                                             !formKey.currentState!.validate()) {
                                           return;
                                         }
 
+                                        logFirebaseEvent('Container_Auth');
                                         if (passwordController?.text !=
                                             password1Controller?.text) {
                                           ScaffoldMessenger.of(context)
@@ -471,6 +565,9 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
                                             .doc(user.uid)
                                             .update(usersCreateData);
 
+                                        logFirebaseEvent(
+                                            'Container_Backend-Call');
+
                                         final usersUpdateData = {
                                           ...createUsersRecordData(
                                             isSalon: false,
@@ -481,6 +578,8 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
                                         };
                                         await currentUserReference!
                                             .update(usersUpdateData);
+                                        logFirebaseEvent(
+                                            'Container_Navigate-To');
                                         await Navigator.push(
                                           context,
                                           MaterialPageRoute(
@@ -488,6 +587,7 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
                                                 CheckboxWidget(),
                                           ),
                                         );
+                                        logFirebaseEvent('Container_Page-View');
                                         await pageViewController?.nextPage(
                                           duration: Duration(milliseconds: 300),
                                           curve: Curves.ease,
@@ -544,6 +644,9 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
                                   ),
                                   child: InkWell(
                                     onTap: () async {
+                                      logFirebaseEvent(
+                                          'REGISTER_PAGE_PAGE_Row_ufqrdo4f_ON_TAP');
+                                      logFirebaseEvent('Row_Show-Snack-Bar');
                                       ScaffoldMessenger.of(context)
                                           .showSnackBar(
                                         SnackBar(
@@ -593,6 +696,9 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
                                     EdgeInsetsDirectional.fromSTEB(0, 20, 0, 0),
                                 child: InkWell(
                                   onTap: () async {
+                                    logFirebaseEvent(
+                                        'REGISTER_PAGE_PAGE_Row_nc3zh9ik_ON_TAP');
+                                    logFirebaseEvent('Row_Navigate-To');
                                     await Navigator.push(
                                       context,
                                       MaterialPageRoute(

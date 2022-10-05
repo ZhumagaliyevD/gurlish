@@ -21,11 +21,14 @@ class FFAppState {
             _favPost;
     _showPost = prefs.getBool('ff_showPost') ?? _showPost;
     _showLocation = prefs.getBool('ff_showLocation') ?? _showLocation;
+    _subscribeDate = prefs.containsKey('ff_subscribeDate')
+        ? DateTime.fromMillisecondsSinceEpoch(prefs.getInt('ff_subscribeDate')!)
+        : null;
   }
 
   late SharedPreferences prefs;
 
-  String usertype = '';
+  String usertype = '0';
 
   List<String> image = [];
 
@@ -42,7 +45,7 @@ class FFAppState {
     'Kiddies'
   ];
 
-  String categoryCreatePost = '';
+  String categoryCreatePost = '0';
 
   List<String> imgCreate = [];
 
@@ -63,15 +66,15 @@ class FFAppState {
     prefs.setStringList('ff_favPost', _favPost.map((x) => x.path).toList());
   }
 
-  String role = '';
+  String role = '0';
 
-  String salonType = '';
+  String salonType = '0';
 
-  String email = '';
+  String email = '0';
 
-  String password = '';
+  String password = '0';
 
-  String name = '';
+  String name = '0';
 
   String photoURL = '';
 
@@ -89,15 +92,29 @@ class FFAppState {
     prefs.setBool('ff_showLocation', _value);
   }
 
-  String storiesID = '';
+  String storiesID = '0';
 
-  String sortby = '';
+  String sortby = '0';
 
   List<DocumentReference> linkCatergory = [];
 
   DocumentReference? currentCategory;
 
   LatLng? CurrentUserLocation;
+
+  bool avatar = false;
+
+  DateTime? _subscribeDate;
+  DateTime? get subscribeDate => _subscribeDate;
+  set subscribeDate(DateTime? _value) {
+    if (_value == null) {
+      return;
+    }
+    _subscribeDate = _value;
+    prefs.setInt('ff_subscribeDate', _value.millisecondsSinceEpoch);
+  }
+
+  bool filterIsSet = false;
 }
 
 LatLng? _latLngFromString(String? val) {

@@ -15,9 +15,10 @@ abstract class PricelistRecord
 
   int? get price;
 
-  DocumentReference? get salon;
+  @BuiltValueField(wireName: 'created_by')
+  DocumentReference? get createdBy;
 
-  DocumentReference? get category;
+  String? get category;
 
   @BuiltValueField(wireName: kDocumentReferenceField)
   DocumentReference? get ffRef;
@@ -25,7 +26,8 @@ abstract class PricelistRecord
 
   static void _initializeBuilder(PricelistRecordBuilder builder) => builder
     ..name = ''
-    ..price = 0;
+    ..price = 0
+    ..category = '';
 
   static CollectionReference get collection =>
       FirebaseFirestore.instance.collection('pricelist');
@@ -51,8 +53,8 @@ abstract class PricelistRecord
 Map<String, dynamic> createPricelistRecordData({
   String? name,
   int? price,
-  DocumentReference? salon,
-  DocumentReference? category,
+  DocumentReference? createdBy,
+  String? category,
 }) {
   final firestoreData = serializers.toFirestore(
     PricelistRecord.serializer,
@@ -60,7 +62,7 @@ Map<String, dynamic> createPricelistRecordData({
       (p) => p
         ..name = name
         ..price = price
-        ..salon = salon
+        ..createdBy = createdBy
         ..category = category,
     ),
   );

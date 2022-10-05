@@ -71,7 +71,11 @@ class _StorisMenuWidgetState extends State<StorisMenuWidget> {
                   padding: EdgeInsetsDirectional.fromSTEB(0, 16, 0, 0),
                   child: FFButtonWidget(
                     onPressed: () async {
+                      logFirebaseEvent(
+                          'STORIS_MENU_COMP_DELETE_STORY_BTN_ON_TAP');
+                      logFirebaseEvent('Button_Backend-Call');
                       await containerStoriesRecord.reference.delete();
+                      logFirebaseEvent('Button_Backend-Call');
 
                       final categorySalonUpdateData = {
                         'count_stories': FieldValue.increment(-(1)),
@@ -79,6 +83,7 @@ class _StorisMenuWidgetState extends State<StorisMenuWidget> {
                             FieldValue.arrayRemove([currentUserReference]),
                       };
                       await widget.category!.update(categorySalonUpdateData);
+                      logFirebaseEvent('Button_Navigate-To');
                       await Navigator.push(
                         context,
                         PageTransition(
@@ -106,6 +111,8 @@ class _StorisMenuWidgetState extends State<StorisMenuWidget> {
                   padding: EdgeInsetsDirectional.fromSTEB(0, 16, 0, 0),
                   child: FFButtonWidget(
                     onPressed: () async {
+                      logFirebaseEvent('STORIS_MENU_COMP_CANCEL_BTN_ON_TAP');
+                      logFirebaseEvent('Button_Bottom-Sheet');
                       Navigator.pop(context);
                     },
                     text: 'Cancel',

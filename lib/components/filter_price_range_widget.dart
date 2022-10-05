@@ -41,9 +41,7 @@ class _FilterPriceRangeWidgetState extends State<FilterPriceRangeWidget> {
             ),
             FlutterFlowRadioButton(
               options: ['R50-150', 'R200-350', 'R400-550', 'R550 +'].toList(),
-              onChanged: (value) {
-                setState(() => radioButtonValue = value);
-              },
+              onChanged: (val) => setState(() => radioButtonValue = val),
               optionHeight: 40,
               textStyle: FlutterFlowTheme.of(context).bodyText1.override(
                     fontFamily: 'Poppins',
@@ -62,6 +60,8 @@ class _FilterPriceRangeWidgetState extends State<FilterPriceRangeWidget> {
               padding: EdgeInsetsDirectional.fromSTEB(0, 10, 0, 0),
               child: FFButtonWidget(
                 onPressed: () async {
+                  logFirebaseEvent('FILTER_PRICE_RANGE_COMP_APPLY_BTN_ON_TAP');
+                  logFirebaseEvent('Button_Bottom-Sheet');
                   Navigator.pop(context);
                 },
                 text: 'Apply',

@@ -3,6 +3,7 @@ import '../backend/backend.dart';
 import '../flutter_flow/flutter_flow_icon_button.dart';
 import '../flutter_flow/flutter_flow_theme.dart';
 import '../flutter_flow/flutter_flow_util.dart';
+import '../profile_salon/profile_salon_widget.dart';
 import '../search_current_category/search_current_category_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
@@ -33,10 +34,14 @@ class _MainSearchWidgetState extends State<MainSearchWidget> {
     super.initState();
     // On page load action.
     SchedulerBinding.instance.addPostFrameCallback((_) async {
+      logFirebaseEvent('MAIN_SEARCH_main_search_ON_LOAD');
+      logFirebaseEvent('main_search_Update-Local-State');
       setState(() => FFAppState().showPost = true);
+      logFirebaseEvent('main_search_Update-Local-State');
       setState(() => FFAppState().showLocation = true);
     });
 
+    logFirebaseEvent('screen_view', parameters: {'screen_name': 'main_search'});
     textController1 = TextEditingController();
     textController2 = TextEditingController();
   }
@@ -44,6 +49,8 @@ class _MainSearchWidgetState extends State<MainSearchWidget> {
   @override
   void dispose() {
     _streamSubscriptions.forEach((s) => s?.cancel());
+    textController1?.dispose();
+    textController2?.dispose();
     super.dispose();
   }
 
@@ -90,7 +97,7 @@ class _MainSearchWidgetState extends State<MainSearchWidget> {
                                     fontSize: 12,
                                   ),
                           indicatorColor:
-                              FlutterFlowTheme.of(context).secondaryColor,
+                              FlutterFlowTheme.of(context).primaryColor,
                           tabs: [
                             Tab(
                               text: 'Catergories',
@@ -146,10 +153,16 @@ class _MainSearchWidgetState extends State<MainSearchWidget> {
                                                 gridViewIndex];
                                         return InkWell(
                                           onTap: () async {
+                                            logFirebaseEvent(
+                                                'MAIN_SEARCH_Container_dz3ajlox_ON_TAP');
+                                            logFirebaseEvent(
+                                                'Container_Update-Local-State');
                                             setState(() =>
                                                 FFAppState().currentCategory =
                                                     gridViewCategorySalonRecord
                                                         .reference);
+                                            logFirebaseEvent(
+                                                'Container_Navigate-To');
                                             await Navigator.push(
                                               context,
                                               MaterialPageRoute(
@@ -272,6 +285,23 @@ class _MainSearchWidgetState extends State<MainSearchWidget> {
                                                 borderRadius:
                                                     BorderRadius.circular(10),
                                               ),
+                                              errorBorder: OutlineInputBorder(
+                                                borderSide: BorderSide(
+                                                  color: Color(0x00000000),
+                                                  width: 1,
+                                                ),
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                              ),
+                                              focusedErrorBorder:
+                                                  OutlineInputBorder(
+                                                borderSide: BorderSide(
+                                                  color: Color(0x00000000),
+                                                  width: 1,
+                                                ),
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                              ),
                                               filled: true,
                                               fillColor: Color(0xFFE5E5E5),
                                               suffixIcon: Icon(
@@ -305,6 +335,10 @@ class _MainSearchWidgetState extends State<MainSearchWidget> {
                                           size: 30,
                                         ),
                                         onPressed: () async {
+                                          logFirebaseEvent(
+                                              'MAIN_SEARCH_PAGE_send_ICN_ON_TAP');
+                                          logFirebaseEvent(
+                                              'IconButton_Simple-Search');
                                           await queryUsersRecordOnce()
                                               .then(
                                                 (records) =>
@@ -333,6 +367,8 @@ class _MainSearchWidgetState extends State<MainSearchWidget> {
                                               .whenComplete(
                                                   () => setState(() {}));
 
+                                          logFirebaseEvent(
+                                              'IconButton_Update-Local-State');
                                           setState(() =>
                                               FFAppState().showPost = false);
                                         },
@@ -439,128 +475,148 @@ class _MainSearchWidgetState extends State<MainSearchWidget> {
                                             final listViewDefaultUsersRecord =
                                                 _pagingController!.itemList![
                                                     listViewDefaultIndex];
-                                            return Container(
-                                              width: double.infinity,
-                                              height: 70,
-                                              decoration: BoxDecoration(
-                                                color: Colors.white,
-                                              ),
-                                              child: Padding(
-                                                padding: EdgeInsetsDirectional
-                                                    .fromSTEB(12, 8, 12, 8),
-                                                child: Row(
-                                                  mainAxisSize:
-                                                      MainAxisSize.max,
-                                                  children: [
-                                                    Container(
-                                                      width: 40,
-                                                      height: 40,
-                                                      clipBehavior:
-                                                          Clip.antiAlias,
-                                                      decoration: BoxDecoration(
-                                                        shape: BoxShape.circle,
-                                                      ),
-                                                      child: Image.network(
-                                                        listViewDefaultUsersRecord
-                                                            .photoUrl!,
-                                                        fit: BoxFit.fitWidth,
-                                                      ),
+                                            return InkWell(
+                                              onTap: () async {
+                                                logFirebaseEvent(
+                                                    'MAIN_SEARCH_Container_ppc2ktnv_ON_TAP');
+                                                logFirebaseEvent(
+                                                    'Container_Navigate-To');
+                                                await Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        ProfileSalonWidget(
+                                                      profileSalon:
+                                                          listViewDefaultUsersRecord
+                                                              .reference,
                                                     ),
-                                                    Expanded(
-                                                      child: Padding(
-                                                        padding:
-                                                            EdgeInsetsDirectional
-                                                                .fromSTEB(12, 0,
-                                                                    0, 0),
-                                                        child: Column(
-                                                          mainAxisSize:
-                                                              MainAxisSize.max,
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .center,
-                                                          crossAxisAlignment:
-                                                              CrossAxisAlignment
-                                                                  .start,
-                                                          children: [
-                                                            Text(
-                                                              listViewDefaultUsersRecord
-                                                                  .displayName!,
-                                                              style: FlutterFlowTheme
-                                                                      .of(context)
-                                                                  .subtitle1
-                                                                  .override(
-                                                                    fontFamily:
-                                                                        'Outfit',
-                                                                    color: Color(
-                                                                        0xFF101213),
-                                                                    fontSize:
-                                                                        18,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .w500,
-                                                                  ),
-                                                            ),
-                                                            if (listViewDefaultUsersRecord
-                                                                    .isMobile ==
-                                                                true)
-                                                              Padding(
-                                                                padding:
-                                                                    EdgeInsetsDirectional
-                                                                        .fromSTEB(
-                                                                            0,
-                                                                            4,
-                                                                            0,
-                                                                            0),
-                                                                child: Text(
-                                                                  'Mobile service',
-                                                                  style: FlutterFlowTheme.of(
-                                                                          context)
-                                                                      .bodyText2
-                                                                      .override(
-                                                                        fontFamily:
-                                                                            'Outfit',
-                                                                        color: Color(
-                                                                            0xFF57636C),
-                                                                        fontSize:
-                                                                            14,
-                                                                        fontWeight:
-                                                                            FontWeight.normal,
-                                                                      ),
-                                                                ),
-                                                              ),
-                                                            if (listViewDefaultUsersRecord
-                                                                    .isMobile ==
-                                                                false)
-                                                              Padding(
-                                                                padding:
-                                                                    EdgeInsetsDirectional
-                                                                        .fromSTEB(
-                                                                            0,
-                                                                            4,
-                                                                            0,
-                                                                            0),
-                                                                child: Text(
-                                                                  'Stationery service',
-                                                                  style: FlutterFlowTheme.of(
-                                                                          context)
-                                                                      .bodyText2
-                                                                      .override(
-                                                                        fontFamily:
-                                                                            'Outfit',
-                                                                        color: Color(
-                                                                            0xFF57636C),
-                                                                        fontSize:
-                                                                            14,
-                                                                        fontWeight:
-                                                                            FontWeight.normal,
-                                                                      ),
-                                                                ),
-                                                              ),
-                                                          ],
+                                                  ),
+                                                );
+                                              },
+                                              child: Container(
+                                                width: double.infinity,
+                                                height: 70,
+                                                decoration: BoxDecoration(
+                                                  color: Colors.white,
+                                                ),
+                                                child: Padding(
+                                                  padding: EdgeInsetsDirectional
+                                                      .fromSTEB(12, 8, 12, 8),
+                                                  child: Row(
+                                                    mainAxisSize:
+                                                        MainAxisSize.max,
+                                                    children: [
+                                                      Container(
+                                                        width: 40,
+                                                        height: 40,
+                                                        clipBehavior:
+                                                            Clip.antiAlias,
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          shape:
+                                                              BoxShape.circle,
+                                                        ),
+                                                        child: Image.network(
+                                                          listViewDefaultUsersRecord
+                                                              .photoUrl!,
+                                                          fit: BoxFit.fitWidth,
                                                         ),
                                                       ),
-                                                    ),
-                                                  ],
+                                                      Expanded(
+                                                        child: Padding(
+                                                          padding:
+                                                              EdgeInsetsDirectional
+                                                                  .fromSTEB(12,
+                                                                      0, 0, 0),
+                                                          child: Column(
+                                                            mainAxisSize:
+                                                                MainAxisSize
+                                                                    .max,
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .center,
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .start,
+                                                            children: [
+                                                              Text(
+                                                                listViewDefaultUsersRecord
+                                                                    .displayName!,
+                                                                style: FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .subtitle1
+                                                                    .override(
+                                                                      fontFamily:
+                                                                          'Outfit',
+                                                                      color: Color(
+                                                                          0xFF101213),
+                                                                      fontSize:
+                                                                          18,
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .w500,
+                                                                    ),
+                                                              ),
+                                                              if (listViewDefaultUsersRecord
+                                                                      .isMobile ==
+                                                                  true)
+                                                                Padding(
+                                                                  padding: EdgeInsetsDirectional
+                                                                      .fromSTEB(
+                                                                          0,
+                                                                          4,
+                                                                          0,
+                                                                          0),
+                                                                  child: Text(
+                                                                    'Mobile service',
+                                                                    style: FlutterFlowTheme.of(
+                                                                            context)
+                                                                        .bodyText2
+                                                                        .override(
+                                                                          fontFamily:
+                                                                              'Outfit',
+                                                                          color:
+                                                                              Color(0xFF57636C),
+                                                                          fontSize:
+                                                                              14,
+                                                                          fontWeight:
+                                                                              FontWeight.normal,
+                                                                        ),
+                                                                  ),
+                                                                ),
+                                                              if (listViewDefaultUsersRecord
+                                                                      .isMobile ==
+                                                                  false)
+                                                                Padding(
+                                                                  padding: EdgeInsetsDirectional
+                                                                      .fromSTEB(
+                                                                          0,
+                                                                          4,
+                                                                          0,
+                                                                          0),
+                                                                  child: Text(
+                                                                    'Stationery service',
+                                                                    style: FlutterFlowTheme.of(
+                                                                            context)
+                                                                        .bodyText2
+                                                                        .override(
+                                                                          fontFamily:
+                                                                              'Outfit',
+                                                                          color:
+                                                                              Color(0xFF57636C),
+                                                                          fontSize:
+                                                                              14,
+                                                                          fontWeight:
+                                                                              FontWeight.normal,
+                                                                        ),
+                                                                  ),
+                                                                ),
+                                                            ],
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
                                                 ),
                                               ),
                                             );
@@ -607,127 +663,144 @@ class _MainSearchWidgetState extends State<MainSearchWidget> {
                                                   }
                                                   final containerUsersRecord =
                                                       snapshot.data!;
-                                                  return Container(
-                                                    width: double.infinity,
-                                                    height: 70,
-                                                    decoration: BoxDecoration(
-                                                      color: Colors.white,
-                                                    ),
-                                                    child: Padding(
-                                                      padding:
-                                                          EdgeInsetsDirectional
-                                                              .fromSTEB(
-                                                                  12, 8, 12, 8),
-                                                      child: Row(
-                                                        mainAxisSize:
-                                                            MainAxisSize.max,
-                                                        children: [
-                                                          Container(
-                                                            width: 40,
-                                                            height: 40,
-                                                            clipBehavior:
-                                                                Clip.antiAlias,
-                                                            decoration:
-                                                                BoxDecoration(
-                                                              shape: BoxShape
-                                                                  .circle,
-                                                            ),
-                                                            child:
-                                                                Image.network(
-                                                              containerUsersRecord
-                                                                  .photoUrl!,
-                                                              fit: BoxFit
-                                                                  .fitWidth,
-                                                            ),
+                                                  return InkWell(
+                                                    onTap: () async {
+                                                      logFirebaseEvent(
+                                                          'MAIN_SEARCH_Container_b4zo9mzs_ON_TAP');
+                                                      logFirebaseEvent(
+                                                          'Container_Navigate-To');
+                                                      await Navigator.push(
+                                                        context,
+                                                        MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              ProfileSalonWidget(
+                                                            profileSalon:
+                                                                containerUsersRecord
+                                                                    .reference,
                                                           ),
-                                                          Expanded(
-                                                            child: Padding(
-                                                              padding:
-                                                                  EdgeInsetsDirectional
-                                                                      .fromSTEB(
-                                                                          12,
-                                                                          0,
-                                                                          0,
-                                                                          0),
-                                                              child: Column(
-                                                                mainAxisSize:
-                                                                    MainAxisSize
-                                                                        .max,
-                                                                mainAxisAlignment:
-                                                                    MainAxisAlignment
-                                                                        .center,
-                                                                crossAxisAlignment:
-                                                                    CrossAxisAlignment
-                                                                        .start,
-                                                                children: [
-                                                                  Text(
-                                                                    containerUsersRecord
-                                                                        .displayName!,
-                                                                    style: FlutterFlowTheme.of(
-                                                                            context)
-                                                                        .subtitle1
-                                                                        .override(
-                                                                          fontFamily:
-                                                                              'Outfit',
-                                                                          color:
-                                                                              Color(0xFF101213),
-                                                                          fontSize:
-                                                                              18,
-                                                                          fontWeight:
-                                                                              FontWeight.w500,
-                                                                        ),
-                                                                  ),
-                                                                  if (containerUsersRecord
-                                                                          .isMobile ==
-                                                                      true)
-                                                                    Padding(
-                                                                      padding: EdgeInsetsDirectional
-                                                                          .fromSTEB(
-                                                                              0,
-                                                                              4,
-                                                                              0,
-                                                                              0),
-                                                                      child:
-                                                                          Text(
-                                                                        'Mobile service',
-                                                                        style: FlutterFlowTheme.of(context)
-                                                                            .bodyText2
-                                                                            .override(
-                                                                              fontFamily: 'Outfit',
-                                                                              color: Color(0xFF57636C),
-                                                                              fontSize: 14,
-                                                                              fontWeight: FontWeight.normal,
-                                                                            ),
-                                                                      ),
-                                                                    ),
-                                                                  if (containerUsersRecord
-                                                                          .isMobile ==
-                                                                      false)
-                                                                    Padding(
-                                                                      padding: EdgeInsetsDirectional
-                                                                          .fromSTEB(
-                                                                              0,
-                                                                              4,
-                                                                              0,
-                                                                              0),
-                                                                      child:
-                                                                          Text(
-                                                                        'Stationery service',
-                                                                        style: FlutterFlowTheme.of(context)
-                                                                            .bodyText2
-                                                                            .override(
-                                                                              fontFamily: 'Outfit',
-                                                                              color: Color(0xFF57636C),
-                                                                              fontSize: 14,
-                                                                              fontWeight: FontWeight.normal,
-                                                                            ),
-                                                                      ),
-                                                                    ),
-                                                                ],
+                                                        ),
+                                                      );
+                                                    },
+                                                    child: Container(
+                                                      width: double.infinity,
+                                                      height: 70,
+                                                      decoration: BoxDecoration(
+                                                        color: Colors.white,
+                                                      ),
+                                                      child: Padding(
+                                                        padding:
+                                                            EdgeInsetsDirectional
+                                                                .fromSTEB(12, 8,
+                                                                    12, 8),
+                                                        child: Row(
+                                                          mainAxisSize:
+                                                              MainAxisSize.max,
+                                                          children: [
+                                                            Container(
+                                                              width: 40,
+                                                              height: 40,
+                                                              clipBehavior: Clip
+                                                                  .antiAlias,
+                                                              decoration:
+                                                                  BoxDecoration(
+                                                                shape: BoxShape
+                                                                    .circle,
+                                                              ),
+                                                              child:
+                                                                  Image.network(
+                                                                containerUsersRecord
+                                                                    .photoUrl!,
+                                                                fit: BoxFit
+                                                                    .fitWidth,
                                                               ),
                                                             ),
-                                                          ),
-                                                        ],
+                                                            Expanded(
+                                                              child: Padding(
+                                                                padding:
+                                                                    EdgeInsetsDirectional
+                                                                        .fromSTEB(
+                                                                            12,
+                                                                            0,
+                                                                            0,
+                                                                            0),
+                                                                child: Column(
+                                                                  mainAxisSize:
+                                                                      MainAxisSize
+                                                                          .max,
+                                                                  mainAxisAlignment:
+                                                                      MainAxisAlignment
+                                                                          .center,
+                                                                  crossAxisAlignment:
+                                                                      CrossAxisAlignment
+                                                                          .start,
+                                                                  children: [
+                                                                    Text(
+                                                                      containerUsersRecord
+                                                                          .displayName!,
+                                                                      style: FlutterFlowTheme.of(
+                                                                              context)
+                                                                          .subtitle1
+                                                                          .override(
+                                                                            fontFamily:
+                                                                                'Outfit',
+                                                                            color:
+                                                                                Color(0xFF101213),
+                                                                            fontSize:
+                                                                                18,
+                                                                            fontWeight:
+                                                                                FontWeight.w500,
+                                                                          ),
+                                                                    ),
+                                                                    if (containerUsersRecord
+                                                                            .isMobile ==
+                                                                        true)
+                                                                      Padding(
+                                                                        padding: EdgeInsetsDirectional.fromSTEB(
+                                                                            0,
+                                                                            4,
+                                                                            0,
+                                                                            0),
+                                                                        child:
+                                                                            Text(
+                                                                          'Mobile service',
+                                                                          style: FlutterFlowTheme.of(context)
+                                                                              .bodyText2
+                                                                              .override(
+                                                                                fontFamily: 'Outfit',
+                                                                                color: Color(0xFF57636C),
+                                                                                fontSize: 14,
+                                                                                fontWeight: FontWeight.normal,
+                                                                              ),
+                                                                        ),
+                                                                      ),
+                                                                    if (containerUsersRecord
+                                                                            .isMobile ==
+                                                                        false)
+                                                                      Padding(
+                                                                        padding: EdgeInsetsDirectional.fromSTEB(
+                                                                            0,
+                                                                            4,
+                                                                            0,
+                                                                            0),
+                                                                        child:
+                                                                            Text(
+                                                                          'Stationery service',
+                                                                          style: FlutterFlowTheme.of(context)
+                                                                              .bodyText2
+                                                                              .override(
+                                                                                fontFamily: 'Outfit',
+                                                                                color: Color(0xFF57636C),
+                                                                                fontSize: 14,
+                                                                                fontWeight: FontWeight.normal,
+                                                                              ),
+                                                                        ),
+                                                                      ),
+                                                                  ],
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
                                                       ),
                                                     ),
                                                   );
@@ -776,6 +849,23 @@ class _MainSearchWidgetState extends State<MainSearchWidget> {
                                                 borderRadius:
                                                     BorderRadius.circular(10),
                                               ),
+                                              errorBorder: OutlineInputBorder(
+                                                borderSide: BorderSide(
+                                                  color: Color(0x00000000),
+                                                  width: 1,
+                                                ),
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                              ),
+                                              focusedErrorBorder:
+                                                  OutlineInputBorder(
+                                                borderSide: BorderSide(
+                                                  color: Color(0x00000000),
+                                                  width: 1,
+                                                ),
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                              ),
                                               filled: true,
                                               fillColor: Color(0xFFE5E5E5),
                                               suffixIcon: Icon(
@@ -809,6 +899,10 @@ class _MainSearchWidgetState extends State<MainSearchWidget> {
                                           size: 30,
                                         ),
                                         onPressed: () async {
+                                          logFirebaseEvent(
+                                              'MAIN_SEARCH_PAGE_send_ICN_ON_TAP');
+                                          logFirebaseEvent(
+                                              'IconButton_Simple-Search');
                                           await queryUsersRecordOnce()
                                               .then(
                                                 (records) =>
@@ -837,6 +931,8 @@ class _MainSearchWidgetState extends State<MainSearchWidget> {
                                               .whenComplete(
                                                   () => setState(() {}));
 
+                                          logFirebaseEvent(
+                                              'IconButton_Update-Local-State');
                                           setState(() => FFAppState()
                                               .showLocation = /* NOT RECOMMENDED */ textController2!
                                                   .text ==
@@ -888,154 +984,177 @@ class _MainSearchWidgetState extends State<MainSearchWidget> {
                                               final listViewUsersRecord =
                                                   listViewUsersRecordList[
                                                       listViewIndex];
-                                              return Container(
-                                                width: double.infinity,
-                                                decoration: BoxDecoration(
-                                                  color: Colors.white,
-                                                ),
-                                                child: Padding(
-                                                  padding: EdgeInsetsDirectional
-                                                      .fromSTEB(12, 8, 12, 8),
-                                                  child: Row(
-                                                    mainAxisSize:
-                                                        MainAxisSize.max,
-                                                    children: [
-                                                      Container(
-                                                        width: 40,
-                                                        height: 40,
-                                                        clipBehavior:
-                                                            Clip.antiAlias,
-                                                        decoration:
-                                                            BoxDecoration(
-                                                          shape:
-                                                              BoxShape.circle,
-                                                        ),
-                                                        child: Image.network(
-                                                          listViewUsersRecord
-                                                              .photoUrl!,
-                                                          fit: BoxFit.fitWidth,
-                                                        ),
+                                              return InkWell(
+                                                onTap: () async {
+                                                  logFirebaseEvent(
+                                                      'MAIN_SEARCH_Container_9sexg0sz_ON_TAP');
+                                                  logFirebaseEvent(
+                                                      'Container_Navigate-To');
+                                                  await Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          ProfileSalonWidget(
+                                                        profileSalon:
+                                                            listViewUsersRecord
+                                                                .reference,
                                                       ),
-                                                      Expanded(
-                                                        child: Padding(
-                                                          padding:
-                                                              EdgeInsetsDirectional
-                                                                  .fromSTEB(12,
-                                                                      0, 0, 0),
-                                                          child: Column(
-                                                            mainAxisSize:
-                                                                MainAxisSize
-                                                                    .max,
-                                                            mainAxisAlignment:
-                                                                MainAxisAlignment
-                                                                    .center,
-                                                            crossAxisAlignment:
-                                                                CrossAxisAlignment
-                                                                    .start,
-                                                            children: [
-                                                              Text(
-                                                                listViewUsersRecord
-                                                                    .displayName!,
-                                                                style: FlutterFlowTheme.of(
-                                                                        context)
-                                                                    .subtitle1
-                                                                    .override(
-                                                                      fontFamily:
-                                                                          'Outfit',
-                                                                      color: Color(
-                                                                          0xFF101213),
-                                                                      fontSize:
-                                                                          18,
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .w500,
-                                                                    ),
-                                                              ),
-                                                              if (listViewUsersRecord
-                                                                      .isMobile ==
-                                                                  true)
-                                                                Padding(
-                                                                  padding: EdgeInsetsDirectional
-                                                                      .fromSTEB(
-                                                                          0,
-                                                                          4,
-                                                                          0,
-                                                                          0),
-                                                                  child: Text(
-                                                                    'Mobile service',
-                                                                    style: FlutterFlowTheme.of(
-                                                                            context)
-                                                                        .bodyText2
-                                                                        .override(
-                                                                          fontFamily:
-                                                                              'Outfit',
-                                                                          color:
-                                                                              Color(0xFF57636C),
-                                                                          fontSize:
-                                                                              14,
-                                                                          fontWeight:
-                                                                              FontWeight.normal,
-                                                                        ),
-                                                                  ),
+                                                    ),
+                                                  );
+                                                },
+                                                child: Container(
+                                                  width: double.infinity,
+                                                  decoration: BoxDecoration(
+                                                    color: Colors.white,
+                                                  ),
+                                                  child: Padding(
+                                                    padding:
+                                                        EdgeInsetsDirectional
+                                                            .fromSTEB(
+                                                                12, 8, 12, 8),
+                                                    child: Row(
+                                                      mainAxisSize:
+                                                          MainAxisSize.max,
+                                                      children: [
+                                                        Container(
+                                                          width: 40,
+                                                          height: 40,
+                                                          clipBehavior:
+                                                              Clip.antiAlias,
+                                                          decoration:
+                                                              BoxDecoration(
+                                                            shape:
+                                                                BoxShape.circle,
+                                                          ),
+                                                          child: Image.network(
+                                                            listViewUsersRecord
+                                                                .photoUrl!,
+                                                            fit:
+                                                                BoxFit.fitWidth,
+                                                          ),
+                                                        ),
+                                                        Expanded(
+                                                          child: Padding(
+                                                            padding:
+                                                                EdgeInsetsDirectional
+                                                                    .fromSTEB(
+                                                                        12,
+                                                                        0,
+                                                                        0,
+                                                                        0),
+                                                            child: Column(
+                                                              mainAxisSize:
+                                                                  MainAxisSize
+                                                                      .max,
+                                                              mainAxisAlignment:
+                                                                  MainAxisAlignment
+                                                                      .center,
+                                                              crossAxisAlignment:
+                                                                  CrossAxisAlignment
+                                                                      .start,
+                                                              children: [
+                                                                Text(
+                                                                  listViewUsersRecord
+                                                                      .displayName!,
+                                                                  style: FlutterFlowTheme.of(
+                                                                          context)
+                                                                      .subtitle1
+                                                                      .override(
+                                                                        fontFamily:
+                                                                            'Outfit',
+                                                                        color: Color(
+                                                                            0xFF101213),
+                                                                        fontSize:
+                                                                            18,
+                                                                        fontWeight:
+                                                                            FontWeight.w500,
+                                                                      ),
                                                                 ),
-                                                              if (listViewUsersRecord
-                                                                      .isMobile ==
-                                                                  false)
-                                                                Padding(
-                                                                  padding: EdgeInsetsDirectional
-                                                                      .fromSTEB(
-                                                                          0,
-                                                                          4,
-                                                                          0,
-                                                                          0),
-                                                                  child: Text(
-                                                                    'Stationery service',
-                                                                    style: FlutterFlowTheme.of(
-                                                                            context)
-                                                                        .bodyText2
-                                                                        .override(
-                                                                          fontFamily:
-                                                                              'Outfit',
-                                                                          color:
-                                                                              Color(0xFF57636C),
-                                                                          fontSize:
-                                                                              14,
-                                                                          fontWeight:
-                                                                              FontWeight.normal,
-                                                                        ),
-                                                                  ),
-                                                                ),
-                                                              Padding(
-                                                                padding:
-                                                                    EdgeInsetsDirectional
+                                                                if (listViewUsersRecord
+                                                                        .isMobile ==
+                                                                    true)
+                                                                  Padding(
+                                                                    padding: EdgeInsetsDirectional
                                                                         .fromSTEB(
                                                                             0,
                                                                             4,
                                                                             0,
                                                                             0),
-                                                                child: Text(
-                                                                  listViewUsersRecord
-                                                                      .adresCity!,
-                                                                  style: FlutterFlowTheme.of(
-                                                                          context)
-                                                                      .bodyText2
-                                                                      .override(
-                                                                        fontFamily:
-                                                                            'Outfit',
-                                                                        color: Color(
-                                                                            0xFF57636C),
-                                                                        fontSize:
-                                                                            14,
-                                                                        fontWeight:
-                                                                            FontWeight.normal,
-                                                                      ),
+                                                                    child: Text(
+                                                                      'Mobile service',
+                                                                      style: FlutterFlowTheme.of(
+                                                                              context)
+                                                                          .bodyText2
+                                                                          .override(
+                                                                            fontFamily:
+                                                                                'Outfit',
+                                                                            color:
+                                                                                Color(0xFF57636C),
+                                                                            fontSize:
+                                                                                14,
+                                                                            fontWeight:
+                                                                                FontWeight.normal,
+                                                                          ),
+                                                                    ),
+                                                                  ),
+                                                                if (listViewUsersRecord
+                                                                        .isMobile ==
+                                                                    false)
+                                                                  Padding(
+                                                                    padding: EdgeInsetsDirectional
+                                                                        .fromSTEB(
+                                                                            0,
+                                                                            4,
+                                                                            0,
+                                                                            0),
+                                                                    child: Text(
+                                                                      'Stationery service',
+                                                                      style: FlutterFlowTheme.of(
+                                                                              context)
+                                                                          .bodyText2
+                                                                          .override(
+                                                                            fontFamily:
+                                                                                'Outfit',
+                                                                            color:
+                                                                                Color(0xFF57636C),
+                                                                            fontSize:
+                                                                                14,
+                                                                            fontWeight:
+                                                                                FontWeight.normal,
+                                                                          ),
+                                                                    ),
+                                                                  ),
+                                                                Padding(
+                                                                  padding: EdgeInsetsDirectional
+                                                                      .fromSTEB(
+                                                                          0,
+                                                                          4,
+                                                                          0,
+                                                                          0),
+                                                                  child: Text(
+                                                                    listViewUsersRecord
+                                                                        .adresCity!,
+                                                                    style: FlutterFlowTheme.of(
+                                                                            context)
+                                                                        .bodyText2
+                                                                        .override(
+                                                                          fontFamily:
+                                                                              'Outfit',
+                                                                          color:
+                                                                              Color(0xFF57636C),
+                                                                          fontSize:
+                                                                              14,
+                                                                          fontWeight:
+                                                                              FontWeight.normal,
+                                                                        ),
+                                                                  ),
                                                                 ),
-                                                              ),
-                                                            ],
+                                                              ],
+                                                            ),
                                                           ),
                                                         ),
-                                                      ),
-                                                    ],
+                                                      ],
+                                                    ),
                                                   ),
                                                 ),
                                               );

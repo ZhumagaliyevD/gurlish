@@ -110,6 +110,9 @@ class _DeleteAccountWidgetState extends State<DeleteAccountWidget> {
                           children: [
                             FFButtonWidget(
                               onPressed: () async {
+                                logFirebaseEvent(
+                                    'DELETE_ACCOUNT_COMP_CANCEL_BTN_ON_TAP');
+                                logFirebaseEvent('Button_Bottom-Sheet');
                                 Navigator.pop(context);
                               },
                               text: 'Cancel',
@@ -128,7 +131,11 @@ class _DeleteAccountWidgetState extends State<DeleteAccountWidget> {
                             ),
                             FFButtonWidget(
                               onPressed: () async {
+                                logFirebaseEvent(
+                                    'DELETE_ACCOUNT_YES,_DELETE_BTN_ON_TAP');
+                                logFirebaseEvent('Button_Auth');
                                 await deleteUser(context);
+                                logFirebaseEvent('Button_Navigate-To');
                                 await Navigator.push(
                                   context,
                                   MaterialPageRoute(

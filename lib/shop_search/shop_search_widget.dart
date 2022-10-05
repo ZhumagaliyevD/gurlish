@@ -1,3 +1,4 @@
+import '../add_product/add_product_widget.dart';
 import '../backend/backend.dart';
 import '../current_product/current_product_widget.dart';
 import '../editors_pick/editors_pick_widget.dart';
@@ -22,7 +23,14 @@ class _ShopSearchWidgetState extends State<ShopSearchWidget> {
   @override
   void initState() {
     super.initState();
+    logFirebaseEvent('screen_view', parameters: {'screen_name': 'shop_search'});
     textController = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    textController?.dispose();
+    super.dispose();
   }
 
   @override
@@ -34,7 +42,7 @@ class _ShopSearchWidgetState extends State<ShopSearchWidget> {
         child: GestureDetector(
           onTap: () => FocusScope.of(context).unfocus(),
           child: Padding(
-            padding: EdgeInsetsDirectional.fromSTEB(10, 0, 10, 0),
+            padding: EdgeInsetsDirectional.fromSTEB(10, 20, 10, 0),
             child: Column(
               mainAxisSize: MainAxisSize.max,
               children: [
@@ -63,6 +71,20 @@ class _ShopSearchWidgetState extends State<ShopSearchWidget> {
                             ),
                             borderRadius: BorderRadius.circular(15),
                           ),
+                          errorBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Color(0x00000000),
+                              width: 1,
+                            ),
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                          focusedErrorBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Color(0x00000000),
+                              width: 1,
+                            ),
+                            borderRadius: BorderRadius.circular(15),
+                          ),
                           filled: true,
                           fillColor: Color(0xFFE5E5E5),
                           prefixIcon: Icon(
@@ -75,11 +97,24 @@ class _ShopSearchWidgetState extends State<ShopSearchWidget> {
                     ),
                     Padding(
                       padding: EdgeInsetsDirectional.fromSTEB(10, 0, 0, 0),
-                      child: SvgPicture.asset(
-                        'assets/images/korzina.svg',
-                        width: 30,
-                        height: 30,
-                        fit: BoxFit.contain,
+                      child: InkWell(
+                        onTap: () async {
+                          logFirebaseEvent(
+                              'SHOP_SEARCH_PAGE_Image_myc9b6ic_ON_TAP');
+                          logFirebaseEvent('Image_Navigate-To');
+                          await Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => AddProductWidget(),
+                            ),
+                          );
+                        },
+                        child: SvgPicture.asset(
+                          'assets/images/korzina.svg',
+                          width: 30,
+                          height: 30,
+                          fit: BoxFit.contain,
+                        ),
                       ),
                     ),
                     Padding(
@@ -107,6 +142,9 @@ class _ShopSearchWidgetState extends State<ShopSearchWidget> {
                         padding: EdgeInsetsDirectional.fromSTEB(10, 0, 0, 0),
                         child: InkWell(
                           onTap: () async {
+                            logFirebaseEvent(
+                                'SHOP_SEARCH_PAGE_Text_4jdzw3ei_ON_TAP');
+                            logFirebaseEvent('Text_Navigate-To');
                             await Navigator.push(
                               context,
                               MaterialPageRoute(
@@ -116,11 +154,14 @@ class _ShopSearchWidgetState extends State<ShopSearchWidget> {
                           },
                           child: Text(
                             'Shop Sale',
-                            style:
-                                FlutterFlowTheme.of(context).bodyText1.override(
-                                      fontFamily: 'Poppins',
-                                      fontSize: 16,
-                                    ),
+                            style: FlutterFlowTheme.of(context)
+                                .bodyText1
+                                .override(
+                                  fontFamily: 'Poppins',
+                                  color:
+                                      FlutterFlowTheme.of(context).primaryText,
+                                  fontSize: 16,
+                                ),
                           ),
                         ),
                       ),
@@ -128,6 +169,9 @@ class _ShopSearchWidgetState extends State<ShopSearchWidget> {
                         padding: EdgeInsetsDirectional.fromSTEB(10, 0, 0, 0),
                         child: InkWell(
                           onTap: () async {
+                            logFirebaseEvent(
+                                'SHOP_SEARCH_PAGE_Text_4g5zzrtw_ON_TAP');
+                            logFirebaseEvent('Text_Navigate-To');
                             await Navigator.push(
                               context,
                               MaterialPageRoute(
@@ -145,25 +189,17 @@ class _ShopSearchWidgetState extends State<ShopSearchWidget> {
                           ),
                         ),
                       ),
-                      Padding(
-                        padding: EdgeInsetsDirectional.fromSTEB(10, 0, 0, 0),
-                        child: Text(
-                          'Videos',
-                          style:
-                              FlutterFlowTheme.of(context).bodyText1.override(
-                                    fontFamily: 'Poppins',
-                                    fontSize: 16,
-                                  ),
-                        ),
-                      ),
                     ],
                   ),
                 ),
                 Expanded(
                   child: Padding(
                     padding: EdgeInsetsDirectional.fromSTEB(0, 20, 0, 0),
-                    child: StreamBuilder<List<UsersRecord>>(
-                      stream: queryUsersRecord(),
+                    child: StreamBuilder<List<ProductRecord>>(
+                      stream: queryProductRecord(
+                        queryBuilder: (productRecord) => productRecord
+                            .orderBy('create_at', descending: true),
+                      ),
                       builder: (context, snapshot) {
                         // Customize what your widget looks like when it's loading.
                         if (!snapshot.hasData) {
@@ -178,7 +214,7 @@ class _ShopSearchWidgetState extends State<ShopSearchWidget> {
                             ),
                           );
                         }
-                        List<UsersRecord> gridViewUsersRecordList =
+                        List<ProductRecord> gridViewProductRecordList =
                             snapshot.data!;
                         return GridView.builder(
                           padding: EdgeInsets.zero,
@@ -190,22 +226,29 @@ class _ShopSearchWidgetState extends State<ShopSearchWidget> {
                             childAspectRatio: 1,
                           ),
                           scrollDirection: Axis.vertical,
-                          itemCount: gridViewUsersRecordList.length,
+                          itemCount: gridViewProductRecordList.length,
                           itemBuilder: (context, gridViewIndex) {
-                            final gridViewUsersRecord =
-                                gridViewUsersRecordList[gridViewIndex];
+                            final gridViewProductRecord =
+                                gridViewProductRecordList[gridViewIndex];
                             return InkWell(
                               onTap: () async {
+                                logFirebaseEvent(
+                                    'SHOP_SEARCH_PAGE_Image_3q043rn1_ON_TAP');
+                                logFirebaseEvent('Image_Navigate-To');
                                 await Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) =>
-                                        CurrentProductWidget(),
+                                    builder: (context) => CurrentProductWidget(
+                                      salonShop: gridViewProductRecord,
+                                    ),
                                   ),
                                 );
                               },
-                              child: Image.asset(
-                                'assets/images/Rectangle_2.png',
+                              child: Image.network(
+                                valueOrDefault<String>(
+                                  gridViewProductRecord.img,
+                                  'https://www.beautyincheck.com/wp-content/uploads/2020/11/image-placeholder.jpg',
+                                ),
                                 width: 100,
                                 height: 100,
                                 fit: BoxFit.cover,

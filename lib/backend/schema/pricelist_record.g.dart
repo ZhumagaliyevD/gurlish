@@ -34,10 +34,10 @@ class _$PricelistRecordSerializer
         ..add('price')
         ..add(serializers.serialize(value, specifiedType: const FullType(int)));
     }
-    value = object.salon;
+    value = object.createdBy;
     if (value != null) {
       result
-        ..add('salon')
+        ..add('created_by')
         ..add(serializers.serialize(value,
             specifiedType: const FullType(
                 DocumentReference, const [const FullType.nullable(Object)])));
@@ -47,8 +47,7 @@ class _$PricelistRecordSerializer
       result
         ..add('category')
         ..add(serializers.serialize(value,
-            specifiedType: const FullType(
-                DocumentReference, const [const FullType.nullable(Object)])));
+            specifiedType: const FullType(String)));
     }
     value = object.ffRef;
     if (value != null) {
@@ -81,17 +80,15 @@ class _$PricelistRecordSerializer
           result.price = serializers.deserialize(value,
               specifiedType: const FullType(int)) as int?;
           break;
-        case 'salon':
-          result.salon = serializers.deserialize(value,
+        case 'created_by':
+          result.createdBy = serializers.deserialize(value,
               specifiedType: const FullType(DocumentReference, const [
                 const FullType.nullable(Object)
               ])) as DocumentReference<Object?>?;
           break;
         case 'category':
           result.category = serializers.deserialize(value,
-              specifiedType: const FullType(DocumentReference, const [
-                const FullType.nullable(Object)
-              ])) as DocumentReference<Object?>?;
+              specifiedType: const FullType(String)) as String?;
           break;
         case 'Document__Reference__Field':
           result.ffRef = serializers.deserialize(value,
@@ -112,9 +109,9 @@ class _$PricelistRecord extends PricelistRecord {
   @override
   final int? price;
   @override
-  final DocumentReference<Object?>? salon;
+  final DocumentReference<Object?>? createdBy;
   @override
-  final DocumentReference<Object?>? category;
+  final String? category;
   @override
   final DocumentReference<Object?>? ffRef;
 
@@ -122,7 +119,7 @@ class _$PricelistRecord extends PricelistRecord {
       (new PricelistRecordBuilder()..update(updates))._build();
 
   _$PricelistRecord._(
-      {this.name, this.price, this.salon, this.category, this.ffRef})
+      {this.name, this.price, this.createdBy, this.category, this.ffRef})
       : super._();
 
   @override
@@ -139,7 +136,7 @@ class _$PricelistRecord extends PricelistRecord {
     return other is PricelistRecord &&
         name == other.name &&
         price == other.price &&
-        salon == other.salon &&
+        createdBy == other.createdBy &&
         category == other.category &&
         ffRef == other.ffRef;
   }
@@ -147,7 +144,7 @@ class _$PricelistRecord extends PricelistRecord {
   @override
   int get hashCode {
     return $jf($jc(
-        $jc($jc($jc($jc(0, name.hashCode), price.hashCode), salon.hashCode),
+        $jc($jc($jc($jc(0, name.hashCode), price.hashCode), createdBy.hashCode),
             category.hashCode),
         ffRef.hashCode));
   }
@@ -157,7 +154,7 @@ class _$PricelistRecord extends PricelistRecord {
     return (newBuiltValueToStringHelper(r'PricelistRecord')
           ..add('name', name)
           ..add('price', price)
-          ..add('salon', salon)
+          ..add('createdBy', createdBy)
           ..add('category', category)
           ..add('ffRef', ffRef))
         .toString();
@@ -176,14 +173,14 @@ class PricelistRecordBuilder
   int? get price => _$this._price;
   set price(int? price) => _$this._price = price;
 
-  DocumentReference<Object?>? _salon;
-  DocumentReference<Object?>? get salon => _$this._salon;
-  set salon(DocumentReference<Object?>? salon) => _$this._salon = salon;
+  DocumentReference<Object?>? _createdBy;
+  DocumentReference<Object?>? get createdBy => _$this._createdBy;
+  set createdBy(DocumentReference<Object?>? createdBy) =>
+      _$this._createdBy = createdBy;
 
-  DocumentReference<Object?>? _category;
-  DocumentReference<Object?>? get category => _$this._category;
-  set category(DocumentReference<Object?>? category) =>
-      _$this._category = category;
+  String? _category;
+  String? get category => _$this._category;
+  set category(String? category) => _$this._category = category;
 
   DocumentReference<Object?>? _ffRef;
   DocumentReference<Object?>? get ffRef => _$this._ffRef;
@@ -198,7 +195,7 @@ class PricelistRecordBuilder
     if ($v != null) {
       _name = $v.name;
       _price = $v.price;
-      _salon = $v.salon;
+      _createdBy = $v.createdBy;
       _category = $v.category;
       _ffRef = $v.ffRef;
       _$v = null;
@@ -225,7 +222,7 @@ class PricelistRecordBuilder
         new _$PricelistRecord._(
             name: name,
             price: price,
-            salon: salon,
+            createdBy: createdBy,
             category: category,
             ffRef: ffRef);
     replace(_$result);

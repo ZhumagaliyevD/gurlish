@@ -21,16 +21,17 @@ export 'dart:convert' show jsonEncode, jsonDecode;
 export 'package:intl/intl.dart';
 export 'package:cloud_firestore/cloud_firestore.dart' show DocumentReference;
 export 'package:page_transition/page_transition.dart';
+export '../backend/firebase_analytics/analytics.dart';
 
 T valueOrDefault<T>(T? value, T defaultValue) =>
     (value is String && value.isEmpty) || value == null ? defaultValue : value;
 
-String dateTimeFormat(String format, DateTime? dateTime) {
+String dateTimeFormat(String format, DateTime? dateTime, {String? locale}) {
   if (dateTime == null) {
     return '';
   }
   if (format == 'relative') {
-    return timeago.format(dateTime);
+    return timeago.format(dateTime, locale: locale);
   }
   return DateFormat(format).format(dateTime);
 }
@@ -68,6 +69,9 @@ String formatNumber(
   String? format,
   String? locale,
 }) {
+  if (value == null) {
+    return '';
+  }
   var formattedValue = '';
   switch (formatType) {
     case FormatType.decimal:
@@ -127,13 +131,20 @@ extension DateTimeComparisonOperators on DateTime {
   bool operator >=(DateTime other) => this > other || isAtSameMomentAs(other);
 }
 
-dynamic getJsonField(dynamic response, String jsonPath) {
+dynamic getJsonField(
+  dynamic response,
+  String jsonPath, [
+  bool isForList = false,
+]) {
   final field = JsonPath(jsonPath).read(response);
-  return field.isNotEmpty
-      ? field.length > 1
-          ? field.map((f) => f.value).toList()
-          : field.first.value
-      : null;
+  if (field.isEmpty) {
+    return null;
+  }
+  if (field.length > 1) {
+    return field.map((f) => f.value).toList();
+  }
+  final value = field.first.value;
+  return isForList && value is! Iterable ? [value] : value;
 }
 
 bool get isAndroid => !kIsWeb && Platform.isAndroid;

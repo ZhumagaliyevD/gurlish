@@ -1,4 +1,4 @@
-# Social Beauty Platform
+# Gurlish
 
 A new Flutter project.
 

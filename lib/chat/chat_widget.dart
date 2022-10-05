@@ -49,6 +49,8 @@ class _ChatWidgetState extends State<ChatWidget> {
         setState(() => _chatInfo = info);
       }
     });
+
+    logFirebaseEvent('screen_view', parameters: {'screen_name': 'chat'});
   }
 
   @override
@@ -69,6 +71,8 @@ class _ChatWidgetState extends State<ChatWidget> {
             size: 24,
           ),
           onPressed: () async {
+            logFirebaseEvent('CHAT_PAGE_arrow_back_rounded_ICN_ON_TAP');
+            logFirebaseEvent('IconButton_Navigate-Back');
             Navigator.pop(context);
           },
         ),
@@ -76,6 +80,8 @@ class _ChatWidgetState extends State<ChatWidget> {
           children: [
             InkWell(
               onTap: () async {
+                logFirebaseEvent('CHAT_PAGE_Text_m2a1jsl0_ON_TAP');
+                logFirebaseEvent('Text_Navigate-To');
                 await Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -153,7 +159,7 @@ class _ChatWidgetState extends State<ChatWidget> {
                     fontSize: 14,
                   ),
                   emptyChatWidget: Image.asset(
-                    'assets/images/messagesEmpty@2x.png',
+                    'assets/images/df3hg_',
                     width: MediaQuery.of(context).size.width * 0.76,
                   ),
                 )

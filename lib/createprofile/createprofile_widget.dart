@@ -3,6 +3,7 @@ import '../backend/backend.dart';
 import '../backend/firebase_storage/storage.dart';
 import '../flutter_flow/flutter_flow_theme.dart';
 import '../flutter_flow/flutter_flow_util.dart';
+import '../flutter_flow/flutter_flow_widgets.dart';
 import '../flutter_flow/upload_media.dart';
 import '../map_adress_copy/map_adress_copy_widget.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -17,7 +18,9 @@ class CreateprofileWidget extends StatefulWidget {
 }
 
 class _CreateprofileWidgetState extends State<CreateprofileWidget> {
+  bool isMediaUploading = false;
   String uploadedFileUrl = '';
+
   TextEditingController? textController;
   final formKey = GlobalKey<FormState>();
   final scaffoldKey = GlobalKey<ScaffoldState>();
@@ -25,7 +28,15 @@ class _CreateprofileWidgetState extends State<CreateprofileWidget> {
   @override
   void initState() {
     super.initState();
+    logFirebaseEvent('screen_view',
+        parameters: {'screen_name': 'createprofile'});
     textController = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    textController?.dispose();
+    super.dispose();
   }
 
   @override
@@ -90,6 +101,9 @@ class _CreateprofileWidgetState extends State<CreateprofileWidget> {
                       padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 20),
                       child: InkWell(
                         onTap: () async {
+                          logFirebaseEvent(
+                              'CREATEPROFILE_Column_krno70jv_ON_TAP');
+                          logFirebaseEvent('Column_Upload-Photo-Video');
                           final selectedMedia =
                               await selectMediaWithSourceBottomSheet(
                             context: context,
@@ -98,34 +112,41 @@ class _CreateprofileWidgetState extends State<CreateprofileWidget> {
                           if (selectedMedia != null &&
                               selectedMedia.every((m) =>
                                   validateFileFormat(m.storagePath, context))) {
-                            showUploadMessage(
-                              context,
-                              'Uploading file...',
-                              showLoading: true,
-                            );
-                            final downloadUrls = (await Future.wait(
-                                    selectedMedia.map((m) async =>
-                                        await uploadData(
-                                            m.storagePath, m.bytes))))
-                                .where((u) => u != null)
-                                .map((u) => u!)
-                                .toList();
-                            ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                            setState(() => isMediaUploading = true);
+                            var downloadUrls = <String>[];
+                            try {
+                              showUploadMessage(
+                                context,
+                                'Uploading file...',
+                                showLoading: true,
+                              );
+                              downloadUrls = (await Future.wait(
+                                selectedMedia.map(
+                                  (m) async =>
+                                      await uploadData(m.storagePath, m.bytes),
+                                ),
+                              ))
+                                  .where((u) => u != null)
+                                  .map((u) => u!)
+                                  .toList();
+                            } finally {
+                              ScaffoldMessenger.of(context)
+                                  .hideCurrentSnackBar();
+                              isMediaUploading = false;
+                            }
                             if (downloadUrls.length == selectedMedia.length) {
                               setState(
                                   () => uploadedFileUrl = downloadUrls.first);
-                              showUploadMessage(
-                                context,
-                                'Success!',
-                              );
+                              showUploadMessage(context, 'Success!');
                             } else {
+                              setState(() {});
                               showUploadMessage(
-                                context,
-                                'Failed to upload media',
-                              );
+                                  context, 'Failed to upload media');
                               return;
                             }
                           }
+
+                          logFirebaseEvent('Column_Backend-Call');
 
                           final usersUpdateData = createUsersRecordData(
                             photoUrl: uploadedFileUrl,
@@ -213,6 +234,26 @@ class _CreateprofileWidgetState extends State<CreateprofileWidget> {
                                           topRight: Radius.circular(4.0),
                                         ),
                                       ),
+                                      errorBorder: UnderlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: Color(0x00000000),
+                                          width: 1,
+                                        ),
+                                        borderRadius: const BorderRadius.only(
+                                          topLeft: Radius.circular(4.0),
+                                          topRight: Radius.circular(4.0),
+                                        ),
+                                      ),
+                                      focusedErrorBorder: UnderlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: Color(0x00000000),
+                                          width: 1,
+                                        ),
+                                        borderRadius: const BorderRadius.only(
+                                          topLeft: Radius.circular(4.0),
+                                          topRight: Radius.circular(4.0),
+                                        ),
+                                      ),
                                     ),
                                     style: FlutterFlowTheme.of(context)
                                         .bodyText1
@@ -240,18 +281,24 @@ class _CreateprofileWidgetState extends State<CreateprofileWidget> {
                       ),
                     ),
                     Padding(
-                      padding: EdgeInsetsDirectional.fromSTEB(20, 30, 20, 0),
-                      child: InkWell(
-                        onTap: () async {
+                      padding: EdgeInsetsDirectional.fromSTEB(20, 20, 20, 0),
+                      child: FFButtonWidget(
+                        onPressed: () async {
+                          logFirebaseEvent(
+                              'CREATEPROFILE_PAGE_CONTINUE_BTN_ON_TAP');
+                          logFirebaseEvent('Button_Validate-Form');
                           if (formKey.currentState == null ||
                               !formKey.currentState!.validate()) {
                             return;
                           }
 
+                          logFirebaseEvent('Button_Backend-Call');
+
                           final usersUpdateData = createUsersRecordData(
                             displayName: textController!.text,
                           );
                           await currentUserReference!.update(usersUpdateData);
+                          logFirebaseEvent('Button_Navigate-To');
                           await Navigator.push(
                             context,
                             MaterialPageRoute(
@@ -259,35 +306,21 @@ class _CreateprofileWidgetState extends State<CreateprofileWidget> {
                             ),
                           );
                         },
-                        child: Container(
+                        text: 'Continue',
+                        options: FFButtonOptions(
                           width: double.infinity,
                           height: 75,
-                          decoration: BoxDecoration(
-                            color: FlutterFlowTheme.of(context).primaryColor,
-                            borderRadius: BorderRadius.circular(37),
+                          color: FlutterFlowTheme.of(context).primaryColor,
+                          textStyle:
+                              FlutterFlowTheme.of(context).subtitle2.override(
+                                    fontFamily: 'Poppins',
+                                    color: Colors.white,
+                                  ),
+                          borderSide: BorderSide(
+                            color: Colors.transparent,
+                            width: 1,
                           ),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.max,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                'Continue',
-                                style: FlutterFlowTheme.of(context)
-                                    .bodyText1
-                                    .override(
-                                      fontFamily: 'Poppins',
-                                      color: Colors.white,
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                              ),
-                              Icon(
-                                Icons.navigate_next,
-                                color: Colors.white,
-                                size: 28,
-                              ),
-                            ],
-                          ),
+                          borderRadius: BorderRadius.circular(37),
                         ),
                       ),
                     ),

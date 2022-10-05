@@ -1,6 +1,7 @@
 import '../createprofile/createprofile_widget.dart';
 import '../flutter_flow/flutter_flow_theme.dart';
 import '../flutter_flow/flutter_flow_util.dart';
+import '../flutter_flow/flutter_flow_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -13,6 +14,12 @@ class CheckboxWidget extends StatefulWidget {
 
 class _CheckboxWidgetState extends State<CheckboxWidget> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
+
+  @override
+  void initState() {
+    super.initState();
+    logFirebaseEvent('screen_view', parameters: {'screen_name': 'checkbox'});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -94,9 +101,11 @@ class _CheckboxWidgetState extends State<CheckboxWidget> {
                       ),
                     ),
                     Padding(
-                      padding: EdgeInsetsDirectional.fromSTEB(0, 20, 0, 0),
-                      child: InkWell(
-                        onTap: () async {
+                      padding: EdgeInsetsDirectional.fromSTEB(0, 30, 0, 0),
+                      child: FFButtonWidget(
+                        onPressed: () async {
+                          logFirebaseEvent('CHECKBOX_PAGE_PROCEED_BTN_ON_TAP');
+                          logFirebaseEvent('Button_Navigate-To');
                           await Navigator.push(
                             context,
                             MaterialPageRoute(
@@ -104,31 +113,21 @@ class _CheckboxWidgetState extends State<CheckboxWidget> {
                             ),
                           );
                         },
-                        child: Container(
+                        text: 'Proceed',
+                        options: FFButtonOptions(
                           width: double.infinity,
                           height: 50,
-                          decoration: BoxDecoration(
-                            color: FlutterFlowTheme.of(context)
-                                .secondaryBackground,
-                            borderRadius: BorderRadius.circular(25),
+                          color: Colors.white,
+                          textStyle:
+                              FlutterFlowTheme.of(context).subtitle2.override(
+                                    fontFamily: 'Poppins',
+                                    color: Color(0xFF78258B),
+                                  ),
+                          borderSide: BorderSide(
+                            color: Colors.transparent,
+                            width: 1,
                           ),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                'Proceed',
-                                style: FlutterFlowTheme.of(context)
-                                    .bodyText1
-                                    .override(
-                                      fontFamily: 'Poppins',
-                                      color: FlutterFlowTheme.of(context)
-                                          .primaryColor,
-                                      fontSize: 16,
-                                    ),
-                              ),
-                            ],
-                          ),
+                          borderRadius: BorderRadius.circular(37),
                         ),
                       ),
                     ),

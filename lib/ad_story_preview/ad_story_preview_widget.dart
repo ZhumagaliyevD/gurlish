@@ -1,8 +1,9 @@
 import '../flutter_flow/flutter_flow_theme.dart';
 import '../flutter_flow/flutter_flow_util.dart';
+import 'package:smooth_page_indicator/smooth_page_indicator.dart'
+    as smooth_page_indicator;
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class AdStoryPreviewWidget extends StatefulWidget {
   const AdStoryPreviewWidget({Key? key}) : super(key: key);
@@ -14,6 +15,13 @@ class AdStoryPreviewWidget extends StatefulWidget {
 class _AdStoryPreviewWidgetState extends State<AdStoryPreviewWidget> {
   PageController? pageViewController;
   final scaffoldKey = GlobalKey<ScaffoldState>();
+
+  @override
+  void initState() {
+    super.initState();
+    logFirebaseEvent('screen_view',
+        parameters: {'screen_name': 'Ad_Story_Preview'});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +51,7 @@ class _AdStoryPreviewWidgetState extends State<AdStoryPreviewWidget> {
                           fit: BoxFit.cover,
                         ),
                         Align(
-                          alignment: AlignmentDirectional(0, 0),
+                          alignment: AlignmentDirectional(5.57, -5.03),
                           child: Padding(
                             padding:
                                 EdgeInsetsDirectional.fromSTEB(10, 0, 0, 40),
@@ -101,7 +109,7 @@ class _AdStoryPreviewWidgetState extends State<AdStoryPreviewWidget> {
                 alignment: AlignmentDirectional(0, -0.9),
                 child: Padding(
                   padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 10),
-                  child: SmoothPageIndicator(
+                  child: smooth_page_indicator.SmoothPageIndicator(
                     controller: pageViewController ??=
                         PageController(initialPage: 0),
                     count: 3,
@@ -113,7 +121,7 @@ class _AdStoryPreviewWidgetState extends State<AdStoryPreviewWidget> {
                         curve: Curves.ease,
                       );
                     },
-                    effect: ExpandingDotsEffect(
+                    effect: smooth_page_indicator.ExpandingDotsEffect(
                       expansionFactor: 2,
                       spacing: 8,
                       radius: 16,

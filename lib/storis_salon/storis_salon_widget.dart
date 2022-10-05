@@ -5,10 +5,11 @@ import '../components/storis_menu_widget.dart';
 import '../flutter_flow/flutter_flow_icon_button.dart';
 import '../flutter_flow/flutter_flow_theme.dart';
 import '../flutter_flow/flutter_flow_util.dart';
+import 'package:smooth_page_indicator/smooth_page_indicator.dart'
+    as smooth_page_indicator;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class StorisSalonWidget extends StatefulWidget {
   const StorisSalonWidget({
@@ -27,6 +28,12 @@ class StorisSalonWidget extends StatefulWidget {
 class _StorisSalonWidgetState extends State<StorisSalonWidget> {
   PageController? pageViewController;
   final scaffoldKey = GlobalKey<ScaffoldState>();
+
+  @override
+  void initState() {
+    super.initState();
+    logFirebaseEvent('screen_view', parameters: {'screen_name': 'storisSalon'});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -120,6 +127,10 @@ class _StorisSalonWidgetState extends State<StorisSalonWidget> {
                                               size: 30,
                                             ),
                                             onPressed: () async {
+                                              logFirebaseEvent(
+                                                  'STORIS_SALON_chevron_left_ICN_ON_TAP');
+                                              logFirebaseEvent(
+                                                  'IconButton_Navigate-Back');
                                               Navigator.pop(context);
                                             },
                                           ),
@@ -136,6 +147,10 @@ class _StorisSalonWidgetState extends State<StorisSalonWidget> {
                                                 size: 30,
                                               ),
                                               onPressed: () async {
+                                                logFirebaseEvent(
+                                                    'STORIS_SALON_PAGE_more_vert_ICN_ON_TAP');
+                                                logFirebaseEvent(
+                                                    'IconButton_Bottom-Sheet');
                                                 await showModalBottomSheet(
                                                   isScrollControlled: true,
                                                   backgroundColor:
@@ -159,7 +174,8 @@ class _StorisSalonWidgetState extends State<StorisSalonWidget> {
                                                       ),
                                                     );
                                                   },
-                                                );
+                                                ).then(
+                                                    (value) => setState(() {}));
                                               },
                                             ),
                                         ],
@@ -184,34 +200,39 @@ class _StorisSalonWidgetState extends State<StorisSalonWidget> {
                                             );
                                           }
                                           final rowUsersRecord = snapshot.data!;
-                                          return InkWell(
-                                            onTap: () async {
-                                              await showModalBottomSheet(
-                                                isScrollControlled: true,
-                                                backgroundColor:
-                                                    Colors.transparent,
-                                                context: context,
-                                                builder: (context) {
-                                                  return Padding(
-                                                    padding:
-                                                        MediaQuery.of(context)
+                                          return Row(
+                                            mainAxisSize: MainAxisSize.max,
+                                            children: [
+                                              InkWell(
+                                                onTap: () async {
+                                                  logFirebaseEvent(
+                                                      'STORIS_SALON_CircleImage_i6p7509m_ON_TAP');
+                                                  logFirebaseEvent(
+                                                      'CircleImage_Bottom-Sheet');
+                                                  await showModalBottomSheet(
+                                                    isScrollControlled: true,
+                                                    backgroundColor:
+                                                        Colors.transparent,
+                                                    context: context,
+                                                    builder: (context) {
+                                                      return Padding(
+                                                        padding: MediaQuery.of(
+                                                                context)
                                                             .viewInsets,
-                                                    child: Container(
-                                                      height: 400,
-                                                      child:
-                                                          RatingStoriesWidget(
-                                                        storiesDetails:
-                                                            pageViewStoriesRecord,
-                                                      ),
-                                                    ),
-                                                  );
+                                                        child: Container(
+                                                          height: 400,
+                                                          child:
+                                                              RatingStoriesWidget(
+                                                            storiesDetails:
+                                                                pageViewStoriesRecord,
+                                                          ),
+                                                        ),
+                                                      );
+                                                    },
+                                                  ).then((value) =>
+                                                      setState(() {}));
                                                 },
-                                              );
-                                            },
-                                            child: Row(
-                                              mainAxisSize: MainAxisSize.max,
-                                              children: [
-                                                Container(
+                                                child: Container(
                                                   width: 70,
                                                   height: 70,
                                                   clipBehavior: Clip.antiAlias,
@@ -221,35 +242,69 @@ class _StorisSalonWidgetState extends State<StorisSalonWidget> {
                                                   child: Image.network(
                                                     valueOrDefault<String>(
                                                       rowUsersRecord.photoUrl,
-                                                      'https://www.beautyincheck.com/wp-content/uploads/2020/11/image-placeholder.jpg',
+                                                      'https://davidlowpa.com/wp-content/uploads/2021/08/empty-profile-picture-png-2-2-1.png',
                                                     ),
                                                     fit: BoxFit.cover,
                                                   ),
                                                 ),
-                                                Expanded(
-                                                  child: Padding(
-                                                    padding:
-                                                        EdgeInsetsDirectional
-                                                            .fromSTEB(
-                                                                20, 0, 0, 0),
-                                                    child: Column(
-                                                      mainAxisSize:
-                                                          MainAxisSize.max,
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .start,
-                                                      children: [
-                                                        Padding(
-                                                          padding:
-                                                              EdgeInsetsDirectional
-                                                                  .fromSTEB(0,
-                                                                      0, 0, 10),
-                                                          child: Row(
-                                                            mainAxisSize:
-                                                                MainAxisSize
-                                                                    .max,
-                                                            children: [
-                                                              Text(
+                                              ),
+                                              Expanded(
+                                                child: Padding(
+                                                  padding: EdgeInsetsDirectional
+                                                      .fromSTEB(20, 0, 0, 0),
+                                                  child: Column(
+                                                    mainAxisSize:
+                                                        MainAxisSize.max,
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: [
+                                                      Padding(
+                                                        padding:
+                                                            EdgeInsetsDirectional
+                                                                .fromSTEB(0, 0,
+                                                                    0, 10),
+                                                        child: Row(
+                                                          mainAxisSize:
+                                                              MainAxisSize.max,
+                                                          children: [
+                                                            InkWell(
+                                                              onTap: () async {
+                                                                logFirebaseEvent(
+                                                                    'STORIS_SALON_PAGE_Text_0bh5o31b_ON_TAP');
+                                                                logFirebaseEvent(
+                                                                    'Text_Bottom-Sheet');
+                                                                await showModalBottomSheet(
+                                                                  isScrollControlled:
+                                                                      true,
+                                                                  backgroundColor:
+                                                                      Colors
+                                                                          .transparent,
+                                                                  context:
+                                                                      context,
+                                                                  builder:
+                                                                      (context) {
+                                                                    return Padding(
+                                                                      padding: MediaQuery.of(
+                                                                              context)
+                                                                          .viewInsets,
+                                                                      child:
+                                                                          Container(
+                                                                        height:
+                                                                            400,
+                                                                        child:
+                                                                            RatingStoriesWidget(
+                                                                          storiesDetails:
+                                                                              pageViewStoriesRecord,
+                                                                        ),
+                                                                      ),
+                                                                    );
+                                                                  },
+                                                                ).then((value) =>
+                                                                    setState(
+                                                                        () {}));
+                                                              },
+                                                              child: Text(
                                                                 valueOrDefault<
                                                                     String>(
                                                                   rowUsersRecord
@@ -269,6 +324,12 @@ class _StorisSalonWidgetState extends State<StorisSalonWidget> {
                                                                               .w500,
                                                                     ),
                                                               ),
+                                                            ),
+                                                            if (!rowUsersRecord
+                                                                .followers!
+                                                                .toList()
+                                                                .contains(
+                                                                    currentUserReference))
                                                               Padding(
                                                                 padding:
                                                                     EdgeInsetsDirectional
@@ -277,50 +338,126 @@ class _StorisSalonWidgetState extends State<StorisSalonWidget> {
                                                                             0,
                                                                             0,
                                                                             0),
-                                                                child: Text(
-                                                                  'Follow',
-                                                                  style: FlutterFlowTheme.of(
-                                                                          context)
-                                                                      .bodyText1
-                                                                      .override(
-                                                                        fontFamily:
-                                                                            'Poppins',
-                                                                        color: Colors
-                                                                            .white,
-                                                                        fontWeight:
-                                                                            FontWeight.bold,
-                                                                      ),
+                                                                child: InkWell(
+                                                                  onTap:
+                                                                      () async {
+                                                                    logFirebaseEvent(
+                                                                        'STORIS_SALON_PAGE_Text_idj2z1o4_ON_TAP');
+                                                                    if (rowUsersRecord
+                                                                        .followers!
+                                                                        .toList()
+                                                                        .contains(
+                                                                            currentUserReference)) {
+                                                                      logFirebaseEvent(
+                                                                          'Text_Backend-Call');
+
+                                                                      final usersUpdateData =
+                                                                          {
+                                                                        'following':
+                                                                            FieldValue.arrayRemove([
+                                                                          pageViewStoriesRecord
+                                                                              .createdBy
+                                                                        ]),
+                                                                      };
+                                                                      await currentUserReference!
+                                                                          .update(
+                                                                              usersUpdateData);
+                                                                    } else {
+                                                                      logFirebaseEvent(
+                                                                          'Text_Backend-Call');
+
+                                                                      final usersUpdateData =
+                                                                          {
+                                                                        'following':
+                                                                            FieldValue.arrayUnion([
+                                                                          pageViewStoriesRecord
+                                                                              .createdBy
+                                                                        ]),
+                                                                      };
+                                                                      await currentUserReference!
+                                                                          .update(
+                                                                              usersUpdateData);
+                                                                    }
+
+                                                                    if (rowUsersRecord
+                                                                        .followers!
+                                                                        .toList()
+                                                                        .contains(
+                                                                            currentUserReference)) {
+                                                                      logFirebaseEvent(
+                                                                          'Text_Backend-Call');
+
+                                                                      final usersUpdateData =
+                                                                          {
+                                                                        'Followers':
+                                                                            FieldValue.arrayRemove([
+                                                                          currentUserReference
+                                                                        ]),
+                                                                      };
+                                                                      await pageViewStoriesRecord
+                                                                          .createdBy!
+                                                                          .update(
+                                                                              usersUpdateData);
+                                                                    } else {
+                                                                      logFirebaseEvent(
+                                                                          'Text_Backend-Call');
+
+                                                                      final usersUpdateData =
+                                                                          {
+                                                                        'Followers':
+                                                                            FieldValue.arrayUnion([
+                                                                          currentUserReference
+                                                                        ]),
+                                                                      };
+                                                                      await pageViewStoriesRecord
+                                                                          .createdBy!
+                                                                          .update(
+                                                                              usersUpdateData);
+                                                                    }
+                                                                  },
+                                                                  child: Text(
+                                                                    'Follow',
+                                                                    style: FlutterFlowTheme.of(
+                                                                            context)
+                                                                        .bodyText1
+                                                                        .override(
+                                                                          fontFamily:
+                                                                              'Poppins',
+                                                                          color:
+                                                                              Colors.white,
+                                                                          fontWeight:
+                                                                              FontWeight.bold,
+                                                                        ),
+                                                                  ),
                                                                 ),
                                                               ),
-                                                            ],
-                                                          ),
+                                                          ],
                                                         ),
-                                                        Text(
-                                                          valueOrDefault<
-                                                              String>(
-                                                            rowUsersRecord
-                                                                .adreText,
-                                                            'null',
-                                                          ),
-                                                          style: FlutterFlowTheme
-                                                                  .of(context)
-                                                              .bodyText1
-                                                              .override(
-                                                                fontFamily:
-                                                                    'Poppins',
-                                                                color: Colors
-                                                                    .white,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .w500,
-                                                              ),
+                                                      ),
+                                                      Text(
+                                                        valueOrDefault<String>(
+                                                          rowUsersRecord
+                                                              .adreText,
+                                                          'null',
                                                         ),
-                                                      ],
-                                                    ),
+                                                        style: FlutterFlowTheme
+                                                                .of(context)
+                                                            .bodyText1
+                                                            .override(
+                                                              fontFamily:
+                                                                  'Poppins',
+                                                              color:
+                                                                  Colors.white,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w500,
+                                                            ),
+                                                      ),
+                                                    ],
                                                   ),
                                                 ),
-                                              ],
-                                            ),
+                                              ),
+                                            ],
                                           );
                                         },
                                       ),
@@ -331,6 +468,9 @@ class _StorisSalonWidgetState extends State<StorisSalonWidget> {
                                   alignment: AlignmentDirectional(1, 0),
                                   child: InkWell(
                                     onTap: () async {
+                                      logFirebaseEvent(
+                                          'STORIS_SALON_Container_7q7nrs5s_ON_TAP');
+                                      logFirebaseEvent('Container_Page-View');
                                       await pageViewController?.nextPage(
                                         duration: Duration(milliseconds: 300),
                                         curve: Curves.ease,
@@ -349,6 +489,9 @@ class _StorisSalonWidgetState extends State<StorisSalonWidget> {
                                   alignment: AlignmentDirectional(0, 0),
                                   child: InkWell(
                                     onLongPress: () async {
+                                      logFirebaseEvent(
+                                          'STORIS_SALON_Container_08zoa7zc_ON_LONG_');
+                                      logFirebaseEvent('Container_Page-View');
                                       await pageViewController?.nextPage(
                                         duration: Duration(milliseconds: 300),
                                         curve: Curves.ease,
@@ -367,6 +510,9 @@ class _StorisSalonWidgetState extends State<StorisSalonWidget> {
                                   alignment: AlignmentDirectional(-1, 0),
                                   child: InkWell(
                                     onTap: () async {
+                                      logFirebaseEvent(
+                                          'STORIS_SALON_Container_ra3ccdbw_ON_TAP');
+                                      logFirebaseEvent('Container_Page-View');
                                       await pageViewController?.previousPage(
                                         duration: Duration(milliseconds: 300),
                                         curve: Curves.ease,
@@ -390,7 +536,7 @@ class _StorisSalonWidgetState extends State<StorisSalonWidget> {
                           child: Padding(
                             padding:
                                 EdgeInsetsDirectional.fromSTEB(0, 0, 0, 10),
-                            child: SmoothPageIndicator(
+                            child: smooth_page_indicator.SmoothPageIndicator(
                               controller: pageViewController ??= PageController(
                                   initialPage: min(
                                       0, pageViewStoriesRecordList.length - 1)),
@@ -403,7 +549,7 @@ class _StorisSalonWidgetState extends State<StorisSalonWidget> {
                                   curve: Curves.ease,
                                 );
                               },
-                              effect: ExpandingDotsEffect(
+                              effect: smooth_page_indicator.ExpandingDotsEffect(
                                 expansionFactor: 2,
                                 spacing: 8,
                                 radius: 16,

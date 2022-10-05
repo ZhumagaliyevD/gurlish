@@ -44,9 +44,7 @@ class _FilterSortServiceTypeWidgetState
             FlutterFlowRadioButton(
               options:
                   ['Mobile', 'Stationery', 'Stationery and Mobile'].toList(),
-              onChanged: (value) {
-                setState(() => radioButtonValue = value);
-              },
+              onChanged: (val) => setState(() => radioButtonValue = val),
               optionHeight: 40,
               textStyle: FlutterFlowTheme.of(context).bodyText1.override(
                     fontFamily: 'Poppins',
@@ -65,8 +63,14 @@ class _FilterSortServiceTypeWidgetState
               padding: EdgeInsetsDirectional.fromSTEB(0, 10, 0, 0),
               child: FFButtonWidget(
                 onPressed: () async {
+                  logFirebaseEvent('FILTER_SORT_SERVICE_TYPE_APPLY_BTN_ON_TA');
+                  logFirebaseEvent('Button_Update-Local-State');
                   setState(() => FFAppState().sortby = radioButtonValue!);
+                  logFirebaseEvent('Button_Update-Local-State');
+                  setState(() => FFAppState().filterIsSet = true);
+                  logFirebaseEvent('Button_Bottom-Sheet');
                   Navigator.pop(context);
+                  logFirebaseEvent('Button_Navigate-To');
                   await Navigator.push(
                     context,
                     PageTransition(

@@ -16,6 +16,12 @@ class _ShopSaleWidgetState extends State<ShopSaleWidget> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
+  void initState() {
+    super.initState();
+    logFirebaseEvent('screen_view', parameters: {'screen_name': 'shop_sale'});
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       key: scaffoldKey,
@@ -44,6 +50,9 @@ class _ShopSaleWidgetState extends State<ShopSaleWidget> {
                           size: 30,
                         ),
                         onPressed: () async {
+                          logFirebaseEvent(
+                              'SHOP_SALE_PAGE_chevron_left_ICN_ON_TAP');
+                          logFirebaseEvent('IconButton_Navigate-Back');
                           Navigator.pop(context);
                         },
                       ),

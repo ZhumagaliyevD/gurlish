@@ -24,6 +24,12 @@ class _MapAdressWidgetState extends State<MapAdressWidget> {
   var placePickerValue = FFPlace();
 
   @override
+  void initState() {
+    super.initState();
+    logFirebaseEvent('screen_view', parameters: {'screen_name': 'MapAdress'});
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       key: scaffoldKey,
@@ -51,7 +57,7 @@ class _MapAdressWidgetState extends State<MapAdressWidget> {
                   Padding(
                     padding: EdgeInsetsDirectional.fromSTEB(0, 40, 0, 0),
                     child: Text(
-                      'Choose your salon\'s address',
+                      'Choose your location',
                       style: FlutterFlowTheme.of(context).title2.override(
                             fontFamily: 'Poppins',
                             color: Colors.white,
@@ -110,10 +116,15 @@ class _MapAdressWidgetState extends State<MapAdressWidget> {
                         padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 60),
                         child: FFButtonWidget(
                           onPressed: () async {
+                            logFirebaseEvent(
+                                'MAP_ADRESS_PAGE_placePicker_ON_TAP');
+                            logFirebaseEvent('placePicker_Validate-Form');
                             if (formKey.currentState == null ||
                                 !formKey.currentState!.validate()) {
                               return;
                             }
+
+                            logFirebaseEvent('placePicker_Backend-Call');
 
                             final usersUpdateData = createUsersRecordData(
                               adresMap: placePickerValue.latLng,
@@ -123,6 +134,7 @@ class _MapAdressWidgetState extends State<MapAdressWidget> {
                               adressSelected: true,
                             );
                             await currentUserReference!.update(usersUpdateData);
+                            logFirebaseEvent('placePicker_Navigate-To');
                             await Navigator.push(
                               context,
                               MaterialPageRoute(

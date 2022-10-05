@@ -7,12 +7,20 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:53467980627:android:b77310ab8644356fe3b7a6",
+        "mobilesdk_app_id": "1:53467980627:android:7fb87304da5962f6e3b7a6",
         "android_client_info": {
-          "package_name": "com.wlff.socialbeautyplatform"
+          "package_name": "com.weloveflutterflow.gurlish"
         }
       },
       "oauth_client": [
+        {
+          "client_id": "53467980627-6t07qqa07abrfapjoaic3uc83tssdalf.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.weloveflutterflow.gurlish",
+            "certificate_hash": "9bbb3186b2189ef16d8f272bdab59362c395cbb4"
+          }
+        },
         {
           "client_id": "53467980627-s8a0k16jame1p1mf9aitvb8m6ftubukc.apps.googleusercontent.com",
           "client_type": 3
@@ -31,10 +39,10 @@
               "client_type": 3
             },
             {
-              "client_id": "53467980627-u8uapb656ks1g2c2sgnd055n8f56b52f.apps.googleusercontent.com",
+              "client_id": "53467980627-32u11t416c0j2ltju4hk8781frl59rct.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.wlff.socialbeautyplatform"
+                "bundle_id": "com.weloveflutterflow.gurlish"
               }
             }
           ]

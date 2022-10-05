@@ -75,6 +75,23 @@ class _$CategorySalonRecordSerializer
                   DocumentReference, const [const FullType.nullable(Object)])
             ])));
     }
+    value = object.linkProd;
+    if (value != null) {
+      result
+        ..add('link_prod')
+        ..add(serializers.serialize(value,
+            specifiedType: const FullType(BuiltList, const [
+              const FullType(
+                  DocumentReference, const [const FullType.nullable(Object)])
+            ])));
+    }
+    value = object.createdBiz;
+    if (value != null) {
+      result
+        ..add('created_biz')
+        ..add(
+            serializers.serialize(value, specifiedType: const FullType(bool)));
+    }
     value = object.ffRef;
     if (value != null) {
       result
@@ -131,6 +148,17 @@ class _$CategorySalonRecordSerializer
                     DocumentReference, const [const FullType.nullable(Object)])
               ]))! as BuiltList<Object?>);
           break;
+        case 'link_prod':
+          result.linkProd.replace(serializers.deserialize(value,
+              specifiedType: const FullType(BuiltList, const [
+                const FullType(
+                    DocumentReference, const [const FullType.nullable(Object)])
+              ]))! as BuiltList<Object?>);
+          break;
+        case 'created_biz':
+          result.createdBiz = serializers.deserialize(value,
+              specifiedType: const FullType(bool)) as bool?;
+          break;
         case 'Document__Reference__Field':
           result.ffRef = serializers.deserialize(value,
               specifiedType: const FullType(DocumentReference, const [
@@ -158,6 +186,10 @@ class _$CategorySalonRecord extends CategorySalonRecord {
   @override
   final BuiltList<DocumentReference<Object?>>? createdUserLink;
   @override
+  final BuiltList<DocumentReference<Object?>>? linkProd;
+  @override
+  final bool? createdBiz;
+  @override
   final DocumentReference<Object?>? ffRef;
 
   factory _$CategorySalonRecord(
@@ -171,6 +203,8 @@ class _$CategorySalonRecord extends CategorySalonRecord {
       this.linkStories,
       this.countStories,
       this.createdUserLink,
+      this.linkProd,
+      this.createdBiz,
       this.ffRef})
       : super._();
 
@@ -193,6 +227,8 @@ class _$CategorySalonRecord extends CategorySalonRecord {
         linkStories == other.linkStories &&
         countStories == other.countStories &&
         createdUserLink == other.createdUserLink &&
+        linkProd == other.linkProd &&
+        createdBiz == other.createdBiz &&
         ffRef == other.ffRef;
   }
 
@@ -202,11 +238,15 @@ class _$CategorySalonRecord extends CategorySalonRecord {
         $jc(
             $jc(
                 $jc(
-                    $jc($jc($jc(0, name.hashCode), image.hashCode),
-                        linkSalon.hashCode),
-                    linkStories.hashCode),
-                countStories.hashCode),
-            createdUserLink.hashCode),
+                    $jc(
+                        $jc(
+                            $jc($jc($jc(0, name.hashCode), image.hashCode),
+                                linkSalon.hashCode),
+                            linkStories.hashCode),
+                        countStories.hashCode),
+                    createdUserLink.hashCode),
+                linkProd.hashCode),
+            createdBiz.hashCode),
         ffRef.hashCode));
   }
 
@@ -219,6 +259,8 @@ class _$CategorySalonRecord extends CategorySalonRecord {
           ..add('linkStories', linkStories)
           ..add('countStories', countStories)
           ..add('createdUserLink', createdUserLink)
+          ..add('linkProd', linkProd)
+          ..add('createdBiz', createdBiz)
           ..add('ffRef', ffRef))
         .toString();
   }
@@ -259,6 +301,16 @@ class CategorySalonRecordBuilder
           ListBuilder<DocumentReference<Object?>>? createdUserLink) =>
       _$this._createdUserLink = createdUserLink;
 
+  ListBuilder<DocumentReference<Object?>>? _linkProd;
+  ListBuilder<DocumentReference<Object?>> get linkProd =>
+      _$this._linkProd ??= new ListBuilder<DocumentReference<Object?>>();
+  set linkProd(ListBuilder<DocumentReference<Object?>>? linkProd) =>
+      _$this._linkProd = linkProd;
+
+  bool? _createdBiz;
+  bool? get createdBiz => _$this._createdBiz;
+  set createdBiz(bool? createdBiz) => _$this._createdBiz = createdBiz;
+
   DocumentReference<Object?>? _ffRef;
   DocumentReference<Object?>? get ffRef => _$this._ffRef;
   set ffRef(DocumentReference<Object?>? ffRef) => _$this._ffRef = ffRef;
@@ -276,6 +328,8 @@ class CategorySalonRecordBuilder
       _linkStories = $v.linkStories?.toBuilder();
       _countStories = $v.countStories;
       _createdUserLink = $v.createdUserLink?.toBuilder();
+      _linkProd = $v.linkProd?.toBuilder();
+      _createdBiz = $v.createdBiz;
       _ffRef = $v.ffRef;
       _$v = null;
     }
@@ -307,6 +361,8 @@ class CategorySalonRecordBuilder
               linkStories: _linkStories?.build(),
               countStories: countStories,
               createdUserLink: _createdUserLink?.build(),
+              linkProd: _linkProd?.build(),
+              createdBiz: createdBiz,
               ffRef: ffRef);
     } catch (_) {
       late String _$failedField;
@@ -318,6 +374,8 @@ class CategorySalonRecordBuilder
 
         _$failedField = 'createdUserLink';
         _createdUserLink?.build();
+        _$failedField = 'linkProd';
+        _linkProd?.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
             r'CategorySalonRecord', _$failedField, e.toString());

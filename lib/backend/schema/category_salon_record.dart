@@ -27,6 +27,12 @@ abstract class CategorySalonRecord
   @BuiltValueField(wireName: 'created_user_link')
   BuiltList<DocumentReference>? get createdUserLink;
 
+  @BuiltValueField(wireName: 'link_prod')
+  BuiltList<DocumentReference>? get linkProd;
+
+  @BuiltValueField(wireName: 'created_biz')
+  bool? get createdBiz;
+
   @BuiltValueField(wireName: kDocumentReferenceField)
   DocumentReference? get ffRef;
   DocumentReference get reference => ffRef!;
@@ -37,7 +43,9 @@ abstract class CategorySalonRecord
     ..linkSalon = ListBuilder()
     ..linkStories = ListBuilder()
     ..countStories = 0
-    ..createdUserLink = ListBuilder();
+    ..createdUserLink = ListBuilder()
+    ..linkProd = ListBuilder()
+    ..createdBiz = false;
 
   static CollectionReference get collection =>
       FirebaseFirestore.instance.collection('category_salon');
@@ -65,6 +73,7 @@ Map<String, dynamic> createCategorySalonRecordData({
   String? name,
   String? image,
   int? countStories,
+  bool? createdBiz,
 }) {
   final firestoreData = serializers.toFirestore(
     CategorySalonRecord.serializer,
@@ -75,7 +84,9 @@ Map<String, dynamic> createCategorySalonRecordData({
         ..linkSalon = null
         ..linkStories = null
         ..countStories = countStories
-        ..createdUserLink = null,
+        ..createdUserLink = null
+        ..linkProd = null
+        ..createdBiz = createdBiz,
     ),
   );
 

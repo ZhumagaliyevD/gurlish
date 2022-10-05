@@ -102,6 +102,30 @@ class _$PostsRecordSerializer implements StructuredSerializer<PostsRecord> {
         ..add(
             serializers.serialize(value, specifiedType: const FullType(bool)));
     }
+    value = object.following;
+    if (value != null) {
+      result
+        ..add('following')
+        ..add(serializers.serialize(value,
+            specifiedType: const FullType(BuiltList, const [
+              const FullType(
+                  DocumentReference, const [const FullType.nullable(Object)])
+            ])));
+    }
+    value = object.videoReels;
+    if (value != null) {
+      result
+        ..add('video_reels')
+        ..add(serializers.serialize(value,
+            specifiedType: const FullType(String)));
+    }
+    value = object.description;
+    if (value != null) {
+      result
+        ..add('description')
+        ..add(serializers.serialize(value,
+            specifiedType: const FullType(String)));
+    }
     value = object.ffRef;
     if (value != null) {
       result
@@ -177,6 +201,21 @@ class _$PostsRecordSerializer implements StructuredSerializer<PostsRecord> {
           result.walkIns = serializers.deserialize(value,
               specifiedType: const FullType(bool)) as bool?;
           break;
+        case 'following':
+          result.following.replace(serializers.deserialize(value,
+              specifiedType: const FullType(BuiltList, const [
+                const FullType(
+                    DocumentReference, const [const FullType.nullable(Object)])
+              ]))! as BuiltList<Object?>);
+          break;
+        case 'video_reels':
+          result.videoReels = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String?;
+          break;
+        case 'description':
+          result.description = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String?;
+          break;
         case 'Document__Reference__Field':
           result.ffRef = serializers.deserialize(value,
               specifiedType: const FullType(DocumentReference, const [
@@ -214,6 +253,12 @@ class _$PostsRecord extends PostsRecord {
   @override
   final bool? walkIns;
   @override
+  final BuiltList<DocumentReference<Object?>>? following;
+  @override
+  final String? videoReels;
+  @override
+  final String? description;
+  @override
   final DocumentReference<Object?>? ffRef;
 
   factory _$PostsRecord([void Function(PostsRecordBuilder)? updates]) =>
@@ -231,6 +276,9 @@ class _$PostsRecord extends PostsRecord {
       this.location,
       this.linkCategory,
       this.walkIns,
+      this.following,
+      this.videoReels,
+      this.description,
       this.ffRef})
       : super._();
 
@@ -256,6 +304,9 @@ class _$PostsRecord extends PostsRecord {
         location == other.location &&
         linkCategory == other.linkCategory &&
         walkIns == other.walkIns &&
+        following == other.following &&
+        videoReels == other.videoReels &&
+        description == other.description &&
         ffRef == other.ffRef;
   }
 
@@ -271,17 +322,25 @@ class _$PostsRecord extends PostsRecord {
                                 $jc(
                                     $jc(
                                         $jc(
-                                            $jc($jc(0, name.hashCode),
-                                                image.hashCode),
-                                            likedBy.hashCode),
-                                        createdAt.hashCode),
-                                    createdBy.hashCode),
-                                firstPhoto.hashCode),
-                            category.hashCode),
-                        isBusiness.hashCode),
-                    location.hashCode),
-                linkCategory.hashCode),
-            walkIns.hashCode),
+                                            $jc(
+                                                $jc(
+                                                    $jc(
+                                                        $jc(
+                                                            $jc(0,
+                                                                name.hashCode),
+                                                            image.hashCode),
+                                                        likedBy.hashCode),
+                                                    createdAt.hashCode),
+                                                createdBy.hashCode),
+                                            firstPhoto.hashCode),
+                                        category.hashCode),
+                                    isBusiness.hashCode),
+                                location.hashCode),
+                            linkCategory.hashCode),
+                        walkIns.hashCode),
+                    following.hashCode),
+                videoReels.hashCode),
+            description.hashCode),
         ffRef.hashCode));
   }
 
@@ -299,6 +358,9 @@ class _$PostsRecord extends PostsRecord {
           ..add('location', location)
           ..add('linkCategory', linkCategory)
           ..add('walkIns', walkIns)
+          ..add('following', following)
+          ..add('videoReels', videoReels)
+          ..add('description', description)
           ..add('ffRef', ffRef))
         .toString();
   }
@@ -355,6 +417,20 @@ class PostsRecordBuilder implements Builder<PostsRecord, PostsRecordBuilder> {
   bool? get walkIns => _$this._walkIns;
   set walkIns(bool? walkIns) => _$this._walkIns = walkIns;
 
+  ListBuilder<DocumentReference<Object?>>? _following;
+  ListBuilder<DocumentReference<Object?>> get following =>
+      _$this._following ??= new ListBuilder<DocumentReference<Object?>>();
+  set following(ListBuilder<DocumentReference<Object?>>? following) =>
+      _$this._following = following;
+
+  String? _videoReels;
+  String? get videoReels => _$this._videoReels;
+  set videoReels(String? videoReels) => _$this._videoReels = videoReels;
+
+  String? _description;
+  String? get description => _$this._description;
+  set description(String? description) => _$this._description = description;
+
   DocumentReference<Object?>? _ffRef;
   DocumentReference<Object?>? get ffRef => _$this._ffRef;
   set ffRef(DocumentReference<Object?>? ffRef) => _$this._ffRef = ffRef;
@@ -377,6 +453,9 @@ class PostsRecordBuilder implements Builder<PostsRecord, PostsRecordBuilder> {
       _location = $v.location;
       _linkCategory = $v.linkCategory;
       _walkIns = $v.walkIns;
+      _following = $v.following?.toBuilder();
+      _videoReels = $v.videoReels;
+      _description = $v.description;
       _ffRef = $v.ffRef;
       _$v = null;
     }
@@ -413,6 +492,9 @@ class PostsRecordBuilder implements Builder<PostsRecord, PostsRecordBuilder> {
               location: location,
               linkCategory: linkCategory,
               walkIns: walkIns,
+              following: _following?.build(),
+              videoReels: videoReels,
+              description: description,
               ffRef: ffRef);
     } catch (_) {
       late String _$failedField;
@@ -421,6 +503,9 @@ class PostsRecordBuilder implements Builder<PostsRecord, PostsRecordBuilder> {
         _image?.build();
         _$failedField = 'likedBy';
         _likedBy?.build();
+
+        _$failedField = 'following';
+        _following?.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
             r'PostsRecord', _$failedField, e.toString());

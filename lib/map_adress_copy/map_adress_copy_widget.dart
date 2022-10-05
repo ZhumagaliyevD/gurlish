@@ -24,6 +24,13 @@ class _MapAdressCopyWidgetState extends State<MapAdressCopyWidget> {
   var placePickerValue = FFPlace();
 
   @override
+  void initState() {
+    super.initState();
+    logFirebaseEvent('screen_view',
+        parameters: {'screen_name': 'MapAdressCopy'});
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       key: scaffoldKey,
@@ -49,9 +56,9 @@ class _MapAdressCopyWidgetState extends State<MapAdressCopyWidget> {
                 mainAxisSize: MainAxisSize.max,
                 children: [
                   Padding(
-                    padding: EdgeInsetsDirectional.fromSTEB(0, 40, 0, 0),
+                    padding: EdgeInsetsDirectional.fromSTEB(0, 50, 0, 0),
                     child: Text(
-                      'Choose your salon\'s address',
+                      'Choose your location\n',
                       style: FlutterFlowTheme.of(context).title2.override(
                             fontFamily: 'Poppins',
                             color: Colors.white,
@@ -107,13 +114,18 @@ class _MapAdressCopyWidgetState extends State<MapAdressCopyWidget> {
                     Align(
                       alignment: AlignmentDirectional(0, 1),
                       child: Padding(
-                        padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 60),
+                        padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 70),
                         child: FFButtonWidget(
                           onPressed: () async {
+                            logFirebaseEvent(
+                                'MAP_ADRESS_COPY_PAGE_placePicker_ON_TAP');
+                            logFirebaseEvent('placePicker_Validate-Form');
                             if (formKey.currentState == null ||
                                 !formKey.currentState!.validate()) {
                               return;
                             }
+
+                            logFirebaseEvent('placePicker_Backend-Call');
 
                             final usersUpdateData = createUsersRecordData(
                               adresMap: placePickerValue.latLng,
@@ -123,6 +135,7 @@ class _MapAdressCopyWidgetState extends State<MapAdressCopyWidget> {
                               adressSelected: true,
                             );
                             await currentUserReference!.update(usersUpdateData);
+                            logFirebaseEvent('placePicker_Navigate-To');
                             await Navigator.push(
                               context,
                               MaterialPageRoute(

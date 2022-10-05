@@ -1,6 +1,7 @@
 import '../auth/auth_util.dart';
 import '../flutter_flow/flutter_flow_theme.dart';
 import '../flutter_flow/flutter_flow_util.dart';
+import '../flutter_flow/flutter_flow_widgets.dart';
 import '../forget_password/forget_password_widget.dart';
 import '../main.dart';
 import '../user_sign_up/user_sign_up_widget.dart';
@@ -17,6 +18,7 @@ class UserSignInWidget extends StatefulWidget {
 class _UserSignInWidgetState extends State<UserSignInWidget> {
   TextEditingController? emailTextController;
   TextEditingController? passwordController;
+
   late bool passwordVisibility;
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -26,6 +28,15 @@ class _UserSignInWidgetState extends State<UserSignInWidget> {
     emailTextController = TextEditingController();
     passwordController = TextEditingController();
     passwordVisibility = false;
+    logFirebaseEvent('screen_view',
+        parameters: {'screen_name': 'user_sign_In'});
+  }
+
+  @override
+  void dispose() {
+    emailTextController?.dispose();
+    passwordController?.dispose();
+    super.dispose();
   }
 
   @override
@@ -63,7 +74,7 @@ class _UserSignInWidgetState extends State<UserSignInWidget> {
                             'assets/images/logo.png',
                             width: 200,
                             height: 100,
-                            fit: BoxFit.contain,
+                            fit: BoxFit.none,
                           ),
                         ),
                       ),
@@ -89,7 +100,7 @@ class _UserSignInWidgetState extends State<UserSignInWidget> {
                     Padding(
                       padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 30),
                       child: Text(
-                        'Sign In',
+                        'Sign in',
                         style: FlutterFlowTheme.of(context).bodyText1.override(
                               fontFamily: 'Poppins',
                               color: Colors.white,
@@ -133,6 +144,26 @@ class _UserSignInWidgetState extends State<UserSignInWidget> {
                                       ),
                                     ),
                                     focusedBorder: UnderlineInputBorder(
+                                      borderSide: BorderSide(
+                                        color: Color(0x00000000),
+                                        width: 1,
+                                      ),
+                                      borderRadius: const BorderRadius.only(
+                                        topLeft: Radius.circular(4.0),
+                                        topRight: Radius.circular(4.0),
+                                      ),
+                                    ),
+                                    errorBorder: UnderlineInputBorder(
+                                      borderSide: BorderSide(
+                                        color: Color(0x00000000),
+                                        width: 1,
+                                      ),
+                                      borderRadius: const BorderRadius.only(
+                                        topLeft: Radius.circular(4.0),
+                                        topRight: Radius.circular(4.0),
+                                      ),
+                                    ),
+                                    focusedErrorBorder: UnderlineInputBorder(
                                       borderSide: BorderSide(
                                         color: Color(0x00000000),
                                         width: 1,
@@ -206,6 +237,26 @@ class _UserSignInWidgetState extends State<UserSignInWidget> {
                                         topRight: Radius.circular(4.0),
                                       ),
                                     ),
+                                    errorBorder: UnderlineInputBorder(
+                                      borderSide: BorderSide(
+                                        color: Color(0x00000000),
+                                        width: 1,
+                                      ),
+                                      borderRadius: const BorderRadius.only(
+                                        topLeft: Radius.circular(4.0),
+                                        topRight: Radius.circular(4.0),
+                                      ),
+                                    ),
+                                    focusedErrorBorder: UnderlineInputBorder(
+                                      borderSide: BorderSide(
+                                        color: Color(0x00000000),
+                                        width: 1,
+                                      ),
+                                      borderRadius: const BorderRadius.only(
+                                        topLeft: Radius.circular(4.0),
+                                        topRight: Radius.circular(4.0),
+                                      ),
+                                    ),
                                     prefixIcon: Icon(
                                       Icons.vpn_key_outlined,
                                       color: FlutterFlowTheme.of(context)
@@ -248,6 +299,9 @@ class _UserSignInWidgetState extends State<UserSignInWidget> {
                         children: [
                           InkWell(
                             onTap: () async {
+                              logFirebaseEvent(
+                                  'USER_SIGN_IN_PAGE_Text_0i64gpry_ON_TAP');
+                              logFirebaseEvent('Text_Navigate-To');
                               await Navigator.push(
                                 context,
                                 MaterialPageRoute(
@@ -256,7 +310,7 @@ class _UserSignInWidgetState extends State<UserSignInWidget> {
                               );
                             },
                             child: Text(
-                              'Forget password',
+                              'Forgot password?',
                               style: FlutterFlowTheme.of(context)
                                   .bodyText1
                                   .override(
@@ -270,54 +324,45 @@ class _UserSignInWidgetState extends State<UserSignInWidget> {
                     ),
                     Padding(
                       padding: EdgeInsetsDirectional.fromSTEB(20, 20, 20, 0),
-                      child: Container(
-                        width: double.infinity,
-                        height: 75,
-                        decoration: BoxDecoration(
-                          color: FlutterFlowTheme.of(context).primaryColor,
-                          borderRadius: BorderRadius.circular(37),
-                        ),
-                        child: InkWell(
-                          onTap: () async {
-                            final user = await signInWithEmail(
-                              context,
-                              emailTextController!.text,
-                              passwordController!.text,
-                            );
-                            if (user == null) {
-                              return;
-                            }
+                      child: FFButtonWidget(
+                        onPressed: () async {
+                          logFirebaseEvent(
+                              'USER_SIGN_IN_PAGE_SIGN_IN_BTN_ON_TAP');
+                          logFirebaseEvent('Button_Auth');
 
-                            await Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) =>
-                                    NavBarPage(initialPage: 'Main'),
-                              ),
-                            );
-                          },
-                          child: Row(
-                            mainAxisSize: MainAxisSize.max,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                'Continue',
-                                style: FlutterFlowTheme.of(context)
-                                    .bodyText1
-                                    .override(
-                                      fontFamily: 'Poppins',
-                                      color: Colors.white,
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                              ),
-                              Icon(
-                                Icons.navigate_next,
-                                color: Colors.white,
-                                size: 28,
-                              ),
-                            ],
+                          final user = await signInWithEmail(
+                            context,
+                            emailTextController!.text,
+                            passwordController!.text,
+                          );
+                          if (user == null) {
+                            return;
+                          }
+
+                          logFirebaseEvent('Button_Navigate-To');
+                          await Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  NavBarPage(initialPage: 'Main'),
+                            ),
+                          );
+                        },
+                        text: 'Sign in',
+                        options: FFButtonOptions(
+                          width: double.infinity,
+                          height: 75,
+                          color: FlutterFlowTheme.of(context).primaryColor,
+                          textStyle:
+                              FlutterFlowTheme.of(context).subtitle2.override(
+                                    fontFamily: 'Poppins',
+                                    color: Colors.white,
+                                  ),
+                          borderSide: BorderSide(
+                            color: Colors.transparent,
+                            width: 1,
                           ),
+                          borderRadius: BorderRadius.circular(37),
                         ),
                       ),
                     ),
@@ -325,6 +370,9 @@ class _UserSignInWidgetState extends State<UserSignInWidget> {
                       padding: EdgeInsetsDirectional.fromSTEB(0, 15, 0, 0),
                       child: InkWell(
                         onTap: () async {
+                          logFirebaseEvent(
+                              'USER_SIGN_IN_PAGE_Row_m01m9h6c_ON_TAP');
+                          logFirebaseEvent('Row_Navigate-To');
                           await Navigator.push(
                             context,
                             MaterialPageRoute(

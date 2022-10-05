@@ -30,6 +30,12 @@ abstract class StoriesRecord
 
   BuiltList<double>? get rating;
 
+  bool? get isBuisness;
+
+  int? get timer;
+
+  String? get description;
+
   @BuiltValueField(wireName: kDocumentReferenceField)
   DocumentReference? get ffRef;
   DocumentReference get reference => ffRef!;
@@ -40,7 +46,10 @@ abstract class StoriesRecord
     ..category = ''
     ..categories = ListBuilder()
     ..storiesID = ''
-    ..rating = ListBuilder();
+    ..rating = ListBuilder()
+    ..isBuisness = false
+    ..timer = 0
+    ..description = '';
 
   static CollectionReference get collection =>
       FirebaseFirestore.instance.collection('stories');
@@ -70,6 +79,9 @@ Map<String, dynamic> createStoriesRecordData({
   String? imgStories,
   String? category,
   String? storiesID,
+  bool? isBuisness,
+  int? timer,
+  String? description,
 }) {
   final firestoreData = serializers.toFirestore(
     StoriesRecord.serializer,
@@ -82,7 +94,10 @@ Map<String, dynamic> createStoriesRecordData({
         ..category = category
         ..categories = null
         ..storiesID = storiesID
-        ..rating = null,
+        ..rating = null
+        ..isBuisness = isBuisness
+        ..timer = timer
+        ..description = description,
     ),
   );
 

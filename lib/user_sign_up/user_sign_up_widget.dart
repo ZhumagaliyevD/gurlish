@@ -3,6 +3,7 @@ import '../backend/backend.dart';
 import '../checkbox/checkbox_widget.dart';
 import '../flutter_flow/flutter_flow_theme.dart';
 import '../flutter_flow/flutter_flow_util.dart';
+import '../flutter_flow/flutter_flow_widgets.dart';
 import '../user_sign_in/user_sign_in_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -17,8 +18,10 @@ class UserSignUpWidget extends StatefulWidget {
 class _UserSignUpWidgetState extends State<UserSignUpWidget> {
   TextEditingController? emailTextController;
   TextEditingController? passwordController;
+
   late bool passwordVisibility;
   TextEditingController? password1Controller;
+
   late bool password1Visibility;
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -30,6 +33,16 @@ class _UserSignUpWidgetState extends State<UserSignUpWidget> {
     passwordVisibility = false;
     password1Controller = TextEditingController();
     password1Visibility = false;
+    logFirebaseEvent('screen_view',
+        parameters: {'screen_name': 'user_sign_up'});
+  }
+
+  @override
+  void dispose() {
+    emailTextController?.dispose();
+    passwordController?.dispose();
+    password1Controller?.dispose();
+    super.dispose();
   }
 
   @override
@@ -92,7 +105,7 @@ class _UserSignUpWidgetState extends State<UserSignUpWidget> {
                       Padding(
                         padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 30),
                         child: Text(
-                          'Sign UP',
+                          'Sign up',
                           style:
                               FlutterFlowTheme.of(context).bodyText1.override(
                                     fontFamily: 'Poppins',
@@ -137,6 +150,26 @@ class _UserSignUpWidgetState extends State<UserSignUpWidget> {
                                         ),
                                       ),
                                       focusedBorder: UnderlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: Color(0x00000000),
+                                          width: 1,
+                                        ),
+                                        borderRadius: const BorderRadius.only(
+                                          topLeft: Radius.circular(4.0),
+                                          topRight: Radius.circular(4.0),
+                                        ),
+                                      ),
+                                      errorBorder: UnderlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: Color(0x00000000),
+                                          width: 1,
+                                        ),
+                                        borderRadius: const BorderRadius.only(
+                                          topLeft: Radius.circular(4.0),
+                                          topRight: Radius.circular(4.0),
+                                        ),
+                                      ),
+                                      focusedErrorBorder: UnderlineInputBorder(
                                         borderSide: BorderSide(
                                           color: Color(0x00000000),
                                           width: 1,
@@ -199,6 +232,26 @@ class _UserSignUpWidgetState extends State<UserSignUpWidget> {
                                         ),
                                       ),
                                       focusedBorder: UnderlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: Color(0x00000000),
+                                          width: 1,
+                                        ),
+                                        borderRadius: const BorderRadius.only(
+                                          topLeft: Radius.circular(4.0),
+                                          topRight: Radius.circular(4.0),
+                                        ),
+                                      ),
+                                      errorBorder: UnderlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: Color(0x00000000),
+                                          width: 1,
+                                        ),
+                                        borderRadius: const BorderRadius.only(
+                                          topLeft: Radius.circular(4.0),
+                                          topRight: Radius.circular(4.0),
+                                        ),
+                                      ),
+                                      focusedErrorBorder: UnderlineInputBorder(
                                         borderSide: BorderSide(
                                           color: Color(0x00000000),
                                           width: 1,
@@ -285,6 +338,26 @@ class _UserSignUpWidgetState extends State<UserSignUpWidget> {
                                           topRight: Radius.circular(4.0),
                                         ),
                                       ),
+                                      errorBorder: UnderlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: Color(0x00000000),
+                                          width: 1,
+                                        ),
+                                        borderRadius: const BorderRadius.only(
+                                          topLeft: Radius.circular(4.0),
+                                          topRight: Radius.circular(4.0),
+                                        ),
+                                      ),
+                                      focusedErrorBorder: UnderlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: Color(0x00000000),
+                                          width: 1,
+                                        ),
+                                        borderRadius: const BorderRadius.only(
+                                          topLeft: Radius.circular(4.0),
+                                          topRight: Radius.circular(4.0),
+                                        ),
+                                      ),
                                       prefixIcon: Icon(
                                         Icons.vpn_key_outlined,
                                       ),
@@ -320,8 +393,11 @@ class _UserSignUpWidgetState extends State<UserSignUpWidget> {
                       ),
                       Padding(
                         padding: EdgeInsetsDirectional.fromSTEB(20, 20, 20, 0),
-                        child: InkWell(
-                          onTap: () async {
+                        child: FFButtonWidget(
+                          onPressed: () async {
+                            logFirebaseEvent(
+                                'USER_SIGN_UP_PAGE_CONTINUE_BTN_ON_TAP');
+                            logFirebaseEvent('Button_Auth');
                             if (passwordController?.text !=
                                 password1Controller?.text) {
                               ScaffoldMessenger.of(context).showSnackBar(
@@ -355,6 +431,7 @@ class _UserSignUpWidgetState extends State<UserSignUpWidget> {
                                 .doc(user.uid)
                                 .update(usersCreateData);
 
+                            logFirebaseEvent('Button_Navigate-To');
                             await Navigator.push(
                               context,
                               MaterialPageRoute(
@@ -362,35 +439,21 @@ class _UserSignUpWidgetState extends State<UserSignUpWidget> {
                               ),
                             );
                           },
-                          child: Container(
+                          text: 'Continue',
+                          options: FFButtonOptions(
                             width: double.infinity,
                             height: 75,
-                            decoration: BoxDecoration(
-                              color: FlutterFlowTheme.of(context).primaryColor,
-                              borderRadius: BorderRadius.circular(37),
+                            color: FlutterFlowTheme.of(context).primaryColor,
+                            textStyle:
+                                FlutterFlowTheme.of(context).subtitle2.override(
+                                      fontFamily: 'Poppins',
+                                      color: Colors.white,
+                                    ),
+                            borderSide: BorderSide(
+                              color: Colors.transparent,
+                              width: 1,
                             ),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.max,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  'Continue',
-                                  style: FlutterFlowTheme.of(context)
-                                      .bodyText1
-                                      .override(
-                                        fontFamily: 'Poppins',
-                                        color: Colors.white,
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                ),
-                                Icon(
-                                  Icons.navigate_next,
-                                  color: Colors.white,
-                                  size: 28,
-                                ),
-                              ],
-                            ),
+                            borderRadius: BorderRadius.circular(37),
                           ),
                         ),
                       ),
@@ -398,6 +461,9 @@ class _UserSignUpWidgetState extends State<UserSignUpWidget> {
                         padding: EdgeInsetsDirectional.fromSTEB(0, 20, 0, 0),
                         child: InkWell(
                           onTap: () async {
+                            logFirebaseEvent(
+                                'USER_SIGN_UP_PAGE_Row_tpymyrz1_ON_TAP');
+                            logFirebaseEvent('Row_Navigate-To');
                             await Navigator.push(
                               context,
                               MaterialPageRoute(

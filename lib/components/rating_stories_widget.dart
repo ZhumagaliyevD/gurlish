@@ -1,5 +1,6 @@
 import '../auth/auth_util.dart';
 import '../backend/backend.dart';
+import '../backend/push_notifications/push_notifications_util.dart';
 import '../flutter_flow/flutter_flow_icon_button.dart';
 import '../flutter_flow/flutter_flow_theme.dart';
 import '../flutter_flow/flutter_flow_util.dart';
@@ -36,6 +37,12 @@ class _RatingStoriesWidgetState extends State<RatingStoriesWidget> {
     getCurrentUserLocation(defaultLocation: LatLng(0.0, 0.0), cached: true)
         .then((loc) => setState(() => currentUserLocationValue = loc));
     textController = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    textController?.dispose();
+    super.dispose();
   }
 
   @override
@@ -147,7 +154,10 @@ class _RatingStoriesWidgetState extends State<RatingStoriesWidget> {
                                     ClipRRect(
                                       borderRadius: BorderRadius.circular(40),
                                       child: Image.network(
-                                        rowUsersRecord.photoUrl!,
+                                        valueOrDefault<String>(
+                                          rowUsersRecord.photoUrl,
+                                          'https://davidlowpa.com/wp-content/uploads/2021/08/empty-profile-picture-png-2-2-1.png',
+                                        ),
                                         width: 51,
                                         height: 52,
                                         fit: BoxFit.cover,
@@ -309,15 +319,23 @@ class _RatingStoriesWidgetState extends State<RatingStoriesWidget> {
                                               ),
                                             ],
                                           ),
-                                          Padding(
-                                            padding:
-                                                EdgeInsetsDirectional.fromSTEB(
-                                                    0, 10, 0, 0),
+                                          Container(
+                                            width: 80,
+                                            height: 24,
+                                            decoration: BoxDecoration(
+                                              color:
+                                                  FlutterFlowTheme.of(context)
+                                                      .secondaryBackground,
+                                            ),
                                             child: FFButtonWidget(
                                               onPressed: () async {
+                                                logFirebaseEvent(
+                                                    'RATING_STORIES_COMP_VIEW_BTN_ON_TAP');
                                                 if (widget.storiesDetails!
                                                         .createdBy ==
                                                     currentUserReference) {
+                                                  logFirebaseEvent(
+                                                      'Button_Navigate-To');
                                                   await Navigator.push(
                                                     context,
                                                     MaterialPageRoute(
@@ -328,6 +346,8 @@ class _RatingStoriesWidgetState extends State<RatingStoriesWidget> {
                                                     ),
                                                   );
                                                 } else {
+                                                  logFirebaseEvent(
+                                                      'Button_Navigate-To');
                                                   await Navigator.push(
                                                     context,
                                                     MaterialPageRoute(
@@ -354,7 +374,9 @@ class _RatingStoriesWidgetState extends State<RatingStoriesWidget> {
                                                         .override(
                                                           fontFamily: 'Poppins',
                                                           color: Colors.white,
-                                                          fontSize: 16,
+                                                          fontSize: 14,
+                                                          fontWeight:
+                                                              FontWeight.normal,
                                                         ),
                                                 elevation: 3,
                                                 borderSide: BorderSide(
@@ -373,6 +395,23 @@ class _RatingStoriesWidgetState extends State<RatingStoriesWidget> {
                             ),
                           ),
                         ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: EdgeInsetsDirectional.fromSTEB(20, 20, 20, 0),
+                child: Row(
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    Expanded(
+                      child: Text(
+                        widget.storiesDetails!.description!,
+                        style: FlutterFlowTheme.of(context).bodyText1.override(
+                              fontFamily: 'Poppins',
+                              fontWeight: FontWeight.normal,
+                            ),
                       ),
                     ),
                   ],
@@ -502,6 +541,26 @@ class _RatingStoriesWidgetState extends State<RatingStoriesWidget> {
                                         topRight: Radius.circular(4.0),
                                       ),
                                     ),
+                                    errorBorder: UnderlineInputBorder(
+                                      borderSide: BorderSide(
+                                        color: Color(0x00000000),
+                                        width: 1,
+                                      ),
+                                      borderRadius: const BorderRadius.only(
+                                        topLeft: Radius.circular(4.0),
+                                        topRight: Radius.circular(4.0),
+                                      ),
+                                    ),
+                                    focusedErrorBorder: UnderlineInputBorder(
+                                      borderSide: BorderSide(
+                                        color: Color(0x00000000),
+                                        width: 1,
+                                      ),
+                                      borderRadius: const BorderRadius.only(
+                                        topLeft: Radius.circular(4.0),
+                                        topRight: Radius.circular(4.0),
+                                      ),
+                                    ),
                                     contentPadding:
                                         EdgeInsetsDirectional.fromSTEB(
                                             10, 5, 10, 5),
@@ -545,6 +604,11 @@ class _RatingStoriesWidgetState extends State<RatingStoriesWidget> {
                                       size: 20,
                                     ),
                                     onPressed: () async {
+                                      logFirebaseEvent(
+                                          'RATING_STORIES_send_rounded_ICN_ON_TAP');
+                                      logFirebaseEvent(
+                                          'IconButton_Backend-Call');
+
                                       final commentsStoriesCreateData =
                                           createCommentsStoriesRecordData(
                                         text: textController!.text,
@@ -560,6 +624,8 @@ class _RatingStoriesWidgetState extends State<RatingStoriesWidget> {
                                       await CommentsStoriesRecord.createDoc(
                                               widget.storiesDetails!.reference)
                                           .set(commentsStoriesCreateData);
+                                      logFirebaseEvent(
+                                          'IconButton_Backend-Call');
 
                                       final usersUpdateData = {
                                         'rating': FieldValue.arrayUnion(
@@ -567,9 +633,27 @@ class _RatingStoriesWidgetState extends State<RatingStoriesWidget> {
                                       };
                                       await iconButtonUsersRecord.reference
                                           .update(usersUpdateData);
+                                      logFirebaseEvent(
+                                          'IconButton_Trigger-Push-Notification');
+                                      triggerPushNotification(
+                                        notificationTitle: 'New comment',
+                                        notificationText: textController!.text,
+                                        notificationImageUrl:
+                                            iconButtonUsersRecord.photoUrl,
+                                        notificationSound: 'default',
+                                        userRefs: [
+                                          widget.storiesDetails!.createdBy!
+                                        ],
+                                        initialPageName: 'Main',
+                                        parameterData: {},
+                                      );
+                                      logFirebaseEvent(
+                                          'IconButton_Clear-Text-Fields');
                                       setState(() {
                                         textController?.clear();
                                       });
+                                      logFirebaseEvent(
+                                          'IconButton_Show-Snack-Bar');
                                       ScaffoldMessenger.of(context)
                                           .showSnackBar(
                                         SnackBar(
@@ -671,9 +755,13 @@ class _RatingStoriesWidgetState extends State<RatingStoriesWidget> {
                                         children: [
                                           InkWell(
                                             onTap: () async {
+                                              logFirebaseEvent(
+                                                  'RATING_STORIES_CircleImage_m2epriuy_ON_T');
                                               if (listViewCommentsStoriesRecord
                                                       .createdBy ==
                                                   currentUserReference) {
+                                                logFirebaseEvent(
+                                                    'CircleImage_Navigate-To');
                                                 await Navigator.push(
                                                   context,
                                                   MaterialPageRoute(
@@ -684,6 +772,8 @@ class _RatingStoriesWidgetState extends State<RatingStoriesWidget> {
                                                   ),
                                                 );
                                               } else {
+                                                logFirebaseEvent(
+                                                    'CircleImage_Navigate-To');
                                                 await Navigator.push(
                                                   context,
                                                   MaterialPageRoute(
@@ -705,7 +795,10 @@ class _RatingStoriesWidgetState extends State<RatingStoriesWidget> {
                                                 shape: BoxShape.circle,
                                               ),
                                               child: Image.network(
-                                                rowUsersRecord.photoUrl!,
+                                                valueOrDefault<String>(
+                                                  rowUsersRecord.photoUrl,
+                                                  'https://davidlowpa.com/wp-content/uploads/2021/08/empty-profile-picture-png-2-2-1.png',
+                                                ),
                                               ),
                                             ),
                                           ),
@@ -722,9 +815,13 @@ class _RatingStoriesWidgetState extends State<RatingStoriesWidget> {
                                                     children: [
                                                       InkWell(
                                                         onTap: () async {
+                                                          logFirebaseEvent(
+                                                              'RATING_STORIES_COMP_Text_met7lk0z_ON_TAP');
                                                           if (listViewCommentsStoriesRecord
                                                                   .createdBy ==
                                                               currentUserReference) {
+                                                            logFirebaseEvent(
+                                                                'Text_Navigate-To');
                                                             await Navigator
                                                                 .push(
                                                               context,
@@ -736,6 +833,8 @@ class _RatingStoriesWidgetState extends State<RatingStoriesWidget> {
                                                               ),
                                                             );
                                                           } else {
+                                                            logFirebaseEvent(
+                                                                'Text_Navigate-To');
                                                             await Navigator
                                                                 .push(
                                                               context,

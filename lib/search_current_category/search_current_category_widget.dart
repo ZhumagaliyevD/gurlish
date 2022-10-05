@@ -32,7 +32,8 @@ class _SearchCurrentCategoryWidgetState
     extends State<SearchCurrentCategoryWidget> {
   LatLng? currentUserLocationValue;
   final scaffoldKey = GlobalKey<ScaffoldState>();
-  double? ratingBarValue1;
+  double? ratingBarValue10;
+  double? ratingBarValue2;
   double? ratingBarValue3;
   double? ratingBarValue4;
   double? ratingBarValue5;
@@ -46,12 +47,16 @@ class _SearchCurrentCategoryWidgetState
     super.initState();
     // On page load action.
     SchedulerBinding.instance.addPostFrameCallback((_) async {
+      logFirebaseEvent('SEARCH_CURRENT_CATEGORY_search_current_c');
       currentUserLocationValue =
           await getCurrentUserLocation(defaultLocation: LatLng(0.0, 0.0));
+      logFirebaseEvent('search_current_category_Update-Local-Sta');
       setState(
           () => FFAppState().CurrentUserLocation = currentUserLocationValue);
     });
 
+    logFirebaseEvent('screen_view',
+        parameters: {'screen_name': 'search_current_category'});
     getCurrentUserLocation(defaultLocation: LatLng(0.0, 0.0), cached: true)
         .then((loc) => setState(() => currentUserLocationValue = loc));
   }
@@ -97,7 +102,7 @@ class _SearchCurrentCategoryWidgetState
                 children: [
                   Container(
                     width: double.infinity,
-                    height: 150,
+                    height: MediaQuery.of(context).size.height * 0.2,
                     child: Stack(
                       children: [
                         Image.network(
@@ -108,7 +113,7 @@ class _SearchCurrentCategoryWidgetState
                         ),
                         Container(
                           width: double.infinity,
-                          height: double.infinity,
+                          height: MediaQuery.of(context).size.height * 0.2,
                           decoration: BoxDecoration(
                             gradient: LinearGradient(
                               colors: [Color(0x0078258B), Color(0xA9000000)],
@@ -135,6 +140,9 @@ class _SearchCurrentCategoryWidgetState
                                     size: 30,
                                   ),
                                   onPressed: () async {
+                                    logFirebaseEvent(
+                                        'SEARCH_CURRENT_CATEGORY_chevron_left_ICN');
+                                    logFirebaseEvent('IconButton_Navigate-To');
                                     await Navigator.push(
                                       context,
                                       MaterialPageRoute(
@@ -185,6 +193,9 @@ class _SearchCurrentCategoryWidgetState
                                 EdgeInsetsDirectional.fromSTEB(10, 0, 0, 0),
                             child: InkWell(
                               onTap: () async {
+                                logFirebaseEvent(
+                                    'SEARCH_CURRENT_CATEGORY_Container_0w9595');
+                                logFirebaseEvent('Container_Bottom-Sheet');
                                 await showModalBottomSheet(
                                   isScrollControlled: true,
                                   backgroundColor: Color(0x6078258B),
@@ -193,10 +204,15 @@ class _SearchCurrentCategoryWidgetState
                                     return Padding(
                                       padding:
                                           MediaQuery.of(context).viewInsets,
-                                      child: FilterSortWidget(),
+                                      child: Container(
+                                        height:
+                                            MediaQuery.of(context).size.height *
+                                                0.4,
+                                        child: FilterSortWidget(),
+                                      ),
                                     );
                                   },
-                                );
+                                ).then((value) => setState(() {}));
                               },
                               child: Container(
                                 height: 25,
@@ -231,6 +247,9 @@ class _SearchCurrentCategoryWidgetState
                                 EdgeInsetsDirectional.fromSTEB(10, 0, 0, 0),
                             child: InkWell(
                               onTap: () async {
+                                logFirebaseEvent(
+                                    'SEARCH_CURRENT_CATEGORY_Container_spt3yb');
+                                logFirebaseEvent('Container_Bottom-Sheet');
                                 await showModalBottomSheet(
                                   isScrollControlled: true,
                                   backgroundColor: Color(0x4778258B),
@@ -239,13 +258,19 @@ class _SearchCurrentCategoryWidgetState
                                     return Padding(
                                       padding:
                                           MediaQuery.of(context).viewInsets,
-                                      child: FilterPriceRangeWidget(),
+                                      child: Container(
+                                        height:
+                                            MediaQuery.of(context).size.height *
+                                                0.4,
+                                        child: FilterPriceRangeWidget(),
+                                      ),
                                     );
                                   },
-                                );
+                                ).then((value) => setState(() {}));
                               },
                               child: Container(
-                                height: 25,
+                                height:
+                                    MediaQuery.of(context).size.height * 0.7,
                                 decoration: BoxDecoration(
                                   color: Color(0xFFE5E5E5),
                                   borderRadius: BorderRadius.circular(10),
@@ -277,6 +302,9 @@ class _SearchCurrentCategoryWidgetState
                                 EdgeInsetsDirectional.fromSTEB(10, 0, 0, 0),
                             child: InkWell(
                               onTap: () async {
+                                logFirebaseEvent(
+                                    'SEARCH_CURRENT_CATEGORY_Container_7e6skr');
+                                logFirebaseEvent('Container_Bottom-Sheet');
                                 await showModalBottomSheet(
                                   isScrollControlled: true,
                                   backgroundColor: Colors.transparent,
@@ -288,12 +316,12 @@ class _SearchCurrentCategoryWidgetState
                                       child: Container(
                                         height:
                                             MediaQuery.of(context).size.height *
-                                                0.5,
+                                                0.4,
                                         child: FilterSortServiceTypeWidget(),
                                       ),
                                     );
                                   },
-                                );
+                                ).then((value) => setState(() {}));
                               },
                               child: Container(
                                 height: 25,
@@ -328,7 +356,14 @@ class _SearchCurrentCategoryWidgetState
                                 EdgeInsetsDirectional.fromSTEB(10, 0, 0, 0),
                             child: InkWell(
                               onTap: () async {
+                                logFirebaseEvent(
+                                    'SEARCH_CURRENT_CATEGORY_Container_9zry9m');
+                                logFirebaseEvent(
+                                    'Container_Update-Local-State');
                                 setState(() => FFAppState().sortby = 'walkins');
+                                logFirebaseEvent(
+                                    'Container_Update-Local-State');
+                                setState(() => FFAppState().filterIsSet = true);
                               },
                               child: Container(
                                 height: 25,
@@ -362,208 +397,6 @@ class _SearchCurrentCategoryWidgetState
                       ),
                     ),
                   ),
-                  if (FFAppState().sortby == '')
-                    Padding(
-                      padding: EdgeInsetsDirectional.fromSTEB(10, 10, 10, 0),
-                      child: StreamBuilder<List<PostsRecord>>(
-                        stream: queryPostsRecord(
-                          queryBuilder: (postsRecord) => postsRecord
-                              .where('link_category',
-                                  isEqualTo:
-                                      columnCategorySalonRecord.reference)
-                              .where('isBusiness', isEqualTo: true),
-                        ),
-                        builder: (context, snapshot) {
-                          // Customize what your widget looks like when it's loading.
-                          if (!snapshot.hasData) {
-                            return Center(
-                              child: SizedBox(
-                                width: 50,
-                                height: 50,
-                                child: CircularProgressIndicator(
-                                  color:
-                                      FlutterFlowTheme.of(context).primaryColor,
-                                ),
-                              ),
-                            );
-                          }
-                          List<PostsRecord> listViewPostsRecordList =
-                              snapshot.data!;
-                          return ListView.builder(
-                            padding: EdgeInsets.zero,
-                            shrinkWrap: true,
-                            scrollDirection: Axis.vertical,
-                            itemCount: listViewPostsRecordList.length,
-                            itemBuilder: (context, listViewIndex) {
-                              final listViewPostsRecord =
-                                  listViewPostsRecordList[listViewIndex];
-                              return Padding(
-                                padding: EdgeInsetsDirectional.fromSTEB(
-                                    0, 10, 0, 10),
-                                child: InkWell(
-                                  onTap: () async {
-                                    if (listViewPostsRecord.createdBy ==
-                                        currentUserReference) {
-                                      await Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) => NavBarPage(
-                                              initialPage: 'MyProfile'),
-                                        ),
-                                      );
-                                    } else {
-                                      await Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) =>
-                                              ProfileSalonWidget(
-                                            profileSalon:
-                                                listViewPostsRecord.createdBy,
-                                          ),
-                                        ),
-                                      );
-                                    }
-                                  },
-                                  child: Column(
-                                    mainAxisSize: MainAxisSize.max,
-                                    children: [
-                                      StreamBuilder<UsersRecord>(
-                                        stream: UsersRecord.getDocument(
-                                            listViewPostsRecord.createdBy!),
-                                        builder: (context, snapshot) {
-                                          // Customize what your widget looks like when it's loading.
-                                          if (!snapshot.hasData) {
-                                            return Center(
-                                              child: SizedBox(
-                                                width: 50,
-                                                height: 50,
-                                                child:
-                                                    CircularProgressIndicator(
-                                                  color: FlutterFlowTheme.of(
-                                                          context)
-                                                      .primaryColor,
-                                                ),
-                                              ),
-                                            );
-                                          }
-                                          final rowUsersRecord = snapshot.data!;
-                                          return Row(
-                                            mainAxisSize: MainAxisSize.max,
-                                            children: [
-                                              Container(
-                                                width: 80,
-                                                height: 80,
-                                                clipBehavior: Clip.antiAlias,
-                                                decoration: BoxDecoration(
-                                                  shape: BoxShape.circle,
-                                                ),
-                                                child: Image.network(
-                                                  rowUsersRecord.photoUrl!,
-                                                  fit: BoxFit.contain,
-                                                ),
-                                              ),
-                                              Padding(
-                                                padding: EdgeInsetsDirectional
-                                                    .fromSTEB(10, 0, 0, 0),
-                                                child: Column(
-                                                  mainAxisSize:
-                                                      MainAxisSize.max,
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  children: [
-                                                    Text(
-                                                      rowUsersRecord
-                                                          .displayName!,
-                                                      style:
-                                                          FlutterFlowTheme.of(
-                                                                  context)
-                                                              .bodyText1
-                                                              .override(
-                                                                fontFamily:
-                                                                    'Poppins',
-                                                                fontSize: 18,
-                                                              ),
-                                                    ),
-                                                    Row(
-                                                      mainAxisSize:
-                                                          MainAxisSize.max,
-                                                      children: [
-                                                        Text(
-                                                          functions
-                                                              .returnDistanceBetweenTwoPointsCopy(
-                                                                  rowUsersRecord
-                                                                      .adresMap,
-                                                                  currentUserLocationValue)
-                                                              .toString(),
-                                                          style: FlutterFlowTheme
-                                                                  .of(context)
-                                                              .bodyText1,
-                                                        ),
-                                                        Text(
-                                                          'km from you',
-                                                          style: FlutterFlowTheme
-                                                                  .of(context)
-                                                              .bodyText1,
-                                                        ),
-                                                      ],
-                                                    ),
-                                                    RatingBar.builder(
-                                                      onRatingUpdate: (newValue) =>
-                                                          setState(() =>
-                                                              ratingBarValue1 =
-                                                                  newValue),
-                                                      itemBuilder:
-                                                          (context, index) =>
-                                                              Icon(
-                                                        Icons.star_rounded,
-                                                        color:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .secondaryColor,
-                                                      ),
-                                                      direction:
-                                                          Axis.horizontal,
-                                                      initialRating:
-                                                          ratingBarValue1 ??= 3,
-                                                      unratedColor:
-                                                          Color(0xFF9E9E9E),
-                                                      itemCount: 5,
-                                                      itemSize: 20,
-                                                      glowColor:
-                                                          FlutterFlowTheme.of(
-                                                                  context)
-                                                              .secondaryColor,
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                            ],
-                                          );
-                                        },
-                                      ),
-                                      Padding(
-                                        padding: EdgeInsetsDirectional.fromSTEB(
-                                            0, 15, 0, 0),
-                                        child: ClipRRect(
-                                          borderRadius:
-                                              BorderRadius.circular(15),
-                                          child: Image.network(
-                                            listViewPostsRecord.firstPhoto!,
-                                            width: double.infinity,
-                                            height: 180,
-                                            fit: BoxFit.cover,
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              );
-                            },
-                          );
-                        },
-                      ),
-                    ),
                   if (FFAppState().sortby == 'Alphabetic A-Z')
                     Padding(
                       padding: EdgeInsetsDirectional.fromSTEB(10, 10, 10, 0),
@@ -606,8 +439,11 @@ class _SearchCurrentCategoryWidgetState
                                     0, 10, 0, 10),
                                 child: InkWell(
                                   onTap: () async {
+                                    logFirebaseEvent(
+                                        'SEARCH_CURRENT_CATEGORY_Column_g289p22h_');
                                     if (alphabeticAZPostsRecord.createdBy ==
                                         currentUserReference) {
+                                      logFirebaseEvent('Column_Navigate-To');
                                       await Navigator.push(
                                         context,
                                         MaterialPageRoute(
@@ -616,6 +452,7 @@ class _SearchCurrentCategoryWidgetState
                                         ),
                                       );
                                     } else {
+                                      logFirebaseEvent('Column_Navigate-To');
                                       await Navigator.push(
                                         context,
                                         MaterialPageRoute(
@@ -760,6 +597,215 @@ class _SearchCurrentCategoryWidgetState
                                           child: Image.network(
                                             alphabeticAZPostsRecord.firstPhoto!,
                                             width: double.infinity,
+                                            height: MediaQuery.of(context)
+                                                    .size
+                                                    .height *
+                                                0.2,
+                                            fit: BoxFit.cover,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              );
+                            },
+                          );
+                        },
+                      ),
+                    ),
+                  if (FFAppState().sortby == '')
+                    Padding(
+                      padding: EdgeInsetsDirectional.fromSTEB(10, 10, 10, 0),
+                      child: StreamBuilder<List<PostsRecord>>(
+                        stream: queryPostsRecord(
+                          queryBuilder: (postsRecord) => postsRecord
+                              .where('link_category',
+                                  isEqualTo:
+                                      columnCategorySalonRecord.reference)
+                              .where('isBusiness', isEqualTo: true),
+                        ),
+                        builder: (context, snapshot) {
+                          // Customize what your widget looks like when it's loading.
+                          if (!snapshot.hasData) {
+                            return Center(
+                              child: SizedBox(
+                                width: 50,
+                                height: 50,
+                                child: CircularProgressIndicator(
+                                  color:
+                                      FlutterFlowTheme.of(context).primaryColor,
+                                ),
+                              ),
+                            );
+                          }
+                          List<PostsRecord> listViewPostsRecordList =
+                              snapshot.data!;
+                          return ListView.builder(
+                            padding: EdgeInsets.zero,
+                            shrinkWrap: true,
+                            scrollDirection: Axis.vertical,
+                            itemCount: listViewPostsRecordList.length,
+                            itemBuilder: (context, listViewIndex) {
+                              final listViewPostsRecord =
+                                  listViewPostsRecordList[listViewIndex];
+                              return Padding(
+                                padding: EdgeInsetsDirectional.fromSTEB(
+                                    0, 10, 0, 10),
+                                child: InkWell(
+                                  onTap: () async {
+                                    logFirebaseEvent(
+                                        'SEARCH_CURRENT_CATEGORY_Column_dyy8cyyf_');
+                                    if (listViewPostsRecord.createdBy ==
+                                        currentUserReference) {
+                                      logFirebaseEvent('Column_Navigate-To');
+                                      await Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => NavBarPage(
+                                              initialPage: 'MyProfile'),
+                                        ),
+                                      );
+                                    } else {
+                                      logFirebaseEvent('Column_Navigate-To');
+                                      await Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              ProfileSalonWidget(
+                                            profileSalon:
+                                                listViewPostsRecord.createdBy,
+                                          ),
+                                        ),
+                                      );
+                                    }
+                                  },
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.max,
+                                    children: [
+                                      StreamBuilder<UsersRecord>(
+                                        stream: UsersRecord.getDocument(
+                                            listViewPostsRecord.createdBy!),
+                                        builder: (context, snapshot) {
+                                          // Customize what your widget looks like when it's loading.
+                                          if (!snapshot.hasData) {
+                                            return Center(
+                                              child: SizedBox(
+                                                width: 50,
+                                                height: 50,
+                                                child:
+                                                    CircularProgressIndicator(
+                                                  color: FlutterFlowTheme.of(
+                                                          context)
+                                                      .primaryColor,
+                                                ),
+                                              ),
+                                            );
+                                          }
+                                          final rowUsersRecord = snapshot.data!;
+                                          return Row(
+                                            mainAxisSize: MainAxisSize.max,
+                                            children: [
+                                              Container(
+                                                width: 80,
+                                                height: 80,
+                                                clipBehavior: Clip.antiAlias,
+                                                decoration: BoxDecoration(
+                                                  shape: BoxShape.circle,
+                                                ),
+                                                child: Image.network(
+                                                  rowUsersRecord.photoUrl!,
+                                                  fit: BoxFit.contain,
+                                                ),
+                                              ),
+                                              Padding(
+                                                padding: EdgeInsetsDirectional
+                                                    .fromSTEB(10, 0, 0, 0),
+                                                child: Column(
+                                                  mainAxisSize:
+                                                      MainAxisSize.max,
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Text(
+                                                      rowUsersRecord
+                                                          .displayName!,
+                                                      style:
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .bodyText1
+                                                              .override(
+                                                                fontFamily:
+                                                                    'Poppins',
+                                                                fontSize: 18,
+                                                              ),
+                                                    ),
+                                                    Row(
+                                                      mainAxisSize:
+                                                          MainAxisSize.max,
+                                                      children: [
+                                                        Text(
+                                                          functions
+                                                              .returnDistanceBetweenTwoPointsCopy(
+                                                                  rowUsersRecord
+                                                                      .adresMap,
+                                                                  currentUserLocationValue)
+                                                              .toString(),
+                                                          style: FlutterFlowTheme
+                                                                  .of(context)
+                                                              .bodyText1,
+                                                        ),
+                                                        Text(
+                                                          'km from you',
+                                                          style: FlutterFlowTheme
+                                                                  .of(context)
+                                                              .bodyText1,
+                                                        ),
+                                                      ],
+                                                    ),
+                                                    RatingBar.builder(
+                                                      onRatingUpdate: (newValue) =>
+                                                          setState(() =>
+                                                              ratingBarValue2 =
+                                                                  newValue),
+                                                      itemBuilder:
+                                                          (context, index) =>
+                                                              Icon(
+                                                        Icons.star_rounded,
+                                                        color:
+                                                            FlutterFlowTheme.of(
+                                                                    context)
+                                                                .secondaryColor,
+                                                      ),
+                                                      direction:
+                                                          Axis.horizontal,
+                                                      initialRating:
+                                                          ratingBarValue2 ??= 3,
+                                                      unratedColor:
+                                                          Color(0xFF9E9E9E),
+                                                      itemCount: 5,
+                                                      itemSize: 20,
+                                                      glowColor:
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .secondaryColor,
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ],
+                                          );
+                                        },
+                                      ),
+                                      Padding(
+                                        padding: EdgeInsetsDirectional.fromSTEB(
+                                            0, 15, 0, 0),
+                                        child: ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(15),
+                                          child: Image.network(
+                                            listViewPostsRecord.firstPhoto!,
+                                            width: double.infinity,
                                             height: 180,
                                             fit: BoxFit.cover,
                                           ),
@@ -815,8 +861,11 @@ class _SearchCurrentCategoryWidgetState
                                     0, 10, 0, 10),
                                 child: InkWell(
                                   onTap: () async {
+                                    logFirebaseEvent(
+                                        'SEARCH_CURRENT_CATEGORY_Column_qae36zdf_');
                                     if (alphabeticZAPostsRecord.createdBy ==
                                         currentUserReference) {
+                                      logFirebaseEvent('Column_Navigate-To');
                                       await Navigator.push(
                                         context,
                                         MaterialPageRoute(
@@ -825,6 +874,7 @@ class _SearchCurrentCategoryWidgetState
                                         ),
                                       );
                                     } else {
+                                      logFirebaseEvent('Column_Navigate-To');
                                       await Navigator.push(
                                         context,
                                         MaterialPageRoute(
@@ -1018,8 +1068,11 @@ class _SearchCurrentCategoryWidgetState
                                     0, 10, 0, 10),
                                 child: InkWell(
                                   onTap: () async {
+                                    logFirebaseEvent(
+                                        'SEARCH_CURRENT_CATEGORY_Column_tc95c68m_');
                                     if (nearestPostsRecord.createdBy ==
                                         currentUserReference) {
+                                      logFirebaseEvent('Column_Navigate-To');
                                       await Navigator.push(
                                         context,
                                         MaterialPageRoute(
@@ -1028,6 +1081,7 @@ class _SearchCurrentCategoryWidgetState
                                         ),
                                       );
                                     } else {
+                                      logFirebaseEvent('Column_Navigate-To');
                                       await Navigator.push(
                                         context,
                                         MaterialPageRoute(
@@ -1220,8 +1274,11 @@ class _SearchCurrentCategoryWidgetState
                                     0, 10, 0, 10),
                                 child: InkWell(
                                   onTap: () async {
+                                    logFirebaseEvent(
+                                        'SEARCH_CURRENT_CATEGORY_Column_a4jlqtqr_');
                                     if (farthestPostsRecord.createdBy ==
                                         currentUserReference) {
+                                      logFirebaseEvent('Column_Navigate-To');
                                       await Navigator.push(
                                         context,
                                         MaterialPageRoute(
@@ -1230,6 +1287,7 @@ class _SearchCurrentCategoryWidgetState
                                         ),
                                       );
                                     } else {
+                                      logFirebaseEvent('Column_Navigate-To');
                                       await Navigator.push(
                                         context,
                                         MaterialPageRoute(
@@ -1422,8 +1480,11 @@ class _SearchCurrentCategoryWidgetState
                                     0, 10, 0, 10),
                                 child: InkWell(
                                   onTap: () async {
+                                    logFirebaseEvent(
+                                        'SEARCH_CURRENT_CATEGORY_Column_4ua8ptrh_');
                                     if (walkinsPostsRecord.createdBy ==
                                         currentUserReference) {
+                                      logFirebaseEvent('Column_Navigate-To');
                                       await Navigator.push(
                                         context,
                                         MaterialPageRoute(
@@ -1432,6 +1493,7 @@ class _SearchCurrentCategoryWidgetState
                                         ),
                                       );
                                     } else {
+                                      logFirebaseEvent('Column_Navigate-To');
                                       await Navigator.push(
                                         context,
                                         MaterialPageRoute(
@@ -1624,8 +1686,11 @@ class _SearchCurrentCategoryWidgetState
                                     0, 10, 0, 10),
                                 child: InkWell(
                                   onTap: () async {
+                                    logFirebaseEvent(
+                                        'SEARCH_CURRENT_CATEGORY_Column_5umdrlna_');
                                     if (mobilePostsRecord.createdBy ==
                                         currentUserReference) {
+                                      logFirebaseEvent('Column_Navigate-To');
                                       await Navigator.push(
                                         context,
                                         MaterialPageRoute(
@@ -1634,6 +1699,7 @@ class _SearchCurrentCategoryWidgetState
                                         ),
                                       );
                                     } else {
+                                      logFirebaseEvent('Column_Navigate-To');
                                       await Navigator.push(
                                         context,
                                         MaterialPageRoute(
@@ -1828,9 +1894,12 @@ class _SearchCurrentCategoryWidgetState
                                     0, 10, 0, 10),
                                 child: InkWell(
                                   onTap: () async {
+                                    logFirebaseEvent(
+                                        'SEARCH_CURRENT_CATEGORY_Column_qsr213du_');
                                     if (mobileandstationeryPostsRecord
                                             .createdBy ==
                                         currentUserReference) {
+                                      logFirebaseEvent('Column_Navigate-To');
                                       await Navigator.push(
                                         context,
                                         MaterialPageRoute(
@@ -1839,6 +1908,7 @@ class _SearchCurrentCategoryWidgetState
                                         ),
                                       );
                                     } else {
+                                      logFirebaseEvent('Column_Navigate-To');
                                       await Navigator.push(
                                         context,
                                         MaterialPageRoute(
@@ -2034,8 +2104,11 @@ class _SearchCurrentCategoryWidgetState
                                     0, 10, 0, 10),
                                 child: InkWell(
                                   onTap: () async {
+                                    logFirebaseEvent(
+                                        'SEARCH_CURRENT_CATEGORY_Column_xvjovodx_');
                                     if (bothPostsRecord.createdBy ==
                                         currentUserReference) {
+                                      logFirebaseEvent('Column_Navigate-To');
                                       await Navigator.push(
                                         context,
                                         MaterialPageRoute(
@@ -2044,6 +2117,7 @@ class _SearchCurrentCategoryWidgetState
                                         ),
                                       );
                                     } else {
+                                      logFirebaseEvent('Column_Navigate-To');
                                       await Navigator.push(
                                         context,
                                         MaterialPageRoute(
@@ -2181,6 +2255,212 @@ class _SearchCurrentCategoryWidgetState
                                               BorderRadius.circular(15),
                                           child: Image.network(
                                             bothPostsRecord.firstPhoto!,
+                                            width: double.infinity,
+                                            height: 180,
+                                            fit: BoxFit.cover,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              );
+                            },
+                          );
+                        },
+                      ),
+                    ),
+                  if (FFAppState().filterIsSet == false)
+                    Padding(
+                      padding: EdgeInsetsDirectional.fromSTEB(10, 10, 10, 0),
+                      child: StreamBuilder<List<PostsRecord>>(
+                        stream: queryPostsRecord(
+                          queryBuilder: (postsRecord) => postsRecord
+                              .where('category',
+                                  isEqualTo: columnCategorySalonRecord.name)
+                              .where('isBusiness', isEqualTo: true),
+                        ),
+                        builder: (context, snapshot) {
+                          // Customize what your widget looks like when it's loading.
+                          if (!snapshot.hasData) {
+                            return Center(
+                              child: SizedBox(
+                                width: 50,
+                                height: 50,
+                                child: CircularProgressIndicator(
+                                  color:
+                                      FlutterFlowTheme.of(context).primaryColor,
+                                ),
+                              ),
+                            );
+                          }
+                          List<PostsRecord> defaulPostsRecordList =
+                              snapshot.data!;
+                          return ListView.builder(
+                            padding: EdgeInsets.zero,
+                            shrinkWrap: true,
+                            scrollDirection: Axis.vertical,
+                            itemCount: defaulPostsRecordList.length,
+                            itemBuilder: (context, defaulIndex) {
+                              final defaulPostsRecord =
+                                  defaulPostsRecordList[defaulIndex];
+                              return Padding(
+                                padding: EdgeInsetsDirectional.fromSTEB(
+                                    0, 10, 0, 10),
+                                child: InkWell(
+                                  onTap: () async {
+                                    logFirebaseEvent(
+                                        'SEARCH_CURRENT_CATEGORY_Column_4zt2p3rx_');
+                                    if (defaulPostsRecord.createdBy ==
+                                        currentUserReference) {
+                                      logFirebaseEvent('Column_Navigate-To');
+                                      await Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => NavBarPage(
+                                              initialPage: 'MyProfile'),
+                                        ),
+                                      );
+                                    } else {
+                                      logFirebaseEvent('Column_Navigate-To');
+                                      await Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              ProfileSalonWidget(
+                                            profileSalon:
+                                                defaulPostsRecord.createdBy,
+                                          ),
+                                        ),
+                                      );
+                                    }
+                                  },
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.max,
+                                    children: [
+                                      StreamBuilder<UsersRecord>(
+                                        stream: UsersRecord.getDocument(
+                                            defaulPostsRecord.createdBy!),
+                                        builder: (context, snapshot) {
+                                          // Customize what your widget looks like when it's loading.
+                                          if (!snapshot.hasData) {
+                                            return Center(
+                                              child: SizedBox(
+                                                width: 50,
+                                                height: 50,
+                                                child:
+                                                    CircularProgressIndicator(
+                                                  color: FlutterFlowTheme.of(
+                                                          context)
+                                                      .primaryColor,
+                                                ),
+                                              ),
+                                            );
+                                          }
+                                          final rowUsersRecord = snapshot.data!;
+                                          return Row(
+                                            mainAxisSize: MainAxisSize.max,
+                                            children: [
+                                              Container(
+                                                width: 80,
+                                                height: 80,
+                                                clipBehavior: Clip.antiAlias,
+                                                decoration: BoxDecoration(
+                                                  shape: BoxShape.circle,
+                                                ),
+                                                child: Image.network(
+                                                  rowUsersRecord.photoUrl!,
+                                                  fit: BoxFit.contain,
+                                                ),
+                                              ),
+                                              Padding(
+                                                padding: EdgeInsetsDirectional
+                                                    .fromSTEB(10, 0, 0, 0),
+                                                child: Column(
+                                                  mainAxisSize:
+                                                      MainAxisSize.max,
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Text(
+                                                      rowUsersRecord
+                                                          .displayName!,
+                                                      style:
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .bodyText1
+                                                              .override(
+                                                                fontFamily:
+                                                                    'Poppins',
+                                                                fontSize: 18,
+                                                              ),
+                                                    ),
+                                                    Row(
+                                                      mainAxisSize:
+                                                          MainAxisSize.max,
+                                                      children: [
+                                                        Text(
+                                                          functions
+                                                              .returnDistanceBetweenTwoPointsCopy(
+                                                                  rowUsersRecord
+                                                                      .adresMap,
+                                                                  currentUserLocationValue)
+                                                              .toString(),
+                                                          style: FlutterFlowTheme
+                                                                  .of(context)
+                                                              .bodyText1,
+                                                        ),
+                                                        Text(
+                                                          'km from you',
+                                                          style: FlutterFlowTheme
+                                                                  .of(context)
+                                                              .bodyText1,
+                                                        ),
+                                                      ],
+                                                    ),
+                                                    RatingBar.builder(
+                                                      onRatingUpdate: (newValue) =>
+                                                          setState(() =>
+                                                              ratingBarValue10 =
+                                                                  newValue),
+                                                      itemBuilder:
+                                                          (context, index) =>
+                                                              Icon(
+                                                        Icons.star_rounded,
+                                                        color:
+                                                            FlutterFlowTheme.of(
+                                                                    context)
+                                                                .secondaryColor,
+                                                      ),
+                                                      direction:
+                                                          Axis.horizontal,
+                                                      initialRating:
+                                                          ratingBarValue10 ??=
+                                                              3,
+                                                      unratedColor:
+                                                          Color(0xFF9E9E9E),
+                                                      itemCount: 5,
+                                                      itemSize: 20,
+                                                      glowColor:
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .secondaryColor,
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ],
+                                          );
+                                        },
+                                      ),
+                                      Padding(
+                                        padding: EdgeInsetsDirectional.fromSTEB(
+                                            0, 15, 0, 0),
+                                        child: ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(15),
+                                          child: Image.network(
+                                            defaulPostsRecord.firstPhoto!,
                                             width: double.infinity,
                                             height: 180,
                                             fit: BoxFit.cover,

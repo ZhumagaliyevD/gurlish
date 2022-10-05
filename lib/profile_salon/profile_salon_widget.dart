@@ -1,7 +1,9 @@
 import '../auth/auth_util.dart';
 import '../backend/backend.dart';
+import '../backend/push_notifications/push_notifications_util.dart';
 import '../chat/chat_widget.dart';
 import '../components/rating_post_widget.dart';
+import '../flutter_flow/flutter_flow_expanded_image_view.dart';
 import '../flutter_flow/flutter_flow_icon_button.dart';
 import '../flutter_flow/flutter_flow_theme.dart';
 import '../flutter_flow/flutter_flow_util.dart';
@@ -13,6 +15,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:page_transition/page_transition.dart';
 
 class ProfileSalonWidget extends StatefulWidget {
   const ProfileSalonWidget({
@@ -35,6 +38,8 @@ class _ProfileSalonWidgetState extends State<ProfileSalonWidget> {
     super.initState();
     getCurrentUserLocation(defaultLocation: LatLng(0.0, 0.0), cached: true)
         .then((loc) => setState(() => currentUserLocationValue = loc));
+    logFirebaseEvent('screen_view',
+        parameters: {'screen_name': 'Profile_salon'});
   }
 
   @override
@@ -119,6 +124,10 @@ class _ProfileSalonWidgetState extends State<ProfileSalonWidget> {
                                       size: 30,
                                     ),
                                     onPressed: () async {
+                                      logFirebaseEvent(
+                                          'PROFILE_SALON_chevron_left_ICN_ON_TAP');
+                                      logFirebaseEvent(
+                                          'IconButton_Navigate-To');
                                       await Navigator.push(
                                         context,
                                         MaterialPageRoute(
@@ -139,6 +148,10 @@ class _ProfileSalonWidgetState extends State<ProfileSalonWidget> {
                                       size: 30,
                                     ),
                                     onPressed: () async {
+                                      logFirebaseEvent(
+                                          'PROFILE_SALON_message_outlined_ICN_ON_TA');
+                                      logFirebaseEvent(
+                                          'IconButton_Navigate-To');
                                       await Navigator.push(
                                         context,
                                         MaterialPageRoute(
@@ -166,15 +179,57 @@ class _ProfileSalonWidgetState extends State<ProfileSalonWidget> {
                                       children: [
                                         Align(
                                           alignment: AlignmentDirectional(0, 0),
-                                          child: Container(
-                                            width: 120,
-                                            height: 120,
-                                            clipBehavior: Clip.antiAlias,
-                                            decoration: BoxDecoration(
-                                              shape: BoxShape.circle,
-                                            ),
-                                            child: Image.network(
-                                              columnUsersRecord.photoUrl!,
+                                          child: InkWell(
+                                            onTap: () async {
+                                              logFirebaseEvent(
+                                                  'PROFILE_SALON_CircleImage_zx52gat8_ON_TA');
+                                              logFirebaseEvent(
+                                                  'CircleImage_Expand-Image');
+                                              await Navigator.push(
+                                                context,
+                                                PageTransition(
+                                                  type: PageTransitionType.fade,
+                                                  child:
+                                                      FlutterFlowExpandedImageView(
+                                                    image: Image.network(
+                                                      valueOrDefault<String>(
+                                                        columnUsersRecord
+                                                            .photoUrl,
+                                                        'https://davidlowpa.com/wp-content/uploads/2021/08/empty-profile-picture-png-2-2-1.png',
+                                                      ),
+                                                      fit: BoxFit.contain,
+                                                    ),
+                                                    allowRotation: false,
+                                                    tag: valueOrDefault<String>(
+                                                      columnUsersRecord
+                                                          .photoUrl,
+                                                      'https://davidlowpa.com/wp-content/uploads/2021/08/empty-profile-picture-png-2-2-1.png',
+                                                    ),
+                                                    useHeroAnimation: true,
+                                                  ),
+                                                ),
+                                              );
+                                            },
+                                            child: Hero(
+                                              tag: valueOrDefault<String>(
+                                                columnUsersRecord.photoUrl,
+                                                'https://davidlowpa.com/wp-content/uploads/2021/08/empty-profile-picture-png-2-2-1.png',
+                                              ),
+                                              transitionOnUserGestures: true,
+                                              child: Container(
+                                                width: 120,
+                                                height: 120,
+                                                clipBehavior: Clip.antiAlias,
+                                                decoration: BoxDecoration(
+                                                  shape: BoxShape.circle,
+                                                ),
+                                                child: Image.network(
+                                                  valueOrDefault<String>(
+                                                    columnUsersRecord.photoUrl,
+                                                    'https://davidlowpa.com/wp-content/uploads/2021/08/empty-profile-picture-png-2-2-1.png',
+                                                  ),
+                                                ),
+                                              ),
                                             ),
                                           ),
                                         ),
@@ -263,8 +318,38 @@ class _ProfileSalonWidgetState extends State<ProfileSalonWidget> {
                                                   0, 0, 40, 0),
                                           child: InkWell(
                                             onTap: () async {
-                                              await launchURL(
-                                                  columnUsersRecord.inst!);
+                                              logFirebaseEvent(
+                                                  'PROFILE_SALON_PAGE_Image_qqztywod_ON_TAP');
+                                              if (columnUsersRecord.inst !=
+                                                      null &&
+                                                  columnUsersRecord.inst !=
+                                                      '') {
+                                                logFirebaseEvent(
+                                                    'Image_Launch-U-R-L');
+                                                await launchURL(
+                                                    columnUsersRecord.inst!);
+                                              } else {
+                                                logFirebaseEvent(
+                                                    'Image_Show-Snack-Bar');
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(
+                                                  SnackBar(
+                                                    content: Text(
+                                                      'social network is not connected',
+                                                      style: TextStyle(
+                                                        color:
+                                                            FlutterFlowTheme.of(
+                                                                    context)
+                                                                .primaryText,
+                                                      ),
+                                                    ),
+                                                    duration: Duration(
+                                                        milliseconds: 4000),
+                                                    backgroundColor:
+                                                        Colors.white,
+                                                  ),
+                                                );
+                                              }
                                             },
                                             child: SvgPicture.asset(
                                               'assets/images/insta.svg',
@@ -276,8 +361,40 @@ class _ProfileSalonWidgetState extends State<ProfileSalonWidget> {
                                         ),
                                         InkWell(
                                           onTap: () async {
-                                            await launchURL(
-                                                columnUsersRecord.facebook!);
+                                            logFirebaseEvent(
+                                                'PROFILE_SALON_PAGE_Image_nc4zafne_ON_TAP');
+                                            if (columnUsersRecord.facebook !=
+                                                    null &&
+                                                columnUsersRecord.facebook !=
+                                                    '') {
+                                              logFirebaseEvent(
+                                                  'Image_Launch-U-R-L');
+                                              await launchURL(
+                                                  columnUsersRecord.facebook!);
+                                            } else {
+                                              logFirebaseEvent(
+                                                  'Image_Show-Snack-Bar');
+                                              ScaffoldMessenger.of(context)
+                                                  .showSnackBar(
+                                                SnackBar(
+                                                  content: Text(
+                                                    'social network is not connected',
+                                                    style: TextStyle(
+                                                      color:
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .primaryText,
+                                                    ),
+                                                  ),
+                                                  duration: Duration(
+                                                      milliseconds: 4000),
+                                                  backgroundColor:
+                                                      FlutterFlowTheme.of(
+                                                              context)
+                                                          .white,
+                                                ),
+                                              );
+                                            }
                                           },
                                           child: SvgPicture.asset(
                                             'assets/images/fb.svg',
@@ -292,8 +409,40 @@ class _ProfileSalonWidgetState extends State<ProfileSalonWidget> {
                                                   40, 0, 0, 0),
                                           child: InkWell(
                                             onTap: () async {
-                                              await launchURL(
-                                                  columnUsersRecord.whats!);
+                                              logFirebaseEvent(
+                                                  'PROFILE_SALON_PAGE_Image_1rqxx6ls_ON_TAP');
+                                              if (columnUsersRecord.whats !=
+                                                      null &&
+                                                  columnUsersRecord.whats !=
+                                                      '') {
+                                                logFirebaseEvent(
+                                                    'Image_Launch-U-R-L');
+                                                await launchURL(
+                                                    columnUsersRecord.whats!);
+                                              } else {
+                                                logFirebaseEvent(
+                                                    'Image_Show-Snack-Bar');
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(
+                                                  SnackBar(
+                                                    content: Text(
+                                                      'social network is not connected',
+                                                      style: TextStyle(
+                                                        color:
+                                                            FlutterFlowTheme.of(
+                                                                    context)
+                                                                .primaryText,
+                                                      ),
+                                                    ),
+                                                    duration: Duration(
+                                                        milliseconds: 4000),
+                                                    backgroundColor:
+                                                        FlutterFlowTheme.of(
+                                                                context)
+                                                            .white,
+                                                  ),
+                                                );
+                                              }
                                             },
                                             child: SvgPicture.asset(
                                               'assets/images/wp.svg',
@@ -309,65 +458,91 @@ class _ProfileSalonWidgetState extends State<ProfileSalonWidget> {
                                   Padding(
                                     padding: EdgeInsetsDirectional.fromSTEB(
                                         0, 20, 0, 0),
-                                    child: Container(
-                                      width: 150,
-                                      height: 50,
-                                      decoration: BoxDecoration(
-                                        gradient: LinearGradient(
-                                          colors: [
-                                            Color(0xFFF97794),
-                                            Color(0xFF623AA2)
-                                          ],
-                                          stops: [0, 1],
-                                          begin: AlignmentDirectional(0, -1),
-                                          end: AlignmentDirectional(0, 1),
-                                        ),
-                                        borderRadius: BorderRadius.circular(25),
-                                      ),
-                                      child: InkWell(
-                                        onTap: () async {
-                                          if (columnUsersRecord.followers!
-                                              .toList()
-                                              .contains(currentUserReference)) {
-                                            final usersUpdateData = {
-                                              'following':
-                                                  FieldValue.arrayRemove([
-                                                columnUsersRecord.reference
-                                              ]),
-                                            };
-                                            await currentUserReference!
-                                                .update(usersUpdateData);
-                                          } else {
-                                            final usersUpdateData = {
-                                              'following':
-                                                  FieldValue.arrayUnion([
-                                                columnUsersRecord.reference
-                                              ]),
-                                            };
-                                            await currentUserReference!
-                                                .update(usersUpdateData);
-                                          }
+                                    child: InkWell(
+                                      onTap: () async {
+                                        logFirebaseEvent(
+                                            'PROFILE_SALON_Container_zgddl2zj_ON_TAP');
+                                        if (columnUsersRecord.followers!
+                                            .toList()
+                                            .contains(currentUserReference)) {
+                                          logFirebaseEvent(
+                                              'Container_Backend-Call');
 
-                                          if (columnUsersRecord.followers!
-                                              .toList()
-                                              .contains(currentUserReference)) {
-                                            final usersUpdateData = {
-                                              'Followers':
-                                                  FieldValue.arrayRemove(
-                                                      [currentUserReference]),
-                                            };
-                                            await columnUsersRecord.reference
-                                                .update(usersUpdateData);
-                                          } else {
-                                            final usersUpdateData = {
-                                              'Followers':
-                                                  FieldValue.arrayUnion(
-                                                      [currentUserReference]),
-                                            };
-                                            await columnUsersRecord.reference
-                                                .update(usersUpdateData);
-                                          }
-                                        },
+                                          final usersUpdateData = {
+                                            'following': FieldValue.arrayRemove(
+                                                [columnUsersRecord.reference]),
+                                          };
+                                          await currentUserReference!
+                                              .update(usersUpdateData);
+                                        } else {
+                                          logFirebaseEvent(
+                                              'Container_Backend-Call');
+
+                                          final usersUpdateData = {
+                                            'following': FieldValue.arrayUnion(
+                                                [columnUsersRecord.reference]),
+                                          };
+                                          await currentUserReference!
+                                              .update(usersUpdateData);
+                                        }
+
+                                        if (columnUsersRecord.followers!
+                                            .toList()
+                                            .contains(currentUserReference)) {
+                                          logFirebaseEvent(
+                                              'Container_Backend-Call');
+
+                                          final usersUpdateData = {
+                                            'Followers': FieldValue.arrayRemove(
+                                                [currentUserReference]),
+                                          };
+                                          await columnUsersRecord.reference
+                                              .update(usersUpdateData);
+                                          logFirebaseEvent(
+                                              'Container_Trigger-Push-Notification');
+                                          triggerPushNotification(
+                                            notificationTitle:
+                                                'New subscriber!',
+                                            notificationText:
+                                                '${currentUserDisplayName} subscribed on you!',
+                                            notificationImageUrl:
+                                                'https://storage.googleapis.com/flutterflow-io-6f20.appspot.com/projects/social-beauty-platform-ipfogg/assets/ggmx5w9y584v/IMG_6499.JPG',
+                                            notificationSound: 'default',
+                                            userRefs: [
+                                              columnUsersRecord.reference
+                                            ],
+                                            initialPageName: 'Main',
+                                            parameterData: {},
+                                          );
+                                        } else {
+                                          logFirebaseEvent(
+                                              'Container_Backend-Call');
+
+                                          final usersUpdateData = {
+                                            'Followers': FieldValue.arrayUnion(
+                                                [currentUserReference]),
+                                          };
+                                          await columnUsersRecord.reference
+                                              .update(usersUpdateData);
+                                          return;
+                                        }
+                                      },
+                                      child: Container(
+                                        width: 150,
+                                        height: 50,
+                                        decoration: BoxDecoration(
+                                          gradient: LinearGradient(
+                                            colors: [
+                                              Color(0xFFF97794),
+                                              Color(0xFF623AA2)
+                                            ],
+                                            stops: [0, 1],
+                                            begin: AlignmentDirectional(0, -1),
+                                            end: AlignmentDirectional(0, 1),
+                                          ),
+                                          borderRadius:
+                                              BorderRadius.circular(25),
+                                        ),
                                         child: Stack(
                                           children: [
                                             if (!columnUsersRecord.followers!
@@ -469,6 +644,10 @@ class _ProfileSalonWidgetState extends State<ProfileSalonWidget> {
                                             0, 0, 10, 0),
                                         child: InkWell(
                                           onTap: () async {
+                                            logFirebaseEvent(
+                                                'PROFILE_SALON_Column_fr687ea9_ON_TAP');
+                                            logFirebaseEvent(
+                                                'Column_Navigate-To');
                                             await Navigator.push(
                                               context,
                                               MaterialPageRoute(
@@ -521,6 +700,10 @@ class _ProfileSalonWidgetState extends State<ProfileSalonWidget> {
                                                           ),
                                                           InkWell(
                                                             onTap: () async {
+                                                              logFirebaseEvent(
+                                                                  'PROFILE_SALON_Column_zzm7kvg4_ON_TAP');
+                                                              logFirebaseEvent(
+                                                                  'Column_Navigate-To');
                                                               await Navigator
                                                                   .push(
                                                                 context,
@@ -654,7 +837,7 @@ class _ProfileSalonWidgetState extends State<ProfileSalonWidget> {
                           padding:
                               EdgeInsetsDirectional.fromSTEB(10, 20, 10, 0),
                           child: DefaultTabController(
-                            length: 3,
+                            length: 2,
                             initialIndex: 0,
                             child: Column(
                               children: [
@@ -671,9 +854,6 @@ class _ProfileSalonWidgetState extends State<ProfileSalonWidget> {
                                     ),
                                     Tab(
                                       text: 'Pricelist',
-                                    ),
-                                    Tab(
-                                      text: 'Dashboard',
                                     ),
                                   ],
                                 ),
@@ -732,6 +912,10 @@ class _ProfileSalonWidgetState extends State<ProfileSalonWidget> {
                                                         gridViewIndex];
                                                 return InkWell(
                                                   onTap: () async {
+                                                    logFirebaseEvent(
+                                                        'PROFILE_SALON_PAGE_Image_n55lrquj_ON_TAP');
+                                                    logFirebaseEvent(
+                                                        'Image_Bottom-Sheet');
                                                     await showModalBottomSheet(
                                                       isScrollControlled: true,
                                                       backgroundColor:
@@ -753,7 +937,8 @@ class _ProfileSalonWidgetState extends State<ProfileSalonWidget> {
                                                           ),
                                                         );
                                                       },
-                                                    );
+                                                    ).then((value) =>
+                                                        setState(() {}));
                                                   },
                                                   child: ClipRRect(
                                                     borderRadius:
@@ -773,8 +958,95 @@ class _ProfileSalonWidgetState extends State<ProfileSalonWidget> {
                                           },
                                         ),
                                       ),
-                                      Container(),
-                                      Container(),
+                                      Padding(
+                                        padding: EdgeInsetsDirectional.fromSTEB(
+                                            0, 10, 0, 0),
+                                        child: StreamBuilder<
+                                            List<PricelistRecord>>(
+                                          stream: queryPricelistRecord(
+                                            queryBuilder: (pricelistRecord) =>
+                                                pricelistRecord.where(
+                                                    'created_by',
+                                                    isEqualTo:
+                                                        currentUserReference),
+                                          ),
+                                          builder: (context, snapshot) {
+                                            // Customize what your widget looks like when it's loading.
+                                            if (!snapshot.hasData) {
+                                              return Center(
+                                                child: SizedBox(
+                                                  width: 50,
+                                                  height: 50,
+                                                  child:
+                                                      CircularProgressIndicator(
+                                                    color: FlutterFlowTheme.of(
+                                                            context)
+                                                        .primaryColor,
+                                                  ),
+                                                ),
+                                              );
+                                            }
+                                            List<PricelistRecord>
+                                                listViewPricelistRecordList =
+                                                snapshot.data!;
+                                            return ListView.builder(
+                                              padding: EdgeInsets.zero,
+                                              shrinkWrap: true,
+                                              scrollDirection: Axis.vertical,
+                                              itemCount:
+                                                  listViewPricelistRecordList
+                                                      .length,
+                                              itemBuilder:
+                                                  (context, listViewIndex) {
+                                                final listViewPricelistRecord =
+                                                    listViewPricelistRecordList[
+                                                        listViewIndex];
+                                                return Padding(
+                                                  padding: EdgeInsetsDirectional
+                                                      .fromSTEB(0, 20, 0, 0),
+                                                  child: Column(
+                                                    mainAxisSize:
+                                                        MainAxisSize.max,
+                                                    children: [
+                                                      Padding(
+                                                        padding:
+                                                            EdgeInsetsDirectional
+                                                                .fromSTEB(10, 0,
+                                                                    10, 10),
+                                                        child: Row(
+                                                          mainAxisSize:
+                                                              MainAxisSize.max,
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .spaceBetween,
+                                                          children: [
+                                                            Text(
+                                                              listViewPricelistRecord
+                                                                  .name!,
+                                                              style: FlutterFlowTheme
+                                                                      .of(context)
+                                                                  .bodyText1,
+                                                            ),
+                                                            Text(
+                                                              'R ${listViewPricelistRecord.price.toString()}',
+                                                              style: FlutterFlowTheme
+                                                                      .of(context)
+                                                                  .bodyText1,
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                      Divider(
+                                                        thickness: 1,
+                                                      ),
+                                                    ],
+                                                  ),
+                                                );
+                                              },
+                                            );
+                                          },
+                                        ),
+                                      ),
                                     ],
                                   ),
                                 ),
@@ -866,6 +1138,10 @@ class _ProfileSalonWidgetState extends State<ProfileSalonWidget> {
                                                         gridViewIndex];
                                                 return InkWell(
                                                   onTap: () async {
+                                                    logFirebaseEvent(
+                                                        'PROFILE_SALON_PAGE_Image_v9cpx83r_ON_TAP');
+                                                    logFirebaseEvent(
+                                                        'Image_Bottom-Sheet');
                                                     await showModalBottomSheet(
                                                       isScrollControlled: true,
                                                       backgroundColor:
@@ -887,7 +1163,8 @@ class _ProfileSalonWidgetState extends State<ProfileSalonWidget> {
                                                           ),
                                                         );
                                                       },
-                                                    );
+                                                    ).then((value) =>
+                                                        setState(() {}));
                                                   },
                                                   child: ClipRRect(
                                                     borderRadius:

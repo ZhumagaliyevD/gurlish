@@ -3,7 +3,6 @@ import '../backend/backend.dart';
 import '../flutter_flow/flutter_flow_theme.dart';
 import '../flutter_flow/flutter_flow_util.dart';
 import '../flutter_flow/flutter_flow_widgets.dart';
-import '../main.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -71,6 +70,8 @@ class _FilterWidgetState extends State<FilterWidget> {
                       ),
                       InkWell(
                         onTap: () async {
+                          logFirebaseEvent('FILTER_COMP_Icon_79wxlifa_ON_TAP');
+                          logFirebaseEvent('Icon_Bottom-Sheet');
                           Navigator.pop(context);
                         },
                         child: Icon(
@@ -130,6 +131,8 @@ class _FilterWidgetState extends State<FilterWidget> {
                             ),
                             child: InkWell(
                               onTap: () async {
+                                logFirebaseEvent(
+                                    'FILTER_COMP_Stack_vcvn3bs9_ON_TAP');
                                 if (FFAppState()
                                         .linkCatergory
                                         .length
@@ -140,6 +143,8 @@ class _FilterWidgetState extends State<FilterWidget> {
                                           [])
                                       .contains(
                                           wrapCategorySalonRecord.reference)) {
+                                    logFirebaseEvent('Stack_Backend-Call');
+
                                     final usersUpdateData = {
                                       'link_fav_categories':
                                           FieldValue.arrayRemove([
@@ -148,11 +153,14 @@ class _FilterWidgetState extends State<FilterWidget> {
                                     };
                                     await currentUserReference!
                                         .update(usersUpdateData);
+                                    logFirebaseEvent(
+                                        'Stack_Update-Local-State');
                                     setState(() => FFAppState()
                                         .linkCatergory
                                         .remove(
                                             wrapCategorySalonRecord.reference));
                                   } else {
+                                    logFirebaseEvent('Stack_Show-Snack-Bar');
                                     ScaffoldMessenger.of(context).showSnackBar(
                                       SnackBar(
                                         content: Text(
@@ -170,6 +178,8 @@ class _FilterWidgetState extends State<FilterWidget> {
                                 } else {
                                   if (FFAppState().linkCatergory.contains(
                                       wrapCategorySalonRecord.reference)) {
+                                    logFirebaseEvent('Stack_Backend-Call');
+
                                     final usersUpdateData = {
                                       'link_fav_categories':
                                           FieldValue.arrayRemove([
@@ -178,11 +188,15 @@ class _FilterWidgetState extends State<FilterWidget> {
                                     };
                                     await currentUserReference!
                                         .update(usersUpdateData);
+                                    logFirebaseEvent(
+                                        'Stack_Update-Local-State');
                                     setState(() => FFAppState()
                                         .linkCatergory
                                         .remove(
                                             wrapCategorySalonRecord.reference));
                                   } else {
+                                    logFirebaseEvent('Stack_Backend-Call');
+
                                     final usersUpdateData = {
                                       'link_fav_categories':
                                           FieldValue.arrayUnion([
@@ -191,6 +205,8 @@ class _FilterWidgetState extends State<FilterWidget> {
                                     };
                                     await currentUserReference!
                                         .update(usersUpdateData);
+                                    logFirebaseEvent(
+                                        'Stack_Update-Local-State');
                                     setState(() => FFAppState()
                                         .linkCatergory
                                         .add(
@@ -279,16 +295,9 @@ class _FilterWidgetState extends State<FilterWidget> {
                   padding: EdgeInsetsDirectional.fromSTEB(0, 24, 0, 0),
                   child: FFButtonWidget(
                     onPressed: () async {
+                      logFirebaseEvent('FILTER_COMP_SHOW_RESULTS_BTN_ON_TAP');
+                      logFirebaseEvent('Button_Bottom-Sheet');
                       Navigator.pop(context);
-                      await Navigator.push(
-                        context,
-                        PageTransition(
-                          type: PageTransitionType.fade,
-                          duration: Duration(milliseconds: 0),
-                          reverseDuration: Duration(milliseconds: 0),
-                          child: NavBarPage(initialPage: 'Main'),
-                        ),
-                      );
                     },
                     text: 'Show results',
                     options: FFButtonOptions(

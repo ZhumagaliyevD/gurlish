@@ -16,6 +16,12 @@ class _EditorsPickWidgetState extends State<EditorsPickWidget> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
+  void initState() {
+    super.initState();
+    logFirebaseEvent('screen_view', parameters: {'screen_name': 'EditorsPick'});
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       key: scaffoldKey,
@@ -44,6 +50,9 @@ class _EditorsPickWidgetState extends State<EditorsPickWidget> {
                           size: 30,
                         ),
                         onPressed: () async {
+                          logFirebaseEvent(
+                              'EDITORS_PICK_chevron_left_ICN_ON_TAP');
+                          logFirebaseEvent('IconButton_Navigate-Back');
                           Navigator.pop(context);
                         },
                       ),

@@ -37,6 +37,13 @@ abstract class PostsRecord implements Built<PostsRecord, PostsRecordBuilder> {
   @BuiltValueField(wireName: 'walk_ins')
   bool? get walkIns;
 
+  BuiltList<DocumentReference>? get following;
+
+  @BuiltValueField(wireName: 'video_reels')
+  String? get videoReels;
+
+  String? get description;
+
   @BuiltValueField(wireName: kDocumentReferenceField)
   DocumentReference? get ffRef;
   DocumentReference get reference => ffRef!;
@@ -48,7 +55,10 @@ abstract class PostsRecord implements Built<PostsRecord, PostsRecordBuilder> {
     ..firstPhoto = ''
     ..category = ''
     ..isBusiness = false
-    ..walkIns = false;
+    ..walkIns = false
+    ..following = ListBuilder()
+    ..videoReels = ''
+    ..description = '';
 
   static CollectionReference get collection =>
       FirebaseFirestore.instance.collection('posts');
@@ -81,6 +91,8 @@ Map<String, dynamic> createPostsRecordData({
   LatLng? location,
   DocumentReference? linkCategory,
   bool? walkIns,
+  String? videoReels,
+  String? description,
 }) {
   final firestoreData = serializers.toFirestore(
     PostsRecord.serializer,
@@ -96,7 +108,10 @@ Map<String, dynamic> createPostsRecordData({
         ..isBusiness = isBusiness
         ..location = location
         ..linkCategory = linkCategory
-        ..walkIns = walkIns,
+        ..walkIns = walkIns
+        ..following = null
+        ..videoReels = videoReels
+        ..description = description,
     ),
   );
 

@@ -22,23 +22,33 @@ class PostCreatorWidget extends StatefulWidget {
 }
 
 class _PostCreatorWidgetState extends State<PostCreatorWidget> {
-  PostsRecord? niceStries;
-  PostsRecord? niceStriess;
+  bool isMediaUploading = false;
   String uploadedFileUrl = '';
+
   String? dropDownValue;
   TextEditingController? textController;
+  PostsRecord? niceStries;
+  PostsRecord? niceStriess;
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
     super.initState();
+    logFirebaseEvent('screen_view', parameters: {'screen_name': 'PostCreator'});
     textController = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    textController?.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       key: scaffoldKey,
+      backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
       appBar: AppBar(
         backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
         automaticallyImplyLeading: false,
@@ -59,6 +69,8 @@ class _PostCreatorWidgetState extends State<PostCreatorWidget> {
                 size: 30,
               ),
               onPressed: () async {
+                logFirebaseEvent('POST_CREATOR_close_rounded_ICN_ON_TAP');
+                logFirebaseEvent('IconButton_Navigate-Back');
                 Navigator.pop(context);
               },
             ),
@@ -67,9 +79,8 @@ class _PostCreatorWidgetState extends State<PostCreatorWidget> {
         centerTitle: false,
         elevation: 0,
       ),
-      backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
       body: Column(
-        mainAxisSize: MainAxisSize.max,
+        mainAxisSize: MainAxisSize.min,
         children: [
           if (FFAppState().imgCreate.length != 0)
             Builder(
@@ -96,6 +107,9 @@ class _PostCreatorWidgetState extends State<PostCreatorWidget> {
                         children: [
                           InkWell(
                             onTap: () async {
+                              logFirebaseEvent(
+                                  'POST_CREATOR_PAGE_Image_8bvsnoje_ON_TAP');
+                              logFirebaseEvent('Image_Expand-Image');
                               await Navigator.push(
                                 context,
                                 PageTransition(
@@ -144,6 +158,9 @@ class _PostCreatorWidgetState extends State<PostCreatorWidget> {
                             alignment: AlignmentDirectional(0.83, -0.81),
                             child: InkWell(
                               onTap: () async {
+                                logFirebaseEvent(
+                                    'POST_CREATOR_PAGE_Icon_p75dx0jx_ON_TAP');
+                                logFirebaseEvent('Icon_Update-Local-State');
                                 setState(() =>
                                     FFAppState().imgCreate.remove(imagesItem));
                               },
@@ -166,9 +183,10 @@ class _PostCreatorWidgetState extends State<PostCreatorWidget> {
             padding: EdgeInsetsDirectional.fromSTEB(0, 16, 0, 0),
             child: FFButtonWidget(
               onPressed: () async {
+                logFirebaseEvent('POST_CREATOR_PAGE_UPLOAD_BTN_ON_TAP');
+                logFirebaseEvent('Button_Upload-Photo-Video');
                 final selectedMedia = await selectMediaWithSourceBottomSheet(
                   context: context,
-                  maxHeight: 150.00,
                   imageQuality: 100,
                   allowPhoto: true,
                   backgroundColor: Colors.white,
@@ -177,33 +195,37 @@ class _PostCreatorWidgetState extends State<PostCreatorWidget> {
                 if (selectedMedia != null &&
                     selectedMedia.every(
                         (m) => validateFileFormat(m.storagePath, context))) {
-                  showUploadMessage(
-                    context,
-                    'Uploading file...',
-                    showLoading: true,
-                  );
-                  final downloadUrls = (await Future.wait(selectedMedia.map(
-                          (m) async =>
-                              await uploadData(m.storagePath, m.bytes))))
-                      .where((u) => u != null)
-                      .map((u) => u!)
-                      .toList();
-                  ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                  setState(() => isMediaUploading = true);
+                  var downloadUrls = <String>[];
+                  try {
+                    showUploadMessage(
+                      context,
+                      'Uploading file...',
+                      showLoading: true,
+                    );
+                    downloadUrls = (await Future.wait(
+                      selectedMedia.map(
+                        (m) async => await uploadData(m.storagePath, m.bytes),
+                      ),
+                    ))
+                        .where((u) => u != null)
+                        .map((u) => u!)
+                        .toList();
+                  } finally {
+                    ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                    isMediaUploading = false;
+                  }
                   if (downloadUrls.length == selectedMedia.length) {
                     setState(() => uploadedFileUrl = downloadUrls.first);
-                    showUploadMessage(
-                      context,
-                      'Success!',
-                    );
+                    showUploadMessage(context, 'Success!');
                   } else {
-                    showUploadMessage(
-                      context,
-                      'Failed to upload media',
-                    );
+                    setState(() {});
+                    showUploadMessage(context, 'Failed to upload media');
                     return;
                   }
                 }
 
+                logFirebaseEvent('Button_Update-Local-State');
                 setState(() => FFAppState().imgCreate.add(uploadedFileUrl));
               },
               text: 'Upload',
@@ -277,175 +299,207 @@ class _PostCreatorWidgetState extends State<PostCreatorWidget> {
               mainAxisSize: MainAxisSize.max,
               children: [
                 Expanded(
-                  child: TextFormField(
-                    controller: textController,
-                    obscureText: false,
-                    decoration: InputDecoration(
-                      hintText: 'Enter post details here...',
-                      hintStyle: FlutterFlowTheme.of(context).bodyText2,
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                          color: FlutterFlowTheme.of(context).primaryBackground,
-                          width: 2,
+                  child: Padding(
+                    padding: EdgeInsetsDirectional.fromSTEB(12, 0, 12, 0),
+                    child: TextFormField(
+                      controller: textController,
+                      obscureText: false,
+                      decoration: InputDecoration(
+                        hintText: 'Enter post details here...',
+                        hintStyle: FlutterFlowTheme.of(context).bodyText2,
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color:
+                                FlutterFlowTheme.of(context).primaryBackground,
+                            width: 2,
+                          ),
+                          borderRadius: BorderRadius.circular(8),
                         ),
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                          color: FlutterFlowTheme.of(context).primaryBackground,
-                          width: 2,
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color:
+                                FlutterFlowTheme.of(context).primaryBackground,
+                            width: 2,
+                          ),
+                          borderRadius: BorderRadius.circular(8),
                         ),
-                        borderRadius: BorderRadius.circular(8),
+                        errorBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Color(0x00000000),
+                            width: 2,
+                          ),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        focusedErrorBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Color(0x00000000),
+                            width: 2,
+                          ),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        contentPadding:
+                            EdgeInsetsDirectional.fromSTEB(20, 32, 20, 12),
                       ),
-                      contentPadding:
-                          EdgeInsetsDirectional.fromSTEB(20, 32, 20, 12),
+                      style: FlutterFlowTheme.of(context).bodyText1,
+                      textAlign: TextAlign.start,
+                      maxLines: 4,
                     ),
-                    style: FlutterFlowTheme.of(context).bodyText1,
-                    textAlign: TextAlign.start,
-                    maxLines: 4,
                   ),
                 ),
               ],
             ),
           ),
-          Padding(
-            padding: EdgeInsetsDirectional.fromSTEB(0, 16, 0, 0),
-            child: StreamBuilder<List<CategorySalonRecord>>(
-              stream: queryCategorySalonRecord(
-                queryBuilder: (categorySalonRecord) =>
-                    categorySalonRecord.where('name', isEqualTo: dropDownValue),
-                singleRecord: true,
-              ),
-              builder: (context, snapshot) {
-                // Customize what your widget looks like when it's loading.
-                if (!snapshot.hasData) {
-                  return Center(
-                    child: SizedBox(
-                      width: 50,
-                      height: 50,
-                      child: CircularProgressIndicator(
-                        color: FlutterFlowTheme.of(context).primaryColor,
-                      ),
-                    ),
-                  );
-                }
-                List<CategorySalonRecord> rowCategorySalonRecordList =
-                    snapshot.data!;
-                // Return an empty Container when the document does not exist.
-                if (snapshot.data!.isEmpty) {
-                  return Container();
-                }
-                final rowCategorySalonRecord =
-                    rowCategorySalonRecordList.isNotEmpty
-                        ? rowCategorySalonRecordList.first
-                        : null;
-                return Row(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    if (dropDownValue != null && dropDownValue != '')
-                      FFButtonWidget(
-                        onPressed: () async {
-                          if (valueOrDefault<bool>(
-                              currentUserDocument?.isSalon, false)) {
-                            final postsCreateData = createPostsRecordData(
-                              createdBy: currentUserReference,
-                              name: textController!.text,
-                              category: dropDownValue,
-                              createdAt: getCurrentTimestamp,
-                              firstPhoto: uploadedFileUrl,
-                              isBusiness: true,
-                              location: currentUserDocument!.adresMap,
-                              linkCategory: rowCategorySalonRecord!.reference,
-                              walkIns: valueOrDefault<bool>(
-                                  currentUserDocument?.walkIns, false),
-                            );
-                            var postsRecordReference =
-                                PostsRecord.collection.doc();
-                            await postsRecordReference.set(postsCreateData);
-                            niceStriess = PostsRecord.getDocumentFromData(
-                                postsCreateData, postsRecordReference);
-                          } else {
-                            final postsCreateData = createPostsRecordData(
-                              createdBy: currentUserReference,
-                              name: textController!.text,
-                              category: dropDownValue,
-                              createdAt: getCurrentTimestamp,
-                              firstPhoto: uploadedFileUrl,
-                              isBusiness: false,
-                              location: currentUserDocument!.adresMap,
-                              linkCategory: rowCategorySalonRecord!.reference,
-                            );
-                            var postsRecordReference =
-                                PostsRecord.collection.doc();
-                            await postsRecordReference.set(postsCreateData);
-                            niceStries = PostsRecord.getDocumentFromData(
-                                postsCreateData, postsRecordReference);
-                          }
-
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text(
-                                'Ready',
-                                style: TextStyle(
-                                  color: FlutterFlowTheme.of(context).black600,
-                                ),
-                              ),
-                              duration: Duration(milliseconds: 4000),
-                              backgroundColor: Colors.white,
-                              action: SnackBarAction(
-                                label: 'home',
-                                textColor: Color(0x00000000),
-                                onPressed: () async {
-                                  await Navigator.push(
-                                    context,
-                                    PageTransition(
-                                      type: PageTransitionType.leftToRight,
-                                      duration: Duration(milliseconds: 2000),
-                                      reverseDuration:
-                                          Duration(milliseconds: 2000),
-                                      child: NavBarPage(initialPage: 'Main'),
-                                    ),
-                                  );
-                                },
-                              ),
-                            ),
-                          );
-                          await Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  NavBarPage(initialPage: 'Main'),
-                            ),
-                          );
-                          setState(() => FFAppState().imgCreate = []);
-
-                          setState(() {});
-                        },
-                        text: 'Create Post',
-                        options: FFButtonOptions(
-                          width: 250,
-                          height: 50,
-                          color: Color(0xFF78258B),
-                          textStyle:
-                              FlutterFlowTheme.of(context).subtitle2.override(
-                                    fontFamily: 'Lexend Deca',
-                                    color: Colors.white,
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                          elevation: 3,
-                          borderSide: BorderSide(
-                            color: Colors.transparent,
-                            width: 1,
-                          ),
+          if (uploadedFileUrl != null && uploadedFileUrl != '')
+            Padding(
+              padding: EdgeInsetsDirectional.fromSTEB(0, 16, 0, 0),
+              child: StreamBuilder<List<CategorySalonRecord>>(
+                stream: queryCategorySalonRecord(
+                  queryBuilder: (categorySalonRecord) => categorySalonRecord
+                      .where('name', isEqualTo: dropDownValue),
+                  singleRecord: true,
+                ),
+                builder: (context, snapshot) {
+                  // Customize what your widget looks like when it's loading.
+                  if (!snapshot.hasData) {
+                    return Center(
+                      child: SizedBox(
+                        width: 50,
+                        height: 50,
+                        child: CircularProgressIndicator(
+                          color: FlutterFlowTheme.of(context).primaryColor,
                         ),
                       ),
-                  ],
-                );
-              },
+                    );
+                  }
+                  List<CategorySalonRecord> rowCategorySalonRecordList =
+                      snapshot.data!;
+                  // Return an empty Container when the document does not exist.
+                  if (snapshot.data!.isEmpty) {
+                    return Container();
+                  }
+                  final rowCategorySalonRecord =
+                      rowCategorySalonRecordList.isNotEmpty
+                          ? rowCategorySalonRecordList.first
+                          : null;
+                  return Row(
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      if (dropDownValue != null && dropDownValue != '')
+                        FFButtonWidget(
+                          onPressed: () async {
+                            logFirebaseEvent(
+                                'POST_CREATOR_PAGE_CREATE_POST_BTN_ON_TAP');
+                            if (valueOrDefault<bool>(
+                                currentUserDocument?.isSalon, false)) {
+                              logFirebaseEvent('Button_Backend-Call');
+
+                              final postsCreateData = createPostsRecordData(
+                                createdBy: currentUserReference,
+                                name: textController!.text,
+                                category: dropDownValue,
+                                createdAt: getCurrentTimestamp,
+                                firstPhoto: uploadedFileUrl,
+                                isBusiness: true,
+                                location: currentUserDocument!.adresMap,
+                                linkCategory: rowCategorySalonRecord!.reference,
+                                walkIns: valueOrDefault<bool>(
+                                    currentUserDocument?.walkIns, false),
+                                description: textController!.text,
+                              );
+                              var postsRecordReference =
+                                  PostsRecord.collection.doc();
+                              await postsRecordReference.set(postsCreateData);
+                              niceStriess = PostsRecord.getDocumentFromData(
+                                  postsCreateData, postsRecordReference);
+                            } else {
+                              logFirebaseEvent('Button_Backend-Call');
+
+                              final postsCreateData = createPostsRecordData(
+                                createdBy: currentUserReference,
+                                name: textController!.text,
+                                category: dropDownValue,
+                                createdAt: getCurrentTimestamp,
+                                firstPhoto: uploadedFileUrl,
+                                isBusiness: false,
+                                location: currentUserDocument!.adresMap,
+                                linkCategory: rowCategorySalonRecord!.reference,
+                                description: textController!.text,
+                              );
+                              var postsRecordReference =
+                                  PostsRecord.collection.doc();
+                              await postsRecordReference.set(postsCreateData);
+                              niceStries = PostsRecord.getDocumentFromData(
+                                  postsCreateData, postsRecordReference);
+                            }
+
+                            logFirebaseEvent('Button_Show-Snack-Bar');
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(
+                                  'Ready',
+                                  style: TextStyle(
+                                    color:
+                                        FlutterFlowTheme.of(context).black600,
+                                  ),
+                                ),
+                                duration: Duration(milliseconds: 4000),
+                                backgroundColor: Colors.white,
+                                action: SnackBarAction(
+                                  label: 'home',
+                                  textColor: Color(0x00000000),
+                                  onPressed: () async {
+                                    await Navigator.push(
+                                      context,
+                                      PageTransition(
+                                        type: PageTransitionType.leftToRight,
+                                        duration: Duration(milliseconds: 2000),
+                                        reverseDuration:
+                                            Duration(milliseconds: 2000),
+                                        child: NavBarPage(initialPage: 'Main'),
+                                      ),
+                                    );
+                                  },
+                                ),
+                              ),
+                            );
+                            logFirebaseEvent('Button_Update-Local-State');
+                            setState(() => FFAppState().imgCreate = []);
+                            logFirebaseEvent('Button_Navigate-To');
+                            await Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    NavBarPage(initialPage: 'MyProfile'),
+                              ),
+                            );
+
+                            setState(() {});
+                          },
+                          text: 'Create Post',
+                          options: FFButtonOptions(
+                            width: 250,
+                            height: 50,
+                            color: Color(0xFF78258B),
+                            textStyle:
+                                FlutterFlowTheme.of(context).subtitle2.override(
+                                      fontFamily: 'Lexend Deca',
+                                      color: Colors.white,
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                            elevation: 3,
+                            borderSide: BorderSide(
+                              color: Colors.transparent,
+                              width: 1,
+                            ),
+                          ),
+                        ),
+                    ],
+                  );
+                },
+              ),
             ),
-          ),
         ],
       ),
     );

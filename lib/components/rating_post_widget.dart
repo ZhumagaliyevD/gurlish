@@ -1,5 +1,6 @@
 import '../auth/auth_util.dart';
 import '../backend/backend.dart';
+import '../backend/push_notifications/push_notifications_util.dart';
 import '../flutter_flow/flutter_flow_icon_button.dart';
 import '../flutter_flow/flutter_flow_theme.dart';
 import '../flutter_flow/flutter_flow_util.dart';
@@ -7,6 +8,7 @@ import '../flutter_flow/flutter_flow_widgets.dart';
 import '../main.dart';
 import '../profile_salon/profile_salon_widget.dart';
 import '../flutter_flow/custom_functions.dart' as functions;
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -36,6 +38,12 @@ class _RatingPostWidgetState extends State<RatingPostWidget> {
     getCurrentUserLocation(defaultLocation: LatLng(0.0, 0.0), cached: true)
         .then((loc) => setState(() => currentUserLocationValue = loc));
     textController = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    textController?.dispose();
+    super.dispose();
   }
 
   @override
@@ -147,7 +155,10 @@ class _RatingPostWidgetState extends State<RatingPostWidget> {
                                     ClipRRect(
                                       borderRadius: BorderRadius.circular(40),
                                       child: Image.network(
-                                        rowUsersRecord.photoUrl!,
+                                        valueOrDefault<String>(
+                                          rowUsersRecord.photoUrl,
+                                          'https://davidlowpa.com/wp-content/uploads/2021/08/empty-profile-picture-png-2-2-1.png',
+                                        ),
                                         width: 51,
                                         height: 52,
                                         fit: BoxFit.cover,
@@ -311,9 +322,13 @@ class _RatingPostWidgetState extends State<RatingPostWidget> {
                                                     0, 10, 0, 0),
                                             child: FFButtonWidget(
                                               onPressed: () async {
+                                                logFirebaseEvent(
+                                                    'RATING_POST_COMP_VIEW_BTN_ON_TAP');
                                                 if (widget.postDetails!
                                                         .createdBy ==
                                                     currentUserReference) {
+                                                  logFirebaseEvent(
+                                                      'Button_Navigate-To');
                                                   await Navigator.push(
                                                     context,
                                                     MaterialPageRoute(
@@ -324,6 +339,8 @@ class _RatingPostWidgetState extends State<RatingPostWidget> {
                                                     ),
                                                   );
                                                 } else {
+                                                  logFirebaseEvent(
+                                                      'Button_Navigate-To');
                                                   await Navigator.push(
                                                     context,
                                                     MaterialPageRoute(
@@ -369,6 +386,23 @@ class _RatingPostWidgetState extends State<RatingPostWidget> {
                             ),
                           ),
                         ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: EdgeInsetsDirectional.fromSTEB(20, 20, 20, 0),
+                child: Row(
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    Expanded(
+                      child: AutoSizeText(
+                        widget.postDetails!.description!,
+                        style: FlutterFlowTheme.of(context).bodyText1.override(
+                              fontFamily: 'Poppins',
+                              fontWeight: FontWeight.normal,
+                            ),
                       ),
                     ),
                   ],
@@ -476,6 +510,26 @@ class _RatingPostWidgetState extends State<RatingPostWidget> {
                                         topRight: Radius.circular(4.0),
                                       ),
                                     ),
+                                    errorBorder: UnderlineInputBorder(
+                                      borderSide: BorderSide(
+                                        color: Color(0x00000000),
+                                        width: 1,
+                                      ),
+                                      borderRadius: const BorderRadius.only(
+                                        topLeft: Radius.circular(4.0),
+                                        topRight: Radius.circular(4.0),
+                                      ),
+                                    ),
+                                    focusedErrorBorder: UnderlineInputBorder(
+                                      borderSide: BorderSide(
+                                        color: Color(0x00000000),
+                                        width: 1,
+                                      ),
+                                      borderRadius: const BorderRadius.only(
+                                        topLeft: Radius.circular(4.0),
+                                        topRight: Radius.circular(4.0),
+                                      ),
+                                    ),
                                     contentPadding:
                                         EdgeInsetsDirectional.fromSTEB(
                                             10, 5, 10, 5),
@@ -501,6 +555,10 @@ class _RatingPostWidgetState extends State<RatingPostWidget> {
                                   size: 20,
                                 ),
                                 onPressed: () async {
+                                  logFirebaseEvent(
+                                      'RATING_POST_COMP_send_rounded_ICN_ON_TAP');
+                                  logFirebaseEvent('IconButton_Backend-Call');
+
                                   final commentsPostCreateData =
                                       createCommentsPostRecordData(
                                     text: textController!.text,
@@ -511,9 +569,12 @@ class _RatingPostWidgetState extends State<RatingPostWidget> {
                                   await CommentsPostRecord.createDoc(
                                           widget.postDetails!.reference)
                                       .set(commentsPostCreateData);
+                                  logFirebaseEvent(
+                                      'IconButton_Clear-Text-Fields');
                                   setState(() {
                                     textController?.clear();
                                   });
+                                  logFirebaseEvent('IconButton_Show-Snack-Bar');
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     SnackBar(
                                       content: Text(
@@ -527,6 +588,17 @@ class _RatingPostWidgetState extends State<RatingPostWidget> {
                                       duration: Duration(milliseconds: 4000),
                                       backgroundColor: Colors.white,
                                     ),
+                                  );
+                                  logFirebaseEvent(
+                                      'IconButton_Trigger-Push-Notification');
+                                  triggerPushNotification(
+                                    notificationTitle:
+                                        '${currentUserDisplayName} has commented/rated your post!',
+                                    notificationText: textController!.text,
+                                    notificationSound: 'default',
+                                    userRefs: [widget.postDetails!.createdBy!],
+                                    initialPageName: 'Main',
+                                    parameterData: {},
                                   );
                                 },
                               ),
@@ -610,9 +682,13 @@ class _RatingPostWidgetState extends State<RatingPostWidget> {
                                         children: [
                                           InkWell(
                                             onTap: () async {
+                                              logFirebaseEvent(
+                                                  'RATING_POST_CircleImage_qrxjaax9_ON_TAP');
                                               if (listViewCommentsPostRecord
                                                       .createdBy ==
                                                   currentUserReference) {
+                                                logFirebaseEvent(
+                                                    'CircleImage_Navigate-To');
                                                 await Navigator.push(
                                                   context,
                                                   MaterialPageRoute(
@@ -623,6 +699,8 @@ class _RatingPostWidgetState extends State<RatingPostWidget> {
                                                   ),
                                                 );
                                               } else {
+                                                logFirebaseEvent(
+                                                    'CircleImage_Navigate-To');
                                                 await Navigator.push(
                                                   context,
                                                   MaterialPageRoute(
@@ -644,7 +722,10 @@ class _RatingPostWidgetState extends State<RatingPostWidget> {
                                                 shape: BoxShape.circle,
                                               ),
                                               child: Image.network(
-                                                rowUsersRecord.photoUrl!,
+                                                valueOrDefault<String>(
+                                                  rowUsersRecord.photoUrl,
+                                                  'https://davidlowpa.com/wp-content/uploads/2021/08/empty-profile-picture-png-2-2-1.png',
+                                                ),
                                               ),
                                             ),
                                           ),
@@ -661,9 +742,13 @@ class _RatingPostWidgetState extends State<RatingPostWidget> {
                                                     children: [
                                                       InkWell(
                                                         onTap: () async {
+                                                          logFirebaseEvent(
+                                                              'RATING_POST_COMP_Text_the4aakl_ON_TAP');
                                                           if (listViewCommentsPostRecord
                                                                   .createdBy ==
                                                               currentUserReference) {
+                                                            logFirebaseEvent(
+                                                                'Text_Navigate-To');
                                                             await Navigator
                                                                 .push(
                                                               context,
@@ -675,6 +760,8 @@ class _RatingPostWidgetState extends State<RatingPostWidget> {
                                                               ),
                                                             );
                                                           } else {
+                                                            logFirebaseEvent(
+                                                                'Text_Navigate-To');
                                                             await Navigator
                                                                 .push(
                                                               context,

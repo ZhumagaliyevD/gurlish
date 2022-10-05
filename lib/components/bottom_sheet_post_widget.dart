@@ -2,6 +2,7 @@ import '../flutter_flow/flutter_flow_theme.dart';
 import '../flutter_flow/flutter_flow_util.dart';
 import '../flutter_flow/flutter_flow_widgets.dart';
 import '../post_creator/post_creator_widget.dart';
+import '../post_creator_video/post_creator_video_widget.dart';
 import '../storiescreat/storiescreat_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -18,7 +19,7 @@ class _BottomSheetPostWidgetState extends State<BottomSheetPostWidget> {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      height: 270,
+      height: double.infinity,
       decoration: BoxDecoration(
         color: FlutterFlowTheme.of(context).secondaryBackground,
         boxShadow: [
@@ -39,9 +40,12 @@ class _BottomSheetPostWidgetState extends State<BottomSheetPostWidget> {
         padding: EdgeInsetsDirectional.fromSTEB(20, 20, 20, 20),
         child: Column(
           mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             FFButtonWidget(
               onPressed: () async {
+                logFirebaseEvent('BOTTOM_SHEET_POST_UPLOAD_POST__PHOTO_BTN');
+                logFirebaseEvent('Button_Navigate-To');
                 await Navigator.push(
                   context,
                   PageTransition(
@@ -52,7 +56,7 @@ class _BottomSheetPostWidgetState extends State<BottomSheetPostWidget> {
                   ),
                 );
               },
-              text: 'Upload Post',
+              text: 'Upload Post (Photo)',
               options: FFButtonOptions(
                 width: double.infinity,
                 height: 60,
@@ -65,9 +69,40 @@ class _BottomSheetPostWidgetState extends State<BottomSheetPostWidget> {
               ),
             ),
             Padding(
+              padding: EdgeInsetsDirectional.fromSTEB(0, 20, 0, 0),
+              child: FFButtonWidget(
+                onPressed: () async {
+                  logFirebaseEvent('BOTTOM_SHEET_POST_UPLOAD_POST__VIDEO_BTN');
+                  logFirebaseEvent('Button_Navigate-To');
+                  await Navigator.push(
+                    context,
+                    PageTransition(
+                      type: PageTransitionType.bottomToTop,
+                      duration: Duration(milliseconds: 25),
+                      reverseDuration: Duration(milliseconds: 25),
+                      child: PostCreatorVideoWidget(),
+                    ),
+                  );
+                },
+                text: 'Upload Post (Video)',
+                options: FFButtonOptions(
+                  width: double.infinity,
+                  height: 60,
+                  color: FlutterFlowTheme.of(context).primaryBackground,
+                  textStyle: FlutterFlowTheme.of(context).subtitle2,
+                  borderSide: BorderSide(
+                    color: Colors.transparent,
+                    width: 1,
+                  ),
+                ),
+              ),
+            ),
+            Padding(
               padding: EdgeInsetsDirectional.fromSTEB(0, 16, 0, 0),
               child: FFButtonWidget(
                 onPressed: () async {
+                  logFirebaseEvent('BOTTOM_SHEET_POST_UPLOAD_STORY_BTN_ON_TA');
+                  logFirebaseEvent('Button_Navigate-To');
                   await Navigator.push(
                     context,
                     PageTransition(
@@ -95,6 +130,8 @@ class _BottomSheetPostWidgetState extends State<BottomSheetPostWidget> {
               padding: EdgeInsetsDirectional.fromSTEB(0, 16, 0, 0),
               child: FFButtonWidget(
                 onPressed: () async {
+                  logFirebaseEvent('BOTTOM_SHEET_POST_COMP_CANCEL_BTN_ON_TAP');
+                  logFirebaseEvent('Button_Navigate-Back');
                   Navigator.pop(context);
                 },
                 text: 'Cancel',

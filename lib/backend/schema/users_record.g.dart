@@ -268,6 +268,20 @@ class _$UsersRecordSerializer implements StructuredSerializer<UsersRecord> {
         ..add(serializers.serialize(value,
             specifiedType: const FullType(String)));
     }
+    value = object.isAdmin;
+    if (value != null) {
+      result
+        ..add('isAdmin')
+        ..add(
+            serializers.serialize(value, specifiedType: const FullType(bool)));
+    }
+    value = object.status;
+    if (value != null) {
+      result
+        ..add('status')
+        ..add(serializers.serialize(value,
+            specifiedType: const FullType(String)));
+    }
     value = object.ffRef;
     if (value != null) {
       result
@@ -445,6 +459,14 @@ class _$UsersRecordSerializer implements StructuredSerializer<UsersRecord> {
           result.serviceType = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String?;
           break;
+        case 'isAdmin':
+          result.isAdmin = serializers.deserialize(value,
+              specifiedType: const FullType(bool)) as bool?;
+          break;
+        case 'status':
+          result.status = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String?;
+          break;
         case 'Document__Reference__Field':
           result.ffRef = serializers.deserialize(value,
               specifiedType: const FullType(DocumentReference, const [
@@ -526,6 +548,10 @@ class _$UsersRecord extends UsersRecord {
   @override
   final String? serviceType;
   @override
+  final bool? isAdmin;
+  @override
+  final String? status;
+  @override
   final DocumentReference<Object?>? ffRef;
 
   factory _$UsersRecord([void Function(UsersRecordBuilder)? updates]) =>
@@ -565,6 +591,8 @@ class _$UsersRecord extends UsersRecord {
       this.linkFavCategories,
       this.sredOcenka,
       this.serviceType,
+      this.isAdmin,
+      this.status,
       this.ffRef})
       : super._();
 
@@ -612,6 +640,8 @@ class _$UsersRecord extends UsersRecord {
         linkFavCategories == other.linkFavCategories &&
         sredOcenka == other.sredOcenka &&
         serviceType == other.serviceType &&
+        isAdmin == other.isAdmin &&
+        status == other.status &&
         ffRef == other.ffRef;
   }
 
@@ -635,25 +665,25 @@ class _$UsersRecord extends UsersRecord {
                                                                 $jc(
                                                                     $jc(
                                                                         $jc(
-                                                                            $jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc(0, email.hashCode), displayName.hashCode), photoUrl.hashCode), uid.hashCode), createdTime.hashCode), phoneNumber.hashCode), photos.hashCode), wishlistPhotos.hashCode), userType.hashCode), adresMap.hashCode), adreText.hashCode), linkPost.hashCode), linkPricelist.hashCode), isSalon.hashCode), category.hashCode),
-                                                                                followers.hashCode),
-                                                                            following.hashCode),
-                                                                        rating.hashCode),
-                                                                    role.hashCode),
-                                                                inst.hashCode),
-                                                            facebook.hashCode),
-                                                        whats.hashCode),
-                                                    isMobile.hashCode),
-                                                adresCity.hashCode),
-                                            isSubs.hashCode),
-                                        authEnd.hashCode),
-                                    averageRating.hashCode),
-                                likedCategory.hashCode),
-                            adressSelected.hashCode),
-                        walkIns.hashCode),
-                    linkFavCategories.hashCode),
-                sredOcenka.hashCode),
-            serviceType.hashCode),
+                                                                            $jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc($jc(0, email.hashCode), displayName.hashCode), photoUrl.hashCode), uid.hashCode), createdTime.hashCode), phoneNumber.hashCode), photos.hashCode), wishlistPhotos.hashCode), userType.hashCode), adresMap.hashCode), adreText.hashCode), linkPost.hashCode), linkPricelist.hashCode), isSalon.hashCode), category.hashCode), followers.hashCode), following.hashCode),
+                                                                                rating.hashCode),
+                                                                            role.hashCode),
+                                                                        inst.hashCode),
+                                                                    facebook.hashCode),
+                                                                whats.hashCode),
+                                                            isMobile.hashCode),
+                                                        adresCity.hashCode),
+                                                    isSubs.hashCode),
+                                                authEnd.hashCode),
+                                            averageRating.hashCode),
+                                        likedCategory.hashCode),
+                                    adressSelected.hashCode),
+                                walkIns.hashCode),
+                            linkFavCategories.hashCode),
+                        sredOcenka.hashCode),
+                    serviceType.hashCode),
+                isAdmin.hashCode),
+            status.hashCode),
         ffRef.hashCode));
   }
 
@@ -693,6 +723,8 @@ class _$UsersRecord extends UsersRecord {
           ..add('linkFavCategories', linkFavCategories)
           ..add('sredOcenka', sredOcenka)
           ..add('serviceType', serviceType)
+          ..add('isAdmin', isAdmin)
+          ..add('status', status)
           ..add('ffRef', ffRef))
         .toString();
   }
@@ -853,6 +885,14 @@ class UsersRecordBuilder implements Builder<UsersRecord, UsersRecordBuilder> {
   String? get serviceType => _$this._serviceType;
   set serviceType(String? serviceType) => _$this._serviceType = serviceType;
 
+  bool? _isAdmin;
+  bool? get isAdmin => _$this._isAdmin;
+  set isAdmin(bool? isAdmin) => _$this._isAdmin = isAdmin;
+
+  String? _status;
+  String? get status => _$this._status;
+  set status(String? status) => _$this._status = status;
+
   DocumentReference<Object?>? _ffRef;
   DocumentReference<Object?>? get ffRef => _$this._ffRef;
   set ffRef(DocumentReference<Object?>? ffRef) => _$this._ffRef = ffRef;
@@ -897,6 +937,8 @@ class UsersRecordBuilder implements Builder<UsersRecord, UsersRecordBuilder> {
       _linkFavCategories = $v.linkFavCategories?.toBuilder();
       _sredOcenka = $v.sredOcenka;
       _serviceType = $v.serviceType;
+      _isAdmin = $v.isAdmin;
+      _status = $v.status;
       _ffRef = $v.ffRef;
       _$v = null;
     }
@@ -955,6 +997,8 @@ class UsersRecordBuilder implements Builder<UsersRecord, UsersRecordBuilder> {
               linkFavCategories: _linkFavCategories?.build(),
               sredOcenka: sredOcenka,
               serviceType: serviceType,
+              isAdmin: isAdmin,
+              status: status,
               ffRef: ffRef);
     } catch (_) {
       late String _$failedField;

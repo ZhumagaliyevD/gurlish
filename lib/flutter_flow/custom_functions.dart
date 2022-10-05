@@ -58,7 +58,7 @@ String getDiff(
   return ans.toInt().toString();
 }
 
-double? returnDistanceBetweenTwoPointsCopy(
+int? returnDistanceBetweenTwoPointsCopy(
   LatLng? positionOne,
   LatLng? positionTwo,
 ) {
@@ -71,9 +71,15 @@ double? returnDistanceBetweenTwoPointsCopy(
           (1 - math.cos((positionTwo.longitude - positionOne.longitude) * p)) /
           2;
   double result = 12742 * math.asin(math.sqrt(a));
-  result.toInt().toString();
+  // result.toInt().toString();
   // uncomment the line below if you want the result to be rounded
   // double finalResult = result.roundToDouble();
   // if you uncommented the line above, you have to replace result in the line below with finalResult
-  return result;
+  return result.toInt();
+}
+
+DateTime forSubscribe(DateTime? dateSubscribe) {
+  DateTime newDate =
+      DateTime(dateSubscribe!.year, dateSubscribe.month - 1, dateSubscribe.day);
+  return newDate;
 }

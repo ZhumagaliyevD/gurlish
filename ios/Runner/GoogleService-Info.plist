@@ -3,9 +3,11 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>53467980627-u8uapb656ks1g2c2sgnd055n8f56b52f.apps.googleusercontent.com</string>
+	<string>53467980627-32u11t416c0j2ltju4hk8781frl59rct.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.53467980627-u8uapb656ks1g2c2sgnd055n8f56b52f</string>
+	<string>com.googleusercontent.apps.53467980627-32u11t416c0j2ltju4hk8781frl59rct</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>53467980627-6t07qqa07abrfapjoaic3uc83tssdalf.apps.googleusercontent.com</string>
 	<key>API_KEY</key>
 	<string>AIzaSyBr9ldS7vzy7pxKa0HBAA8RsG7ZCuVwsaM</string>
 	<key>GCM_SENDER_ID</key>
@@ -13,7 +15,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.wlff.socialbeautyplatform</string>
+	<string>com.weloveflutterflow.gurlish</string>
 	<key>PROJECT_ID</key>
 	<string>gurlish-f17cc</string>
 	<key>STORAGE_BUCKET</key>
@@ -29,6 +31,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:53467980627:ios:c374967537697f65e3b7a6</string>
+	<string>1:53467980627:ios:ed99f88601cc6e76e3b7a6</string>
 </dict>
 </plist>

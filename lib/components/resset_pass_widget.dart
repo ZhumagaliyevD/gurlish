@@ -22,6 +22,12 @@ class _RessetPassWidgetState extends State<RessetPassWidget> {
   }
 
   @override
+  void dispose() {
+    emailTextController?.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
@@ -67,6 +73,20 @@ class _RessetPassWidgetState extends State<RessetPassWidget> {
                   ),
                   borderRadius: BorderRadius.circular(8),
                 ),
+                errorBorder: OutlineInputBorder(
+                  borderSide: BorderSide(
+                    color: Color(0x00000000),
+                    width: 1,
+                  ),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                focusedErrorBorder: OutlineInputBorder(
+                  borderSide: BorderSide(
+                    color: Color(0x00000000),
+                    width: 1,
+                  ),
+                  borderRadius: BorderRadius.circular(8),
+                ),
                 filled: true,
                 fillColor: Color(0xFFF1F4F8),
               ),
@@ -76,6 +96,8 @@ class _RessetPassWidgetState extends State<RessetPassWidget> {
               padding: EdgeInsetsDirectional.fromSTEB(0, 16, 0, 0),
               child: FFButtonWidget(
                 onPressed: () async {
+                  logFirebaseEvent('RESSET_PASS_RESET_PASSWORD_BTN_ON_TAP');
+                  logFirebaseEvent('Button_Auth');
                   if (emailTextController!.text.isEmpty) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
@@ -90,6 +112,7 @@ class _RessetPassWidgetState extends State<RessetPassWidget> {
                     email: emailTextController!.text,
                     context: context,
                   );
+                  logFirebaseEvent('Button_Navigate-Back');
                   Navigator.pop(context);
                 },
                 text: 'Reset Password',

@@ -4,22 +4,18 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'auth/firebase_user_provider.dart';
 import 'auth/auth_util.dart';
-
+import 'backend/push_notifications/push_notifications_util.dart';
 import 'flutter_flow/flutter_flow_theme.dart';
 import 'flutter_flow/flutter_flow_util.dart';
 import 'flutter_flow/internationalization.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'index.dart';
 
-import 'backend/stripe/payment_manager.dart';
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
 
   FFAppState(); // Initialize FFAppState
-
-  await initializeStripe();
 
   runApp(MyApp());
 }
@@ -37,16 +33,17 @@ class _MyAppState extends State<MyApp> {
   Locale? _locale;
   ThemeMode _themeMode = ThemeMode.system;
 
-  late Stream<SocialBeautyPlatformFirebaseUser> userStream;
-  SocialBeautyPlatformFirebaseUser? initialUser;
+  late Stream<GurlishFirebaseUser> userStream;
+  GurlishFirebaseUser? initialUser;
   bool displaySplashImage = true;
 
   final authUserSub = authenticatedUserStream.listen((_) {});
+  final fcmTokenSub = fcmTokenUserStream.listen((_) {});
 
   @override
   void initState() {
     super.initState();
-    userStream = socialBeautyPlatformFirebaseUserStream()
+    userStream = gurlishFirebaseUserStream()
       ..listen((user) => initialUser ?? setState(() => initialUser = user));
     Future.delayed(
       Duration(seconds: 1),
@@ -57,7 +54,7 @@ class _MyAppState extends State<MyApp> {
   @override
   void dispose() {
     authUserSub.cancel();
-
+    fcmTokenSub.cancel();
     super.dispose();
   }
 
@@ -70,7 +67,7 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Social Beauty Platform',
+      title: 'Gurlish',
       localizationsDelegates: [
         FFLocalizationsDelegate(),
         GlobalMaterialLocalizations.delegate,
@@ -82,26 +79,27 @@ class _MyAppState extends State<MyApp> {
       theme: ThemeData(brightness: Brightness.light),
       themeMode: _themeMode,
       home: initialUser == null || displaySplashImage
-          ? Center(
-              child: SizedBox(
-                width: 50,
-                height: 50,
-                child: CircularProgressIndicator(
-                  color: FlutterFlowTheme.of(context).primaryColor,
+          ? Builder(
+              builder: (context) => Container(
+                color: Colors.transparent,
+                child: Image.asset(
+                  'assets/images/Group_2.png',
+                  fit: BoxFit.cover,
                 ),
               ),
             )
           : currentUser!.loggedIn
-              ? NavBarPage()
+              ? PushNotificationsHandler(child: NavBarPage())
               : UserSignInWidget(),
     );
   }
 }
 
 class NavBarPage extends StatefulWidget {
-  NavBarPage({Key? key, this.initialPage}) : super(key: key);
+  NavBarPage({Key? key, this.initialPage, this.page}) : super(key: key);
 
   final String? initialPage;
+  final Widget? page;
 
   @override
   _NavBarPageState createState() => _NavBarPageState();
@@ -109,12 +107,14 @@ class NavBarPage extends StatefulWidget {
 
 /// This is the private State class that goes with NavBarPage.
 class _NavBarPageState extends State<NavBarPage> {
-  String _currentPage = 'Main';
+  String _currentPageName = 'Main';
+  late Widget? _currentPage;
 
   @override
   void initState() {
     super.initState();
-    _currentPage = widget.initialPage ?? _currentPage;
+    _currentPageName = widget.initialPage ?? _currentPageName;
+    _currentPage = widget.page;
   }
 
   @override
@@ -122,75 +122,71 @@ class _NavBarPageState extends State<NavBarPage> {
     final tabs = {
       'Main': MainWidget(),
       'main_search': MainSearchWidget(),
-      'shop_search': ShopSearchWidget(),
-      'Chat_List': ChatListWidget(),
+      'ReelsPage': ReelsPageWidget(),
+      'ChatList': ChatListWidget(),
       'MyProfile': MyProfileWidget(),
     };
-    final currentIndex = tabs.keys.toList().indexOf(_currentPage);
+    final currentIndex = tabs.keys.toList().indexOf(_currentPageName);
     return Scaffold(
-      body: tabs[_currentPage],
-      bottomNavigationBar: Visibility(
-        visible: responsiveVisibility(
-          context: context,
-          tabletLandscape: false,
-          desktop: false,
-        ),
-        child: BottomNavigationBar(
-          currentIndex: currentIndex,
-          onTap: (i) => setState(() => _currentPage = tabs.keys.toList()[i]),
-          backgroundColor: Colors.white,
-          selectedItemColor: FlutterFlowTheme.of(context).primaryColor,
-          unselectedItemColor: Color(0x8A000000),
-          showSelectedLabels: false,
-          showUnselectedLabels: false,
-          type: BottomNavigationBarType.fixed,
-          items: <BottomNavigationBarItem>[
-            BottomNavigationBarItem(
-              icon: Icon(
-                Icons.home,
-                size: 24,
-              ),
-              label: 'Home',
-              tooltip: '',
+      body: _currentPage ?? tabs[_currentPageName],
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: currentIndex,
+        onTap: (i) => setState(() {
+          _currentPage = null;
+          _currentPageName = tabs.keys.toList()[i];
+        }),
+        backgroundColor: Colors.white,
+        selectedItemColor: FlutterFlowTheme.of(context).primaryColor,
+        unselectedItemColor: Color(0x8A000000),
+        showSelectedLabels: false,
+        showUnselectedLabels: false,
+        type: BottomNavigationBarType.fixed,
+        items: <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.home,
+              size: 24,
             ),
-            BottomNavigationBarItem(
-              icon: Icon(
-                Icons.search,
-                size: 24,
-              ),
-              label: 'Home',
-              tooltip: '',
+            label: 'Home',
+            tooltip: '',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.search,
+              size: 24,
             ),
-            BottomNavigationBarItem(
-              icon: Icon(
-                Icons.shopping_cart_sharp,
-                size: 30,
-              ),
-              label: 'Home',
-              tooltip: '',
+            label: 'Home',
+            tooltip: '',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.slow_motion_video,
+              size: 30,
             ),
-            BottomNavigationBarItem(
-              icon: Icon(
-                Icons.chat_bubble_outline,
-                size: 24,
-              ),
-              activeIcon: Icon(
-                Icons.chat_bubble_rounded,
-                size: 24,
-              ),
-              label: '',
-              tooltip: '',
+            label: 'Home',
+            tooltip: '',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.chat_bubble_outline,
+              size: 24,
             ),
-            BottomNavigationBarItem(
-              icon: Icon(
-                Icons.person_rounded,
-                size: 28,
-              ),
-              label: 'Home',
-              tooltip: '',
-            )
-          ],
-        ),
+            activeIcon: Icon(
+              Icons.chat_bubble_rounded,
+              size: 24,
+            ),
+            label: '',
+            tooltip: '',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.person_rounded,
+              size: 28,
+            ),
+            label: 'Home',
+            tooltip: '',
+          )
+        ],
       ),
     );
   }
